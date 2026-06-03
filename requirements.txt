@@ -72,3 +72,33 @@ jupyter==1.0.0
 matplotlib==3.8.2
 seaborn==0.13.0
 plotly==5.17.0
+
+# Enhanced Architecture v2.0 Dependencies
+
+# Actor System & Orchestration
+asyncio-mqtt==0.13.0
+aioredis==2.0.1
+aiokafka==0.8.11
+
+# Physics & Engineering Models
+sympy==1.12
+scipy==1.11.4
+networkx==3.2.1
+
+# Graph Neural Networks
+torch-geometric==2.4.0
+dgl==1.1.3
+
+# Enhanced ML Algorithms
+xgboost==2.0.2
+lightgbm==4.1.0
+catboost==1.2.2
+
+# Physics-Informed Neural Networks
+deepxde==1.10.0
+modulus==0.4.0
+
+# Additional Utilities
+dataclasses-json==0.6.3
+joblib==1.3.2
+cloudpickle==3.0.0

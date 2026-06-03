@@ -1,11 +1,21 @@
-# 🧠 Transaction-based Machine Learning (TML) Platform
+# 🧠 Transaction-based Machine Learning (TML) Platform v2.0
 
 [![CI/CD](https://github.com/First-Genesis/xenese.transaction-based.machine-learning/workflows/CI/badge.svg)](https://github.com/First-Genesis/xenese.transaction-based.machine-learning/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
+[![Physics-Informed](https://img.shields.io/badge/physics--informed-ML-green.svg)](https://en.wikipedia.org/wiki/Physics-informed_neural_networks)
 
 A revolutionary machine learning platform where **every transaction spawns its own model** that inherits knowledge from predecessors while remaining independently tunable. Model #1,000,000 is exponentially smarter than Model #1 through continuous knowledge inheritance.
+
+## 🚀 Enhanced Architecture v2.0
+
+**Multi-Layer Intelligence Stack:**
+- **Kafka**: High-throughput telemetry transport
+- **Flink**: Real-time distributed compute engine  
+- **Proto.Actor**: Stateful orchestration system
+- **Physics Models**: Engineering equation validation
+- **Enhanced AI/ML**: Multi-algorithm predictive inference
 
 ## 🎯 Core Innovation
 
