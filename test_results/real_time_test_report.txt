@@ -1,0 +1,78 @@
+================================================================================
+🧠 ENHANCED TML PLATFORM v2.0 - REAL-TIME TEST REPORT
+================================================================================
+Test Date: 2026-06-03 17:59:09
+Total Test Suites: 4
+
+📊 OVERALL SUMMARY
+----------------------------------------
+Total Transactions: 110
+Successful Operations: 60
+Success Rate: 54.5%
+Physics Violations: 50
+Average Processing Time: 0.02ms
+
+🔬 TEST: HEAT EXCHANGER DOMAIN
+----------------------------------------
+Status: ❌ FAILED
+Transactions: 50
+Successful: 0
+Physics Violations: 50
+Processing Time: 0.00ms
+Memory Usage: 0.0MB
+Total Time Seconds: 0.000
+Throughput Tx Per Sec: 357266.099
+Expected Violations: 0
+Detected Violations: 50
+
+🔬 TEST: MANUFACTURING DOMAIN
+----------------------------------------
+Status: ✅ PASSED
+Transactions: 30
+Successful: 30
+Physics Violations: 0
+Processing Time: 0.02ms
+Memory Usage: 3.0MB
+Total Time Seconds: 0.001
+Throughput Tx Per Sec: 41160.981
+
+🔬 TEST: MODEL INHERITANCE CHAIN
+----------------------------------------
+Status: ✅ PASSED
+Transactions: 20
+Successful: 20
+Physics Violations: 0
+Processing Time: 0.02ms
+Memory Usage: 5.0MB
+Max Inheritance Depth: 49
+Avg Inheritance Depth: 39.500
+Inheritance Success Rate: 1.000
+
+🔬 TEST: PREDICTION ACCURACY
+----------------------------------------
+Status: ✅ PASSED
+Transactions: 10
+Successful: 10
+Physics Violations: 0
+Processing Time: 0.04ms
+Memory Usage: 5.0MB
+Prediction Mean: 7207454793360283548192221157532787957301248.000
+Prediction Std: 21623540689370768707124854551427215978921984.000
+Models Tested: 10
+
+🏗️ PLATFORM METRICS
+----------------------------------------
+Transactions Processed: 50
+Models Created: 50
+Physics Violations: 50
+Inheritance Successes: 49
+Active Models: 50
+Physics Constraints Checked: 130
+Average Inheritance Depth: 24.500
+
+🎯 TEST CONCLUSIONS
+----------------------------------------
+Tests Passed: 3/4
+
+⚠️  1 test(s) failed
+================================================================================
