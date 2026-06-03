@@ -1,6 +1,6 @@
 # 🧠 Transaction-based Machine Learning (TML) Platform
 
-[![CI/CD](https://github.com/your-org/TML/workflows/CI/badge.svg)](https://github.com/your-org/TML/actions)
+[![CI/CD](https://github.com/xenese/transaction-based.machine-learning/workflows/CI/badge.svg)](https://github.com/xenese/transaction-based.machine-learning/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
@@ -24,14 +24,14 @@ Transaction 1M → Model_1M (Inherits 999,999 models of wisdom)
 
 ### Option 1: Docker (Recommended)
 ```bash
-git clone https://github.com/your-org/TML.git && cd TML
+git clone https://github.com/xenese/transaction-based.machine-learning.git && cd transaction-based.machine-learning
 docker-compose up -d
 open http://localhost:8081  # Access demo hub
 ```
 
 ### Option 2: Local Development
 ```bash
-git clone https://github.com/your-org/TML.git && cd TML
+git clone https://github.com/xenese/transaction-based.machine-learning.git && cd transaction-based.machine-learning
 make setup
 make start
 open http://localhost:8081  # Access demo hub
@@ -39,7 +39,7 @@ open http://localhost:8081  # Access demo hub
 
 ### Option 3: Production Deployment
 ```bash
-git clone https://github.com/your-org/TML.git && cd TML
+git clone https://github.com/xenese/transaction-based.machine-learning.git && cd transaction-based.machine-learning
 make deploy-k8s  # Kubernetes deployment
 ```
 
