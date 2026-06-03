@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drilling Parameter Optimization Dashboard - TML Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛢️</text></svg>">
+    <!-- Use CDN Chart.js with integrity check removed for simplicity -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #ffa500;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h2 {
+            color: #ffa500;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            background: #00d2d3;
+            color: #fff;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: #ffa500;
+        }
+        
+        .btn-primary:hover {
+            background: #ff8c00;
+        }
+        
+        .btn-danger {
+            background: #ff6b6b;
+        }
+        
+        .btn-danger:hover {
+            background: #ff5252;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛢️ Drilling Parameter Optimization Dashboard</h1>
+            <div class="subtitle">
+                Real-time TML-powered drilling intelligence - SIMPLIFIED VERSION
+                <span class="status" id="systemStatus">● Ready</span>
+            </div>
+        </header>
+
+        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <button class="btn-primary" onclick="startDemo()">Start Demo</button>
+            <button class="btn-danger" onclick="stopDemo()">Stop Demo</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>⚙️ Current Parameters</h2>
+                <div class="metric">
+                    <span class="metric-label">Depth</span>
+                    <span class="metric-value" id="currentDepth">0 ft</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Formation</span>
+                    <span class="metric-value" id="currentFormation">Surface</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">ROP</span>
+                    <span class="metric-value" id="currentROP">0 ft/hr</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🎯 TML Predictions</h2>
+                <div class="metric">
+                    <span class="metric-label">Equipment Risk</span>
+                    <span class="metric-value" id="equipmentRisk">0%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Stuck Pipe Risk</span>
+                    <span class="metric-value" id="stuckRisk">0%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Optimal Mud Weight</span>
+                    <span class="metric-value" id="mudWeight">9.5 ppg</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Performance</h2>
+                <div class="metric">
+                    <span class="metric-label">Models Created</span>
+                    <span class="metric-value" id="modelCount">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Learning Progress</span>
+                    <span class="metric-value" id="accuracy">0%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Safety Score</span>
+                    <span class="metric-value" id="safetyScore">100%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📈 Real-time Trends</h2>
+            <canvas id="chartCanvas" width="800" height="300"></canvas>
+        </div>
+
+        <div class="card">
+            <h2>📝 Activity Log</h2>
+            <div id="activityLog" style="max-height: 200px; overflow-y: auto;">
+                <div>System ready. Click "Start Demo" to begin.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simplified demo without external dependencies issues
+        let demoInterval = null;
+        let depth = 0;
+        let modelCount = 0;
+        let chart = null;
+        
+        // Demo data
+        const formations = ['Surface', 'Sandstone', 'Shale', 'Limestone', 'Granite'];
+        const formationDepths = [0, 1000, 3000, 6000, 10000];
+        
+        function startDemo() {
+            if (demoInterval) return;
+            
+            document.getElementById('systemStatus').textContent = '● Running';
+            addLog('Demo started - Creating TML models for drilling optimization');
+            
+            // Initialize chart if Chart.js is available
+            initChart();
+            
+            demoInterval = setInterval(() => {
+                updateDemo();
+            }, 1000);
+        }
+        
+        function stopDemo() {
+            if (demoInterval) {
+                clearInterval(demoInterval);
+                demoInterval = null;
+                document.getElementById('systemStatus').textContent = '● Stopped';
+                addLog('Demo stopped');
+            }
+        }
+        
+        function updateDemo() {
+            // Update depth
+            depth += Math.random() * 100 + 50;
+            document.getElementById('currentDepth').textContent = Math.round(depth) + ' ft';
+            
+            // Determine formation
+            let formation = formations[0];
+            for (let i = 0; i < formationDepths.length; i++) {
+                if (depth > formationDepths[i]) {
+                    formation = formations[Math.min(i, formations.length - 1)];
+                }
+            }
+            document.getElementById('currentFormation').textContent = formation;
+            
+            // Update ROP
+            const rop = Math.random() * 50 + 30;
+            document.getElementById('currentROP').textContent = Math.round(rop) + ' ft/hr';
+            
+            // Update risks (TML predictions)
+            const equipRisk = Math.random() * 30;
+            const stuckRisk = Math.random() * 25;
+            document.getElementById('equipmentRisk').textContent = Math.round(equipRisk) + '%';
+            document.getElementById('stuckRisk').textContent = Math.round(stuckRisk) + '%';
+            
+            // Update mud weight
+            const mudWeight = 9.0 + (depth / 10000) * 3;
+            document.getElementById('mudWeight').textContent = mudWeight.toFixed(1) + ' ppg';
+            
+            // Update model count
+            modelCount++;
+            document.getElementById('modelCount').textContent = modelCount;
+            
+            // Update accuracy (increases over time)
+            const accuracy = Math.min(95, 50 + modelCount * 2);
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            // Update safety score
+            const safetyScore = Math.max(60, 100 - Math.max(equipRisk, stuckRisk));
+            document.getElementById('safetyScore').textContent = Math.round(safetyScore) + '%';
+            
+            // Update chart if available
+            if (chart) {
+                updateChart(rop, equipRisk, stuckRisk);
+            }
+            
+            // Add log entry
+            if (modelCount % 5 === 0) {
+                addLog(`Model #${modelCount} created - Depth: ${Math.round(depth)}ft, Formation: ${formation}`);
+            }
+            
+            // Stop at target depth
+            if (depth >= 12000) {
+                stopDemo();
+                addLog('Target depth reached! Demo complete.');
+            }
+        }
+        
+        function initChart() {
+            try {
+                const ctx = document.getElementById('chartCanvas').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [
+                            {
+                                label: 'ROP (ft/hr)',
+                                data: [],
+                                borderColor: '#00d2d3',
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Equipment Risk (%)',
+                                data: [],
+                                borderColor: '#ff6b6b',
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Stuck Pipe Risk (%)',
+                                data: [],
+                                borderColor: '#ffa500',
+                                tension: 0.3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.log('Chart.js not available, continuing without charts');
+                // Hide chart canvas if Chart.js fails
+                document.getElementById('chartCanvas').style.display = 'none';
+            }
+        }
+        
+        function updateChart(rop, equipRisk, stuckRisk) {
+            if (!chart) return;
+            
+            const label = new Date().toLocaleTimeString();
+            chart.data.labels.push(label);
+            chart.data.datasets[0].data.push(rop);
+            chart.data.datasets[1].data.push(equipRisk);
+            chart.data.datasets[2].data.push(stuckRisk);
+            
+            // Keep only last 20 points
+            if (chart.data.labels.length > 20) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach(dataset => dataset.data.shift());
+            }
+            
+            chart.update();
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('activityLog');
+            const entry = document.createElement('div');
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.insertBefore(entry, log.firstChild);
+            
+            // Keep only last 10 entries
+            while (log.children.length > 10) {
+                log.removeChild(log.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>

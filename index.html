@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TML Platform - Demo Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            color: #e0e0e0;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .dashboard-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .dashboard-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-features li {
+            padding: 5px 0;
+            color: #e0e0e0;
+            font-size: 0.9rem;
+        }
+        
+        .dashboard-features li::before {
+            content: "✓ ";
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        .launch-btn {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .launch-btn:hover {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            transform: translateY(-2px);
+        }
+        
+        .status-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ccc;
+        }
+        
+        .concept-highlight {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .concept-highlight h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 TML Platform</h1>
+        <div class="subtitle">
+            Transaction-based Machine Learning Demonstrations
+        </div>
+        
+        <div class="concept-highlight">
+            <h3>🎯 Core Innovation</h3>
+            <p>Every transaction spawns its own model that inherits knowledge from predecessors.<br>
+            <strong>Model #1,000,000 is exponentially smarter than Model #1</strong> while remaining independently tunable.</p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card" onclick="window.open('/ui/index.html', '_blank')">
+                <div style="position: relative;">
+                    <div class="status-indicator"></div>
+                    <div class="dashboard-icon">🎛️</div>
+                    <div class="dashboard-title">TML Platform UI</div>
+                    <div class="dashboard-description">
+                        Interactive demonstration of core TML concepts with model creation, training, and inheritance visualization.
+                    </div>
+                    <ul class="dashboard-features">
+                        <li>Create transaction models</li>
+                        <li>Real-time training interface</li>
+                        <li>Model inheritance chain visualization</li>
+                        <li>Performance comparison</li>
+                        <li>Live demo scenarios</li>
+                    </ul>
+                    <a href="/ui/index.html" class="launch-btn" onclick="event.stopPropagation()">Launch Dashboard</a>
+                </div>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.open('/drilling_dashboard.html', '_blank')">
+                <div style="position: relative;">
+                    <div class="status-indicator"></div>
+                    <div class="dashboard-icon">🛢️</div>
+                    <div class="dashboard-title">Oil & Gas Drilling</div>
+                    <div class="dashboard-description">
+                        Real-time drilling parameter optimization with TML-powered predictive analytics for oil & gas operations.
+                    </div>
+                    <ul class="dashboard-features">
+                        <li>Rate of penetration forecasting</li>
+                        <li>Equipment failure prediction</li>
+                        <li>Stuck pipe risk assessment</li>
+                        <li>Mud weight optimization</li>
+                        <li>Formation-aware drilling</li>
+                    </ul>
+                    <a href="/drilling_dashboard.html" class="launch-btn" onclick="event.stopPropagation()">Launch Dashboard</a>
+                </div>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.open('/iot_dashboard.html', '_blank')">
+                <div style="position: relative;">
+                    <div class="status-indicator"></div>
+                    <div class="dashboard-icon">🌡️</div>
+                    <div class="dashboard-title">IoT Anomaly Detection</div>
+                    <div class="dashboard-description">
+                        Edge device monitoring with temperature anomaly prediction using TML for industrial IoT applications.
+                    </div>
+                    <ul class="dashboard-features">
+                        <li>Real-time sensor monitoring</li>
+                        <li>Temperature anomaly prediction</li>
+                        <li>Multi-sensor correlation</li>
+                        <li>Edge device intelligence</li>
+                        <li>Predictive maintenance alerts</li>
+                    </ul>
+                    <a href="/iot_dashboard.html" class="launch-btn" onclick="event.stopPropagation()">Launch Dashboard</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>🚀 Quick Start</h3>
+            <p>1. Choose a dashboard above to explore TML capabilities</p>
+            <p>2. Each demo shows how models inherit knowledge and improve over time</p>
+            <p>3. Watch as Model #1000 becomes smarter than Model #1 through inheritance</p>
+            <br>
+            <p><strong>Server Status:</strong> <span style="color: #4ade80;">● Online</span> | 
+            <strong>Port:</strong> 8081 | 
+            <strong>API:</strong> <a href="http://localhost:8000" style="color: #60a5fa;">localhost:8000</a></p>
+        </div>
+    </div>
+</body>
+</html>

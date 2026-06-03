@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TML Platform - Transaction-based Machine Learning</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-brain"></i>
+                <span>TML Platform</span>
+            </div>
+            <div class="nav-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Active Models</span>
+                    <span class="stat-value" id="activeModels">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Predictions/sec</span>
+                    <span class="stat-value" id="predictionsPerSec">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="avgAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Transaction-based Machine Learning</h1>
+            <p class="subtitle">Every transaction spawns its own incrementally learning model</p>
+            <div class="concept-banner">
+                <i class="fas fa-lightbulb"></i>
+                <span>Core Concept: Model #1,000,000 > Model #1 through knowledge inheritance</span>
+            </div>
+        </section>
+
+        <!-- Model Creation Section -->
+        <section class="card">
+            <h2><i class="fas fa-plus-circle"></i> Create Transaction Model</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Transaction ID</label>
+                    <input type="text" id="transactionId" placeholder="txn_001" value="txn_001">
+                </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input type="text" id="userId" placeholder="user_123" value="user_123">
+                </div>
+                <div class="form-group">
+                    <label>Parent Model</label>
+                    <select id="parentModel">
+                        <option value="">None (Base Model)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Model Type</label>
+                    <select id="modelType">
+                        <option value="logistic_regression">Logistic Regression</option>
+                        <option value="regression">Linear Regression</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="createModel()">
+                <i class="fas fa-rocket"></i> Create Model
+            </button>
+        </section>
+
+        <!-- Model Chain Visualization -->
+        <section class="card">
+            <h2><i class="fas fa-sitemap"></i> Model Inheritance Chain</h2>
+            <div id="modelChain" class="model-chain">
+                <div class="chain-placeholder">
+                    <i class="fas fa-link"></i>
+                    <p>No models created yet. Create your first model to start the chain!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Training Section -->
+        <section class="card">
+            <h2><i class="fas fa-graduation-cap"></i> Train Model</h2>
+            <div class="model-selector">
+                <label>Select Model to Train</label>
+                <select id="modelToTrain" class="form-control">
+                    <option value="">Select a model...</option>
+                </select>
+            </div>
+            
+            <div class="training-controls">
+                <h3>Add Training Data</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Amount ($)</label>
+                        <input type="number" id="trainAmount" value="150">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="trainCategory">
+                            <option value="electronics">Electronics</option>
+                            <option value="books">Books</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="luxury">Luxury</option>
+                            <option value="home">Home</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Hour of Day</label>
+                        <input type="number" id="trainHour" min="0" max="23" value="14">
+                    </div>
+                    <div class="form-group">
+                        <label>Target (Outcome)</label>
+                        <select id="trainTarget">
+                            <option value="true">True (Success)</option>
+                            <option value="false">False (Failure)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="trainModel()">
+                    <i class="fas fa-brain"></i> Train Model
+                </button>
+                <button class="btn btn-secondary" onclick="generateRandomTraining()">
+                    <i class="fas fa-dice"></i> Generate Random Data
+                </button>
+            </div>
+        </section>
+
+        <!-- Prediction Section -->
+        <section class="card">
+            <h2><i class="fas fa-crystal-ball"></i> Make Predictions</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Amount ($)</label>
+                    <input type="number" id="predictAmount" value="200">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="predictCategory">
+                        <option value="electronics">Electronics</option>
+                        <option value="books">Books</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="luxury">Luxury</option>
+                        <option value="home">Home</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Hour of Day</label>
+                    <input type="number" id="predictHour" min="0" max="23" value="14">
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="predictAllModels()">
+                <i class="fas fa-magic"></i> Predict with All Models
+            </button>
+            
+            <div id="predictionResults" class="prediction-results"></div>
+        </section>
+
+        <!-- Model Comparison -->
+        <section class="card">
+            <h2><i class="fas fa-chart-bar"></i> Model Comparison</h2>
+            <div id="modelComparison" class="comparison-grid">
+                <div class="comparison-placeholder">
+                    <i class="fas fa-chart-line"></i>
+                    <p>Create and train models to see comparison</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Demo Section -->
+        <section class="card">
+            <h2><i class="fas fa-play-circle"></i> Live Demonstration</h2>
+            <div class="demo-controls">
+                <button class="btn btn-primary" onclick="runFullDemo()">
+                    <i class="fas fa-play"></i> Run Full Demo
+                </button>
+                <button class="btn btn-secondary" onclick="runScalabilityTest()">
+                    <i class="fas fa-tachometer-alt"></i> Scalability Test
+                </button>
+                <button class="btn btn-danger" onclick="clearAll()">
+                    <i class="fas fa-trash"></i> Clear All Models
+                </button>
+            </div>
+            
+            <div id="demoOutput" class="demo-output"></div>
+        </section>
+
+        <!-- Activity Log -->
+        <section class="card">
+            <h2><i class="fas fa-history"></i> Activity Log</h2>
+            <div id="activityLog" class="activity-log">
+                <div class="log-entry info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>TML Platform UI initialized. Ready to create models!</span>
+                    <span class="timestamp">Just now</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Core Concept</h3>
+                <p>Each transaction spawns its own model that learns incrementally while inheriting knowledge from predecessors.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Key Features</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Model Inheritance</li>
+                    <li><i class="fas fa-check"></i> Incremental Learning</li>
+                    <li><i class="fas fa-check"></i> Independent Tunability</li>
+                    <li><i class="fas fa-check"></i> Scalable Architecture</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Status</h3>
+                <div class="status-indicator online">
+                    <i class="fas fa-circle"></i> System Online
+                </div>
+                <div class="connection-status" id="connectionStatus">
+                    <i class="fas fa-server"></i> <span id="connectionText">Standalone Mode</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toggle between app.js (standalone) and app-api.js (with real TML backend) -->
+    <script src="app-api.js"></script>
+    <!-- <script src="app.js"></script> -->
+</body>
+</html>

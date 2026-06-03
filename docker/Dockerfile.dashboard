@@ -1,0 +1,41 @@
+FROM python:3.9-slim
+
+LABEL maintainer="TML Platform Team"
+LABEL version="1.0.0"
+LABEL description="TML Platform Dashboard Server"
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy dashboard files
+COPY drilling_server.py .
+COPY drilling_dashboard.html .
+COPY drilling_dashboard_fixed.html .
+COPY iot_dashboard.html .
+COPY index.html .
+COPY chart.min.js .
+COPY ui/ ./ui/
+
+# Create non-root user
+RUN groupadd -r tml && useradd -r -g tml tml
+RUN chown -R tml:tml /app
+USER tml
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8081/ || exit 1
+
+# Expose port
+EXPOSE 8081
+
+# Run the dashboard server
+CMD ["python3", "drilling_server.py"]

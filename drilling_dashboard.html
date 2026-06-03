@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drilling Parameter Optimization Dashboard - TML Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛢️</text></svg>">
+    <script src="chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #ffa500;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        .alert-banner {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+        
+        .alert-banner.active {
+            display: block;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h2 {
+            color: #ffa500;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .metric-value.danger {
+            color: #ff6b6b;
+        }
+        
+        .metric-value.warning {
+            color: #ffa500;
+        }
+        
+        .metric-value.success {
+            color: #00d2d3;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+            height: 400px;
+            position: relative;
+        }
+        
+        .controls {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: #ffa500;
+        }
+        
+        .btn-primary:hover {
+            background: #ff8c00;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #ff6b6b;
+        }
+        
+        .btn-danger:hover {
+            background: #ff5252;
+        }
+        
+        .btn-success {
+            background: #00d2d3;
+        }
+        
+        .btn-success:hover {
+            background: #00bcd4;
+        }
+        
+        select {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+        
+        select option {
+            background: #1a1a2e;
+            color: white;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status.drilling {
+            background: #00d2d3;
+            color: #fff;
+        }
+        
+        .status.stopped {
+            background: #ff6b6b;
+            color: #fff;
+        }
+        
+        .drilling-progress {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2d3, #ffa500);
+            transition: width 0.3s ease;
+        }
+        
+        .formation-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .formation-sandstone { background: #deb887; color: #8b4513; }
+        .formation-shale { background: #708090; color: #fff; }
+        .formation-limestone { background: #f5f5dc; color: #696969; }
+        .formation-dolomite { background: #d3d3d3; color: #2f4f4f; }
+        .formation-granite { background: #2f4f4f; color: #fff; }
+        .formation-salt { background: #fff; color: #000; }
+        
+        .alerts-panel {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recommendations-panel {
+            background: rgba(0, 210, 211, 0.2);
+            border: 1px solid #00d2d3;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 210, 211, 0.3);
+        }
+        
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .risk-gauge {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .risk-low { background: conic-gradient(#00d2d3 0deg 120deg, #333 120deg 360deg); }
+        .risk-medium { background: conic-gradient(#ffa500 0deg 180deg, #333 180deg 360deg); }
+        .risk-high { background: conic-gradient(#ff6b6b 0deg 270deg, #333 270deg 360deg); }
+        
+        .risk-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛢️ Drilling Parameter Optimization Dashboard</h1>
+            <div class="subtitle">
+                Real-time TML-powered drilling intelligence
+                <span class="status drilling" id="systemStatus">● Drilling</span>
+            </div>
+        </header>
+
+        <div class="alert-banner" id="alertBanner">
+            ⚠️ ALERT: High risk condition detected!
+        </div>
+
+        <div class="controls">
+            <button class="btn-primary" onclick="startDrilling()">Start Drilling</button>
+            <button class="btn-danger" onclick="stopDrilling()">Stop Drilling</button>
+            <button class="btn-success" onclick="optimizeParameters()">Optimize Parameters</button>
+            <select id="wellSelect" onchange="changeWell()">
+                <option value="EAGLE_FORD_001">Eagle Ford 001</option>
+                <option value="PERMIAN_042">Permian 042</option>
+                <option value="BAKKEN_156">Bakken 156</option>
+            </select>
+            <select id="rigSelect" onchange="changeRig()">
+                <option value="RIG_042">Rig 042 (5000HP)</option>
+                <option value="RIG_089">Rig 089 (7500HP)</option>
+                <option value="RIG_156">Rig 156 (3000HP)</option>
+            </select>
+        </div>
+
+        <div class="drilling-progress">
+            <h2>🎯 Drilling Progress</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Depth: <span id="currentDepth">0</span> ft / <span id="targetDepth">12,000</span> ft</span>
+                <span>Formation: <span id="currentFormation">Surface</span><span id="formationIndicator" class="formation-indicator formation-sandstone">Sandstone</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #ccc;">
+                <span>ROP: <span id="currentROP">0</span> ft/hr</span>
+                <span>Time Elapsed: <span id="timeElapsed">00:00</span></span>
+                <span>ETA: <span id="estimatedCompletion">--:--</span></span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>⚙️ Current Parameters</h2>
+                <div class="metric">
+                    <span class="metric-label">Weight on Bit</span>
+                    <span class="metric-value" id="weightOnBit">25,000 lbs</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Rotary Speed</span>
+                    <span class="metric-value" id="rotarySpeed">120 RPM</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Mud Weight</span>
+                    <span class="metric-value" id="mudWeight">9.5 ppg</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Flow Rate</span>
+                    <span class="metric-value" id="flowRate">450 gpm</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Standpipe Pressure</span>
+                    <span class="metric-value" id="standpipePressure">3,200 psi</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🎯 TML Predictions</h2>
+                <div class="metric">
+                    <span class="metric-label">Rate of Penetration</span>
+                    <span class="metric-value success" id="ropForecast">85.5 ft/hr</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Equipment Failure Risk</span>
+                    <span class="metric-value" id="equipmentRisk">12.3%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Stuck Pipe Risk</span>
+                    <span class="metric-value" id="stuckPipeRisk">8.7%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Optimal Mud Weight</span>
+                    <span class="metric-value" id="optimalMudWeight">9.8 ppg</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Safety Score</span>
+                    <span class="metric-value success" id="safetyScore">87.5%</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>⚡ Performance Metrics</h2>
+                <div class="metric">
+                    <span class="metric-label">Drilling Efficiency</span>
+                    <span class="metric-value" id="drillingEfficiency">78.2%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Cost per Foot</span>
+                    <span class="metric-value" id="costPerFoot">$585</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Bit Wear</span>
+                    <span class="metric-value" id="bitWear">23.5%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Bit Hours</span>
+                    <span class="metric-value" id="bitHours">45.2 hrs</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Formation Pressure</span>
+                    <span class="metric-value" id="formationPressure">2,850 psi</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔧 Equipment Status</h2>
+                <div class="metric">
+                    <span class="metric-label">Pump Efficiency</span>
+                    <span class="metric-value success" id="pumpEfficiency">95.2%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Drawworks Load</span>
+                    <span class="metric-value" id="drawworksLoad">150,000 lbs</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Torque</span>
+                    <span class="metric-value" id="torque">8,500 ft-lbs</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Downhole Temperature</span>
+                    <span class="metric-value" id="downholeTemp">185°F</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Bit Type</span>
+                    <span class="metric-value" id="bitType">PDC</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <div class="chart-container">
+                <h2 style="color: #ffa500; margin-bottom: 20px;">📈 Real-time Drilling Trends</h2>
+                <canvas id="drillingChart"></canvas>
+            </div>
+
+            <div>
+                <div class="alerts-panel" id="alertsPanel">
+                    <h2 style="color: #ff6b6b; margin-bottom: 15px;">🚨 Active Alerts</h2>
+                    <div id="alertsList">
+                        <div class="alert-item">
+                            <span>⚠️</span>
+                            <span>No active alerts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendations-panel">
+                    <h2 style="color: #00d2d3; margin-bottom: 15px;">💡 TML Recommendations</h2>
+                    <div id="recommendationsList">
+                        <div class="recommendation-item">
+                            <span>Optimal WOB:</span>
+                            <span id="recWOB">28,000 lbs</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <span>Optimal RPM:</span>
+                            <span id="recRPM">135</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <span>Optimal Flow:</span>
+                            <span id="recFlow">475 gpm</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let drillingInterval = null;
+        let drillingChart = null;
+        let startTime = null;
+        let currentWell = "EAGLE_FORD_001";
+        let currentRig = "RIG_042";
+        let drillingData = {
+            depth: 0,
+            targetDepth: 12000,
+            rop: 0,
+            formation: "sandstone"
+        };
+        
+        // Global formations data - moved to global scope to fix reference error
+        const formations = ['sandstone', 'shale', 'limestone', 'dolomite', 'granite'];
+        const formationDepths = [2000, 4000, 6000, 10000, 12000];
+
+        // Chart data
+        let chartData = {
+            labels: [],
+            datasets: [
+                {
+                    label: 'ROP (ft/hr)',
+                    data: [],
+                    borderColor: '#00d2d3',
+                    backgroundColor: 'rgba(0, 210, 211, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Equipment Risk (%)',
+                    data: [],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: 'Stuck Pipe Risk (%)',
+                    data: [],
+                    borderColor: '#ffa500',
+                    backgroundColor: 'rgba(255, 165, 0, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y1'
+                }
+            ]
+        };
+
+        // Initialize chart
+        const ctx = document.getElementById('drillingChart').getContext('2d');
+        drillingChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'ROP (ft/hr)',
+                            color: '#00d2d3'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ccc'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Risk (%)',
+                            color: '#ff6b6b'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        ticks: {
+                            color: '#ccc'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color: '#ccc'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ccc'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ccc'
+                        }
+                    }
+                }
+            }
+        });
+
+        function startDrilling() {
+            if (drillingInterval) return;
+            
+            document.getElementById('systemStatus').textContent = '● Drilling';
+            document.getElementById('systemStatus').className = 'status drilling';
+            
+            startTime = Date.now();
+            drillingInterval = setInterval(() => {
+                updateDrillingData();
+            }, 2000);
+        }
+
+        function stopDrilling() {
+            if (drillingInterval) {
+                clearInterval(drillingInterval);
+                drillingInterval = null;
+                document.getElementById('systemStatus').textContent = '● Stopped';
+                document.getElementById('systemStatus').className = 'status stopped';
+            }
+        }
+
+        function updateDrillingData() {
+            // Simulate drilling progress
+            // formations and formationDepths are now global variables
+            
+            // Advance depth
+            const ropVariation = 20 + Math.random() * 80; // 20-100 ft/hr
+            drillingData.depth += ropVariation / 1800; // Convert to depth per 2-second interval
+            drillingData.rop = ropVariation;
+            
+            // Determine formation
+            let currentFormation = formations[0];
+            for (let i = 0; i < formationDepths.length; i++) {
+                if (drillingData.depth > formationDepths[i]) {
+                    currentFormation = formations[Math.min(i + 1, formations.length - 1)];
+                }
+            }
+            drillingData.formation = currentFormation;
+            
+            // Generate realistic drilling parameters
+            const wob = 20000 + Math.random() * 20000;
+            const rpm = 80 + Math.random() * 80;
+            const mudWeight = 9.0 + Math.random() * 4.0;
+            const flowRate = 400 + Math.random() * 100;
+            const pressure = 2500 + Math.random() * 2000;
+            
+            // Calculate risks based on formation and parameters
+            const formationRiskFactor = formations.indexOf(currentFormation) * 0.1;
+            const equipmentRisk = Math.min(95, 5 + formationRiskFactor * 30 + (wob > 35000 ? 20 : 0) + Math.random() * 15);
+            const stuckPipeRisk = Math.min(90, 3 + formationRiskFactor * 25 + (mudWeight < 9.5 ? 15 : 0) + Math.random() * 12);
+            
+            // Update UI
+            updateDashboard({
+                depth: drillingData.depth,
+                formation: currentFormation,
+                rop: ropVariation,
+                wob: wob,
+                rpm: rpm,
+                mudWeight: mudWeight,
+                flowRate: flowRate,
+                pressure: pressure,
+                equipmentRisk: equipmentRisk,
+                stuckPipeRisk: stuckPipeRisk
+            });
+            
+            // Update chart
+            updateChart(ropVariation, equipmentRisk, stuckPipeRisk);
+            
+            // Check for alerts
+            checkAlerts(equipmentRisk, stuckPipeRisk, wob, rpm);
+            
+            // Stop if target reached
+            if (drillingData.depth >= drillingData.targetDepth) {
+                stopDrilling();
+                alert('🎯 Target depth reached! Drilling complete.');
+            }
+        }
+
+        function updateDashboard(data) {
+            // Progress
+            const progress = (data.depth / drillingData.targetDepth) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentDepth').textContent = Math.round(data.depth).toLocaleString();
+            document.getElementById('currentFormation').textContent = data.formation.charAt(0).toUpperCase() + data.formation.slice(1);
+            document.getElementById('formationIndicator').className = `formation-indicator formation-${data.formation}`;
+            document.getElementById('currentROP').textContent = data.rop.toFixed(1);
+            
+            // Time calculations
+            if (startTime) {
+                const elapsed = (Date.now() - startTime) / 1000;
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = Math.floor(elapsed % 60);
+                document.getElementById('timeElapsed').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (data.rop > 0) {
+                    const remainingDepth = drillingData.targetDepth - data.depth;
+                    const etaHours = remainingDepth / data.rop;
+                    const etaMinutes = Math.round(etaHours * 60);
+                    document.getElementById('estimatedCompletion').textContent = 
+                        `${Math.floor(etaMinutes / 60)}:${(etaMinutes % 60).toString().padStart(2, '0')}`;
+                }
+            }
+            
+            // Current parameters
+            document.getElementById('weightOnBit').textContent = Math.round(data.wob).toLocaleString() + ' lbs';
+            document.getElementById('rotarySpeed').textContent = Math.round(data.rpm) + ' RPM';
+            document.getElementById('mudWeight').textContent = data.mudWeight.toFixed(1) + ' ppg';
+            document.getElementById('flowRate').textContent = Math.round(data.flowRate) + ' gpm';
+            document.getElementById('standpipePressure').textContent = Math.round(data.pressure).toLocaleString() + ' psi';
+            
+            // Predictions
+            document.getElementById('ropForecast').textContent = data.rop.toFixed(1) + ' ft/hr';
+            
+            const equipmentRiskElem = document.getElementById('equipmentRisk');
+            equipmentRiskElem.textContent = data.equipmentRisk.toFixed(1) + '%';
+            equipmentRiskElem.className = 'metric-value ' + 
+                (data.equipmentRisk > 30 ? 'danger' : data.equipmentRisk > 15 ? 'warning' : 'success');
+            
+            const stuckRiskElem = document.getElementById('stuckPipeRisk');
+            stuckRiskElem.textContent = data.stuckPipeRisk.toFixed(1) + '%';
+            stuckRiskElem.className = 'metric-value ' + 
+                (data.stuckPipeRisk > 40 ? 'danger' : data.stuckPipeRisk > 20 ? 'warning' : 'success');
+            
+            document.getElementById('optimalMudWeight').textContent = (data.mudWeight + 0.3).toFixed(1) + ' ppg';
+            
+            const safetyScore = 100 - Math.max(data.equipmentRisk, data.stuckPipeRisk);
+            const safetyElem = document.getElementById('safetyScore');
+            safetyElem.textContent = safetyScore.toFixed(1) + '%';
+            safetyElem.className = 'metric-value ' + 
+                (safetyScore > 80 ? 'success' : safetyScore > 60 ? 'warning' : 'danger');
+            
+            // Performance metrics
+            document.getElementById('drillingEfficiency').textContent = Math.min(100, data.rop * 1.2).toFixed(1) + '%';
+            document.getElementById('costPerFoot').textContent = '$' + Math.round(50000 / Math.max(data.rop, 10)).toLocaleString();
+            document.getElementById('bitWear').textContent = Math.min(100, data.depth / 120).toFixed(1) + '%';
+            document.getElementById('bitHours').textContent = (data.depth / Math.max(data.rop, 10)).toFixed(1) + ' hrs';
+            document.getElementById('formationPressure').textContent = Math.round(0.45 * data.depth).toLocaleString() + ' psi';
+            
+            // Equipment status
+            document.getElementById('pumpEfficiency').textContent = (95 + Math.random() * 4).toFixed(1) + '%';
+            document.getElementById('drawworksLoad').textContent = Math.round(data.wob * 6).toLocaleString() + ' lbs';
+            document.getElementById('torque').textContent = Math.round(data.rpm * 70).toLocaleString() + ' ft-lbs';
+            document.getElementById('downholeTemp').textContent = Math.round(70 + data.depth * 0.02) + '°F';
+            
+            // Recommendations
+            document.getElementById('recWOB').textContent = Math.round(Math.max(25000, 35000 - formations.indexOf(data.formation) * 2000)).toLocaleString() + ' lbs';
+            document.getElementById('recRPM').textContent = Math.round(Math.max(100, 140 - formations.indexOf(data.formation) * 8));
+            document.getElementById('recFlow').textContent = Math.round(450 + formations.indexOf(data.formation) * 20) + ' gpm';
+        }
+
+        function updateChart(rop, equipmentRisk, stuckPipeRisk) {
+            const timestamp = new Date().toLocaleTimeString();
+            
+            chartData.labels.push(timestamp);
+            chartData.datasets[0].data.push(rop);
+            chartData.datasets[1].data.push(equipmentRisk);
+            chartData.datasets[2].data.push(stuckPipeRisk);
+            
+            // Keep only last 20 data points
+            if (chartData.labels.length > 20) {
+                chartData.labels.shift();
+                chartData.datasets.forEach(dataset => dataset.data.shift());
+            }
+            
+            drillingChart.update();
+        }
+
+        function checkAlerts(equipmentRisk, stuckPipeRisk, wob, rpm) {
+            const alerts = [];
+            
+            if (equipmentRisk > 30) alerts.push("HIGH_EQUIPMENT_FAILURE_RISK");
+            if (stuckPipeRisk > 40) alerts.push("HIGH_STUCK_PIPE_RISK");
+            if (wob > 45000) alerts.push("EXCESSIVE_WEIGHT_ON_BIT");
+            if (rpm > 180) alerts.push("EXCESSIVE_RPM");
+            if (drillingData.formation === 'granite') alerts.push("HARD_FORMATION_DETECTED");
+            
+            updateAlerts(alerts);
+            
+            if (alerts.length > 0) {
+                const banner = document.getElementById('alertBanner');
+                banner.className = 'alert-banner active';
+                banner.innerHTML = `⚠️ ALERT: ${alerts[0].replace(/_/g, ' ')}`;
+                setTimeout(() => banner.className = 'alert-banner', 5000);
+            }
+        }
+
+        function updateAlerts(alerts) {
+            const alertsList = document.getElementById('alertsList');
+            
+            if (alerts.length === 0) {
+                alertsList.innerHTML = '<div class="alert-item"><span>✅</span><span>No active alerts</span></div>';
+            } else {
+                alertsList.innerHTML = alerts.map(alert => 
+                    `<div class="alert-item"><span>⚠️</span><span>${alert.replace(/_/g, ' ')}</span></div>`
+                ).join('');
+            }
+        }
+
+        function optimizeParameters() {
+            alert('🤖 TML optimization applied! Parameters adjusted for optimal performance.');
+        }
+
+        function changeWell() {
+            currentWell = document.getElementById('wellSelect').value;
+            // Reset drilling data for new well
+            drillingData.depth = 0;
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        function changeRig() {
+            currentRig = document.getElementById('rigSelect').value;
+        }
+
+        // Initialize dashboard
+        window.addEventListener('load', () => {
+            // Start with some initial data
+            updateDashboard({
+                depth: 0,
+                formation: 'sandstone',
+                rop: 0,
+                wob: 25000,
+                rpm: 120,
+                mudWeight: 9.5,
+                flowRate: 450,
+                pressure: 3200,
+                equipmentRisk: 8,
+                stuckPipeRisk: 5
+            });
+        });
+    </script>
+</body>
+</html>

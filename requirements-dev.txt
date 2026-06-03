@@ -1,0 +1,30 @@
+# Development dependencies
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+pytest-xdist==3.5.0
+
+# Code formatting and linting
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+pre-commit==3.6.0
+
+# Documentation
+sphinx==7.2.6
+sphinx-rtd-theme==1.3.0
+myst-parser==2.0.0
+
+# Debugging and profiling
+ipdb==0.13.13
+memory-profiler==0.61.0
+line-profiler==4.1.1
+
+# Load testing
+locust==2.17.0
+
+# Container and deployment tools
+docker==6.1.3
+docker-compose==1.29.2
