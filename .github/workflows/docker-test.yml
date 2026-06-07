@@ -1,0 +1,88 @@
+name: Docker Services Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-docker-services:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Start Docker services (CI configuration)
+      run: |
+        # Use CI-optimized configuration
+        docker-compose -f docker-compose.ci.yml up -d
+        
+        # Wait for services to be healthy
+        echo "Waiting for services to start..."
+        sleep 30
+        
+        # Check service health
+        docker-compose -f docker-compose.ci.yml ps
+    
+    - name: Wait for Kafka to be ready
+      run: |
+        echo "Waiting for Kafka to be fully ready..."
+        for i in {1..30}; do
+          if docker exec tml-kafka-ci kafka-topics --bootstrap-server localhost:9092 --list 2>/dev/null; then
+            echo "Kafka is ready!"
+            break
+          fi
+          echo "Waiting for Kafka... ($i/30)"
+          sleep 2
+        done
+    
+    - name: Test Kafka functionality
+      run: |
+        # Create test topics
+        docker exec tml-kafka-ci kafka-topics \
+          --bootstrap-server localhost:9092 \
+          --create --topic test-topic \
+          --partitions 3 --replication-factor 1 || true
+        
+        # List topics
+        echo "Kafka topics:"
+        docker exec tml-kafka-ci kafka-topics \
+          --bootstrap-server localhost:9092 \
+          --list
+    
+    - name: Test Redis connectivity
+      run: |
+        docker exec tml-redis-ci redis-cli -a redis123 ping
+    
+    - name: Test PostgreSQL connectivity
+      run: |
+        docker exec tml-postgres-ci pg_isready -U tml
+    
+    - name: Run Python tests
+      run: |
+        # Install test dependencies
+        pip install kafka-python redis psycopg2-binary
+        
+        # Run the test script
+        python tests/test_docker_services.py
+    
+    - name: Show service logs on failure
+      if: failure()
+      run: |
+        echo "=== Kafka logs ==="
+        docker logs tml-kafka-ci --tail 50
+        echo "=== Redis logs ==="
+        docker logs tml-redis-ci --tail 50
+        echo "=== PostgreSQL logs ==="
+        docker logs tml-postgres-ci --tail 50
+    
+    - name: Stop services
+      if: always()
+      run: |
+        docker-compose -f docker-compose.ci.yml down -v

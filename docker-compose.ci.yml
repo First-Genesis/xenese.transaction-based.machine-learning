@@ -1,0 +1,132 @@
+version: '3.8'
+
+# Lightweight Docker Compose for CI/CD Testing
+# Optimized for GitHub Actions and automated testing
+
+services:
+  # Minimal Redis for testing
+  redis:
+    image: redis:7.2-alpine
+    container_name: tml-redis-ci
+    command: redis-server --requirepass redis123
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Minimal PostgreSQL for testing
+  postgres:
+    image: postgres:15-alpine
+    container_name: tml-postgres-ci
+    environment:
+      - POSTGRES_DB=tml
+      - POSTGRES_USER=tml
+      - POSTGRES_PASSWORD=tml123
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tml"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Single-node Kafka for testing (no Zookeeper needed with KRaft mode)
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: tml-kafka-ci
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      # KRaft mode configuration (no Zookeeper)
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_LOG4J_ROOT_LOGLEVEL: WARN
+      # Memory limits for CI
+      KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
+      # Cluster ID for KRaft mode
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    healthcheck:
+      test: ["CMD", "bash", "-c", "kafka-topics --bootstrap-server localhost:9092 --list"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+    command: |
+      bash -c "
+        # Format storage if needed
+        if [ ! -f /tmp/kraft-combined-logs/meta.properties ]; then
+          echo 'Formatting Kafka storage...'
+          kafka-storage format -t MkU3OEVBNTcwNTJENDM2Qk -c /etc/kafka/kafka.properties
+        fi
+        # Start Kafka
+        exec /etc/confluent/docker/run
+      "
+
+  # TML API for testing
+  tml-api:
+    image: python:3.9-slim
+    container_name: tml-api-ci
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=tml
+      - DB_USER=tml
+      - DB_PASSWORD=tml123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis123
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - JWT_SECRET=test-secret-key-for-ci
+      - API_KEY=test-api-key-for-ci
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    command: |
+      bash -c "
+        echo 'Installing dependencies...'
+        pip install --no-cache-dir fastapi uvicorn redis kafka-python psycopg2-binary sqlalchemy
+        echo 'Starting API server...'
+        python -m uvicorn api.production_server:app --host 0.0.0.0 --port 8000 || echo 'API start failed'
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  default:
+    name: tml-ci-network
+    driver: bridge
