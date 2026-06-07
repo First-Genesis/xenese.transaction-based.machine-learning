@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+  # Core Infrastructure Services
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: tml
+      POSTGRES_USER: tml
+      POSTGRES_PASSWORD: tml123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tml"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass redis123
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Use Redpanda instead of Kafka - No Zookeeper needed!
+  redpanda:
+    image: vectorized/redpanda:v23.2.8
+    container_name: redpanda
+    hostname: redpanda
+    ports:
+      - "9092:9092"  # Kafka API port
+      - "8081:8081"  # Schema Registry port
+      - "8082:8082"  # HTTP Proxy port
+      - "9644:9644"  # Admin API port
+    command:
+      - redpanda
+      - start
+      - --smp 1
+      - --reserve-memory 0M
+      - --overprovisioned
+      - --node-id 0
+      - --kafka-addr PLAINTEXT://0.0.0.0:9092,OUTSIDE://0.0.0.0:19092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:9092,OUTSIDE://localhost:19092
+      - --pandaproxy-addr 0.0.0.0:8082
+      - --advertise-pandaproxy-addr localhost:8082
+      - --schema-registry-addr 0.0.0.0:8081
+      - --rpc-addr 0.0.0.0:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --set redpanda.auto_create_topics_enabled=true
+      - --set redpanda.enable_idempotence=true
+      - --set redpanda.enable_transactions=true
+      - --set redpanda.default_topic_partitions=3
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9644/v1/cluster/health_overview"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redpanda Console (optional but very useful)
+  redpanda-console:
+    image: vectorized/console:latest
+    container_name: redpanda-console
+    depends_on:
+      - redpanda
+    ports:
+      - "8080:8080"
+    environment:
+      CONFIG_FILEPATH: /etc/console-config/console-config.yaml
+    volumes:
+      - ./redpanda-console-config.yaml:/etc/console-config/console-config.yaml:ro
+    restart: unless-stopped
+
+  # TML API
+  tml-api:
+    build:
+      context: ./src
+      dockerfile: Dockerfile.api
+    container_name: tml-api
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=tml;Username=tml;Password=tml123
+      - Redis__ConnectionString=redis:6379,password=redis123
+      - Kafka__BootstrapServers=redpanda:9092
+      - Kafka__ConsumerGroup=tml-consumer-group
+      - Kafka__TransactionTopic=tml-transactions
+      - Kafka__ModelUpdatesTopic=tml-model-updates
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+    volumes:
+      - ./models:/app/models
+    restart: unless-stopped
+
+  # MLflow Model Registry
+  mlflow:
+    image: python:3.9-slim
+    container_name: mlflow
+    ports:
+      - "5002:5000"
+    environment:
+      - BACKEND_STORE_URI=postgresql://tml:tml123@postgres:5432/mlflow
+      - DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    volumes:
+      - mlflow_artifacts:/mlflow/artifacts
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: |
+      bash -c "
+        pip install mlflow psycopg2-binary &&
+        mlflow db upgrade postgresql://tml:tml123@postgres:5432/mlflow 2>/dev/null || true &&
+        mlflow server --backend-store-uri postgresql://tml:tml123@postgres:5432/mlflow --default-artifact-root /mlflow/artifacts --host 0.0.0.0
+      "
+    restart: unless-stopped
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  redpanda_data:
+    driver: local
+  mlflow_artifacts:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  default:
+    name: tml-network
+    driver: bridge
