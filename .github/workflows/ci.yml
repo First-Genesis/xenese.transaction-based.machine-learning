@@ -24,20 +24,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      kafka:
-        image: confluentinc/cp-kafka:7.4.0
-        ports:
-          - 9092:9092
-        env:
-          KAFKA_BROKER_ID: 1
-          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-        options: >-
-          --health-cmd "kafka-topics --bootstrap-server localhost:9092 --list"
-          --health-interval 30s
-          --health-timeout 10s
-          --health-retries 5
+      # IMPORTANT: DO NOT ADD KAFKA SERVICE CONTAINER HERE!
+      # confluentinc/cp-kafka requires Zookeeper which causes DNS resolution failures:
+      # "Unable to canonicalize address zookeeper:2181 because it's not resolvable"
+      # Redpanda (Kafka-compatible) is used instead in the steps below
 
     steps:
     - uses: actions/checkout@v4
@@ -77,6 +67,32 @@ jobs:
     - name: Type check with mypy
       run: |
         mypy tml/ --ignore-missing-imports
+
+    - name: Start Redpanda (Kafka replacement)
+      run: |
+        docker run -d \
+          --name redpanda \
+          -p 9092:9092 \
+          -p 8081:8081 \
+          vectorized/redpanda:latest \
+          redpanda start \
+          --smp 1 \
+          --reserve-memory 0M \
+          --overprovisioned \
+          --node-id 0 \
+          --kafka-addr PLAINTEXT://0.0.0.0:9092 \
+          --advertise-kafka-addr PLAINTEXT://localhost:9092
+        
+        # Wait for Redpanda to be ready
+        echo "Waiting for Redpanda to start..."
+        for i in {1..30}; do
+          if docker exec redpanda rpk cluster info &>/dev/null; then
+            echo "Redpanda is ready!"
+            break
+          fi
+          echo "Waiting... ($i/30)"
+          sleep 2
+        done
 
     - name: Test with pytest
       run: |
