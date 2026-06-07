@@ -56,9 +56,11 @@ services:
 
   # Kafka Stack
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    container_name: tml-zookeeper
+    image: confluentinc/cp-zookeeper:7.4.0
     hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -76,12 +78,11 @@ services:
       start_period: 10s
 
   kafka:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: tml-kafka
+    image: confluentinc/cp-kafka:7.4.0
     hostname: kafka
+    container_name: kafka
     depends_on:
-      zookeeper:
-        condition: service_started
+      - zookeeper
     ports:
       - "9092:9092"
       - "29092:29092"
