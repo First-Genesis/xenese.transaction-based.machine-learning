@@ -1,0 +1,188 @@
+# TML Platform Production Makefile
+.PHONY: help build test run stop clean logs health
+
+# Colors for output
+RED=\033[0;31m
+GREEN=\033[0;32m
+YELLOW=\033[1;33m
+NC=\033[0m # No Color
+
+help: ## Show this help message
+	@echo "${GREEN}TML Platform Production Commands:${NC}"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  ${YELLOW}%-20s${NC} %s\n", $$1, $$2}'
+
+# === BUILD COMMANDS ===
+
+build: ## Build the .NET solution
+	@echo "${GREEN}Building TML Platform...${NC}"
+	cd src && dotnet restore
+	cd src && dotnet build --configuration Release
+
+build-docker: ## Build Docker images
+	@echo "${GREEN}Building Docker images...${NC}"
+	docker-compose -f docker-compose.prod.yml build
+
+# === TEST COMMANDS ===
+
+test: ## Run unit tests
+	@echo "${GREEN}Running unit tests...${NC}"
+	cd src && dotnet test --configuration Release --logger "console;verbosity=normal"
+
+test-integration: ## Run integration tests
+	@echo "${GREEN}Running integration tests...${NC}"
+	cd src && dotnet test --configuration Release --filter Category=Integration
+
+# === RUNTIME COMMANDS ===
+
+up: ## Start all services with docker-compose
+	@echo "${GREEN}Starting TML Platform...${NC}"
+	docker-compose -f docker-compose.prod.yml up -d
+	@echo "${GREEN}Waiting for services to be healthy...${NC}"
+	@sleep 10
+	@make health
+
+down: ## Stop all services
+	@echo "${YELLOW}Stopping TML Platform...${NC}"
+	docker-compose -f docker-compose.prod.yml down
+
+restart: ## Restart all services
+	@make down
+	@make up
+
+# === SPECIFIC SERVICE COMMANDS ===
+
+up-infra: ## Start only infrastructure services (DB, Redis, Kafka, MinIO)
+	@echo "${GREEN}Starting infrastructure services...${NC}"
+	docker-compose -f docker-compose.prod.yml up -d postgres redis kafka zookeeper minio consul
+
+up-api: ## Start only API service
+	@echo "${GREEN}Starting API service...${NC}"
+	docker-compose -f docker-compose.prod.yml up -d tml-api
+
+up-monitoring: ## Start monitoring stack
+	@echo "${GREEN}Starting monitoring services...${NC}"
+	docker-compose -f docker-compose.prod.yml up -d prometheus grafana jaeger
+
+# === DATABASE COMMANDS ===
+
+db-migrate: ## Run database migrations
+	@echo "${GREEN}Running database migrations...${NC}"
+	cd src && dotnet ef database update --project TML.Storage --startup-project TML.API
+
+db-reset: ## Reset database (CAUTION: destroys data)
+	@echo "${RED}WARNING: This will destroy all data!${NC}"
+	@read -p "Are you sure? (y/N) " confirm && [ "$$confirm" = "y" ] || exit 1
+	cd src && dotnet ef database drop --project TML.Storage --startup-project TML.API --force
+	cd src && dotnet ef database update --project TML.Storage --startup-project TML.API
+
+# === MINIO COMMANDS ===
+
+minio-setup: ## Setup MinIO buckets and policies
+	@echo "${GREEN}Setting up MinIO...${NC}"
+	docker exec -it $$(docker ps -qf "name=minio") mc config host add minio http://localhost:9000 minioadmin minioadmin123
+	docker exec -it $$(docker ps -qf "name=minio") mc mb minio/tml-models || true
+	docker exec -it $$(docker ps -qf "name=minio") mc policy set public minio/tml-models
+
+# === MONITORING COMMANDS ===
+
+logs: ## Show logs for all services
+	docker-compose -f docker-compose.prod.yml logs -f
+
+logs-api: ## Show API logs
+	docker-compose -f docker-compose.prod.yml logs -f tml-api
+
+health: ## Check health of all services
+	@echo "${GREEN}Checking service health...${NC}"
+	@echo -n "PostgreSQL: " && (docker-compose -f docker-compose.prod.yml exec -T postgres pg_isready -U tml_user -d tml_production > /dev/null 2>&1 && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+	@echo -n "Redis: " && (docker-compose -f docker-compose.prod.yml exec -T redis redis-cli ping > /dev/null 2>&1 && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+	@echo -n "MinIO: " && (curl -sf http://localhost:9000/minio/health/live > /dev/null && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+	@echo -n "Kafka: " && (docker-compose -f docker-compose.prod.yml exec -T kafka kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1 && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+	@echo -n "API: " && (curl -sf http://localhost:5000/health > /dev/null && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+	@echo -n "Prometheus: " && (curl -sf http://localhost:9090/-/healthy > /dev/null && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+	@echo -n "Grafana: " && (curl -sf http://localhost:3000/api/health > /dev/null && echo "${GREEN}✓${NC}" || echo "${RED}✗${NC}")
+
+metrics: ## Open metrics dashboards
+	@echo "${GREEN}Opening dashboards...${NC}"
+	@echo "  Grafana: http://localhost:3000 (admin/grafana_prod_2024!)"
+	@echo "  Prometheus: http://localhost:9090"
+	@echo "  Jaeger: http://localhost:16686"
+	@echo "  MinIO: http://localhost:9001 (minioadmin/minioadmin123)"
+	@echo "  Traefik: http://localhost:8080"
+	@echo "  Consul: http://localhost:8500"
+
+# === DEVELOPMENT COMMANDS ===
+
+dev: ## Run API in development mode
+	@echo "${GREEN}Running API in development mode...${NC}"
+	cd src && ASPNETCORE_ENVIRONMENT=Development dotnet run --project TML.API
+
+watch: ## Run API with hot reload
+	@echo "${GREEN}Running API with hot reload...${NC}"
+	cd src && ASPNETCORE_ENVIRONMENT=Development dotnet watch --project TML.API
+
+# === KAFKA COMMANDS ===
+
+kafka-topics: ## List Kafka topics
+	docker-compose -f docker-compose.prod.yml exec kafka kafka-topics --list --bootstrap-server localhost:9092
+
+kafka-create-topics: ## Create required Kafka topics
+	@echo "${GREEN}Creating Kafka topics...${NC}"
+	docker-compose -f docker-compose.prod.yml exec kafka kafka-topics --create --if-not-exists --topic tml.transactions --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+	docker-compose -f docker-compose.prod.yml exec kafka kafka-topics --create --if-not-exists --topic tml.models --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+	docker-compose -f docker-compose.prod.yml exec kafka kafka-topics --create --if-not-exists --topic tml.events --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+	docker-compose -f docker-compose.prod.yml exec kafka kafka-topics --create --if-not-exists --topic tml.metrics --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+
+# === CLEANUP COMMANDS ===
+
+clean: ## Clean build artifacts
+	@echo "${YELLOW}Cleaning build artifacts...${NC}"
+	cd src && dotnet clean
+	find . -name bin -type d -exec rm -rf {} + 2>/dev/null || true
+	find . -name obj -type d -exec rm -rf {} + 2>/dev/null || true
+
+clean-volumes: ## Remove all Docker volumes (CAUTION: destroys data)
+	@echo "${RED}WARNING: This will destroy all data!${NC}"
+	@read -p "Are you sure? (y/N) " confirm && [ "$$confirm" = "y" ] || exit 1
+	docker-compose -f docker-compose.prod.yml down -v
+
+reset: clean clean-volumes ## Full reset - clean everything
+	@echo "${RED}Full reset completed${NC}"
+
+# === PERFORMANCE COMMANDS ===
+
+benchmark: ## Run performance benchmarks
+	@echo "${GREEN}Running benchmarks...${NC}"
+	cd src && dotnet run --project TML.Tests --configuration Release -- benchmark
+
+load-test: ## Run load tests
+	@echo "${GREEN}Running load tests...${NC}"
+	@echo "Ensure k6 is installed: brew install k6"
+	k6 run tests/load/transactions.js
+
+# === DEPLOYMENT COMMANDS ===
+
+docker-push: ## Push Docker images to registry
+	@echo "${GREEN}Pushing Docker images...${NC}"
+	docker-compose -f docker-compose.prod.yml push
+
+deploy-k8s: ## Deploy to Kubernetes
+	@echo "${GREEN}Deploying to Kubernetes...${NC}"
+	kubectl apply -f k8s/namespace.yaml
+	kubectl apply -f k8s/
+
+# === UTILITY COMMANDS ===
+
+shell-api: ## Open shell in API container
+	docker-compose -f docker-compose.prod.yml exec tml-api /bin/bash
+
+shell-postgres: ## Open PostgreSQL shell
+	docker-compose -f docker-compose.prod.yml exec postgres psql -U tml_user -d tml_production
+
+shell-redis: ## Open Redis CLI
+	docker-compose -f docker-compose.prod.yml exec redis redis-cli -a redis_prod_2024!
+
+version: ## Show version information
+	@echo "${GREEN}TML Platform Version Information:${NC}"
+	@cd src && dotnet --version
+	@docker --version
+	@docker-compose --version

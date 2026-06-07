@@ -1,0 +1,15 @@
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/bin/Debug/net8.0/TML.Core.deps.json
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/bin/Debug/net8.0/TML.Core.dll
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/bin/Debug/net8.0/TML.Core.pdb
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/bin/Debug/net8.0/TML.Core.xml
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.csproj.AssemblyReference.cache
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.AssemblyInfoInputs.cache
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.AssemblyInfo.cs
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.csproj.CoreCompileInputs.cache
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.sourcelink.json
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.dll
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/refint/TML.Core.dll
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.xml
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/TML.Core.pdb
+/Users/rwattyfirstgenesis.com/TML/src/TML.Core/obj/Debug/net8.0/ref/TML.Core.dll

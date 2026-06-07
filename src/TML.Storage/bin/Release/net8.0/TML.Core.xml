@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TML.Core</name>
+    </assembly>
+    <members>
+        <member name="T:TML.Core.Domain.Model">
+            <summary>
+            Represents a machine learning model created from a transaction.
+            Each model can inherit from a parent model and has its own learning state.
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.Id">
+            <summary>
+            Unique identifier for the model
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.TransactionId">
+            <summary>
+            Transaction that created this model
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.ParentModelId">
+            <summary>
+            Parent model for inheritance (null for root models)
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.InheritanceDepth">
+            <summary>
+            Depth in the inheritance hierarchy (0 for root models)
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.Parameters">
+            <summary>
+            Model parameters and weights
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.PhysicsValidation">
+            <summary>
+            Physics validation results
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.Metrics">
+            <summary>
+            Model performance metrics
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.Location">
+            <summary>
+            Spatial location of the model
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.CreatedAt">
+            <summary>
+            Model creation timestamp
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.UpdatedAt">
+            <summary>
+            Last update timestamp
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.Version">
+            <summary>
+            Model version for tracking updates
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.Status">
+            <summary>
+            Current model status
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Model.ArtifactLocation">
+            <summary>
+            Storage location for model artifacts (S3 path, etc.)
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.ModelParameters">
+            <summary>
+            Model parameters and learned weights
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelParameters.Weights">
+            <summary>
+            Linear regression weights
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelParameters.Bias">
+            <summary>
+            Bias term
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelParameters.LearningRate">
+            <summary>
+            Learning rate used for training
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelParameters.Regularization">
+            <summary>
+            Regularization parameter
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelParameters.Iterations">
+            <summary>
+            Number of training iterations
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelParameters.ConvergenceThreshold">
+            <summary>
+            Convergence threshold
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.PhysicsValidation">
+            <summary>
+            Physics validation results for the model
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.PhysicsValidation.IsValid">
+            <summary>
+            Whether the model passes physics constraints
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.PhysicsValidation.ThicknessValid">
+            <summary>
+            Thickness validation result
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.PhysicsValidation.EnergyConservationValid">
+            <summary>
+            Energy conservation validation
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.PhysicsValidation.MassConservationValid">
+            <summary>
+            Mass conservation validation
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.PhysicsValidation.Violations">
+            <summary>
+            List of validation violations
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.PhysicsValidation.ValidationScore">
+            <summary>
+            Physics validation score (0.0 to 1.0)
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.ModelMetrics">
+            <summary>
+            Model performance metrics
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelMetrics.MeanSquaredError">
+            <summary>
+            Mean Squared Error
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelMetrics.RootMeanSquaredError">
+            <summary>
+            Root Mean Squared Error
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelMetrics.MeanAbsoluteError">
+            <summary>
+            Mean Absolute Error
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelMetrics.RSquared">
+            <summary>
+            R-squared coefficient of determination
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelMetrics.Confidence">
+            <summary>
+            Prediction confidence (0.0 to 1.0)
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.ModelMetrics.TrainingDataPoints">
+            <summary>
+            Number of data points used for training
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.SpatialLocation">
+            <summary>
+            Spatial location information for the model
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.SpatialLocation.X">
+            <summary>
+            X coordinate
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.SpatialLocation.Y">
+            <summary>
+            Y coordinate
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.SpatialLocation.Z">
+            <summary>
+            Z coordinate (optional)
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.SpatialLocation.GridId">
+            <summary>
+            Spatial grid identifier
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.SpatialLocation.Neighbors">
+            <summary>
+            Neighboring model IDs for spatial relationships
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.ModelStatus">
+            <summary>
+            Model status enumeration
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.ModelStatus.Active">
+            <summary>
+            Model is active and can be used for predictions
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.ModelStatus.Training">
+            <summary>
+            Model is being trained or updated
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.ModelStatus.Archived">
+            <summary>
+            Model has been archived
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.ModelStatus.Deprecated">
+            <summary>
+            Model has been deprecated
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.ModelStatus.Failed">
+            <summary>
+            Model has failed validation
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.Transaction">
+            <summary>
+            Represents a single transaction in the TML system.
+            Each transaction creates one model with potential inheritance.
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.Id">
+            <summary>
+            Unique identifier for the transaction
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.Data">
+            <summary>
+            Transaction data payload
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.Source">
+            <summary>
+            Source system or component that created this transaction
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.Metadata">
+            <summary>
+            Additional metadata for the transaction
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.CreatedAt">
+            <summary>
+            Timestamp when the transaction was created
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.Status">
+            <summary>
+            Current processing status
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.ProcessedAt">
+            <summary>
+            Timestamp when processing was completed
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.ErrorDetails">
+            <summary>
+            Processing error details if any
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.ProcessingTimeMs">
+            <summary>
+            Processing duration in milliseconds
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.Transaction.ModelId">
+            <summary>
+            ID of the model created from this transaction
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.TransactionData">
+            <summary>
+            Transaction data containing the actual measurement or input data
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.TransactionData.XCoord">
+            <summary>
+            X coordinate for spatial data
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.TransactionData.YCoord">
+            <summary>
+            Y coordinate for spatial data
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.TransactionData.Thickness">
+            <summary>
+            Thickness measurement in millimeters
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.TransactionData.MinThickness">
+            <summary>
+            Minimum acceptable thickness threshold
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.TransactionData.Features">
+            <summary>
+            Additional sensor data or features
+            </summary>
+        </member>
+        <member name="P:TML.Core.Domain.TransactionData.Quality">
+            <summary>
+            Quality score of the measurement (0.0 to 1.0)
+            </summary>
+        </member>
+        <member name="T:TML.Core.Domain.TransactionStatus">
+            <summary>
+            Transaction processing status enumeration
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.TransactionStatus.Pending">
+            <summary>
+            Transaction is waiting to be processed
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.TransactionStatus.Processing">
+            <summary>
+            Transaction is currently being processed
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.TransactionStatus.Completed">
+            <summary>
+            Transaction was processed successfully
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.TransactionStatus.Failed">
+            <summary>
+            Transaction processing failed
+            </summary>
+        </member>
+        <member name="F:TML.Core.Domain.TransactionStatus.Cancelled">
+            <summary>
+            Transaction was cancelled
+            </summary>
+        </member>
+    </members>
+</doc>

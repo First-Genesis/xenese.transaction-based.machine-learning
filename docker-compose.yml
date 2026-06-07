@@ -4,15 +4,14 @@ services:
   # TML Platform Services
   tml-api:
     build:
-      context: .
-      dockerfile: docker/Dockerfile.api
+      context: ./src
+      dockerfile: Dockerfile.api
     ports:
-      - "8000:8000"
+      - "5001:8080"
     environment:
-      - REDIS_URL=redis://redis:6379
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - DATABASE_URL=postgresql://tml:tml123@postgres:5432/tml
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=tml;Username=tml;Password=tml123
+      - Redis__ConnectionString=tml-redis-1:6379,password=redis123
     depends_on:
       - redis
       - kafka
@@ -87,7 +86,7 @@ services:
   mlflow:
     image: python:3.9-slim
     ports:
-      - "5000:5000"
+      - "5002:5000"
     environment:
       - BACKEND_STORE_URI=postgresql://tml:tml123@postgres:5432/mlflow
       - DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts

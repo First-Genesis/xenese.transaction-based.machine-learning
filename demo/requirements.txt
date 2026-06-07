@@ -1,0 +1,14 @@
+# TML Platform Demo Requirements
+
+# Web Framework
+streamlit>=1.28.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Visualization
+plotly>=5.15.0
+
+# Utilities
+python-dateutil>=2.8.0

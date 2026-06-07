@@ -96,7 +96,7 @@ async def root():
             "models": "/api/models",
             "create_model": "/api/models/create",
             "train": "/api/models/train",
-            "predict": "/api/predict"
+            "predict": "/api/predict",
         }
     }
 
@@ -108,6 +108,7 @@ async def health():
         "models_active": len(models_store),
         "timestamp": datetime.now().isoformat()
     }
+
 
 @app.get("/api/models", response_model=List[ModelInfo])
 async def list_models():

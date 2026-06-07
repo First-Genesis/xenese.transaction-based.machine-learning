@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TML.API</name>
+    </assembly>
+    <members>
+        <member name="M:TML.API.Controllers.DriftController.GetDriftSummary">
+            <summary>
+            Get drift summary across all models
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.DriftController.GetModelDriftMetrics(System.Guid)">
+            <summary>
+            Get drift metrics for a specific model
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.DriftController.GetModelDriftHistory(System.Guid,System.Int32)">
+            <summary>
+            Get drift history for a model
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.DriftController.GetDriftAlerts(System.Int32)">
+            <summary>
+            Get recent drift alerts
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.DriftController.CheckDrift(TML.API.Controllers.DriftCheckRequest)">
+            <summary>
+            Manually check drift for specific data
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.DriftController.GetFeatureDrift(System.String,System.Int32)">
+            <summary>
+            Get feature drift analysis
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.DriftController.TriggerRetraining(System.Guid,TML.API.Controllers.RetrainRequest)">
+            <summary>
+            Trigger model retraining
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.CreateExperiment(TML.API.Controllers.CreateExperimentRequest)">
+            <summary>
+            Create a new A/B test experiment
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.GetExperiment(System.Guid)">
+            <summary>
+            Get experiment by ID
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.ListExperiments(System.Nullable{TML.MLOps.ABTesting.ExperimentStatus})">
+            <summary>
+            List all experiments
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.RouteRequest(System.Guid,TML.API.Controllers.RouteRequest)">
+            <summary>
+            Route a request to get variant assignment
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.RecordOutcome(System.Guid,TML.API.Controllers.RecordOutcomeRequest)">
+            <summary>
+            Record conversion/outcome for an experiment
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.AnalyzeExperiment(System.Guid)">
+            <summary>
+            Analyze experiment results
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.ConcludeExperiment(System.Guid,System.Boolean)">
+            <summary>
+            Conclude an experiment
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.StopExperiment(System.Guid,TML.API.Controllers.StopExperimentRequest)">
+            <summary>
+            Stop an experiment
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ExperimentController.GetRecommendations(System.Guid)">
+            <summary>
+            Get experiment recommendations based on current performance
+            </summary>
+        </member>
+        <member name="T:TML.API.Controllers.ModelsController">
+            <summary>
+            API controller for model management
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.GetModels(System.Nullable{System.Int32},System.Nullable{System.Int32},System.String)">
+            <summary>
+            Get all models with optional filtering
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.GetStatistics">
+            <summary>
+            Get model statistics
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.GetSpatialNeighbors(System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Find models within spatial radius
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.GetModel(System.Guid)">
+            <summary>
+            Get model by ID
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.SearchModels(TML.API.Controllers.ModelSearchRequest)">
+            <summary>
+            Search models by criteria
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.FindSpatialNeighbors(System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Find spatial neighbors for a location
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.GetInheritanceChain(System.Guid)">
+            <summary>
+            Get model inheritance chain
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.GetModelArtifacts(System.Guid)">
+            <summary>
+            Download model artifacts from S3
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.ListModelVersions(System.Guid)">
+            <summary>
+            List all versions of a model's artifacts
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.ArchiveModelVersions(System.Guid,System.Int32)">
+            <summary>
+            Archive old model versions to cheaper storage
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.ModelsController.ValidatePhysics(System.Guid)">
+            <summary>
+            Validate physics for a model
+            </summary>
+        </member>
+        <member name="T:TML.API.Controllers.TransactionsController">
+            <summary>
+            API controller for transaction processing
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.TransactionsController.GetTransactions(System.Nullable{System.Int32},System.Nullable{System.Int32},System.String)">
+            <summary>
+            Get all transactions with optional filtering
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.TransactionsController.GetStatistics">
+            <summary>
+            Get transaction statistics
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.TransactionsController.ProcessTransaction(TML.API.Controllers.TransactionRequest)">
+            <summary>
+            Process a single transaction through the TML platform
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.TransactionsController.ProcessBatch(TML.API.Controllers.BatchTransactionRequest)">
+            <summary>
+            Process multiple transactions in batch
+            </summary>
+        </member>
+        <member name="M:TML.API.Controllers.TransactionsController.GetTransaction(System.Guid)">
+            <summary>
+            Get transaction by ID
+            </summary>
+        </member>
+        <member name="T:TML.API.Extensions.ActorSystemHealthCheck">
+            <summary>
+            Health check for the Actor System
+            </summary>
+        </member>
+        <member name="T:TML.API.Middleware.ExceptionHandlingMiddleware">
+            <summary>
+            Global exception handling middleware
+            </summary>
+        </member>
+        <member name="T:TML.API.Middleware.ErrorResponse">
+            <summary>
+            Standard error response format
+            </summary>
+        </member>
+        <member name="T:TML.API.Middleware.RequestLoggingMiddleware">
+            <summary>
+            Middleware for logging HTTP requests and responses
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,7 @@
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/bin/Release/net8.0/CoverletSourceRootsMapping_TML.Tests
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/obj/Release/net8.0/TML.Tests.csproj.AssemblyReference.cache
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/obj/Release/net8.0/TML.Tests.GeneratedMSBuildEditorConfig.editorconfig
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/obj/Release/net8.0/TML.Tests.AssemblyInfoInputs.cache
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/obj/Release/net8.0/TML.Tests.AssemblyInfo.cs
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/obj/Release/net8.0/TML.Tests.csproj.CoreCompileInputs.cache
+/Users/rwattyfirstgenesis.com/TML/src/TML.Tests/obj/Release/net8.0/TML.Tests.sourcelink.json

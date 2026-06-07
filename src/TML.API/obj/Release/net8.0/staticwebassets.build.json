@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "LyK8jwWS9hGxb0afGza0y44PZh2SKgNqeIq0jJ7GzJk=",
+  "Source": "TML.API",
+  "BasePath": "_content/TML.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

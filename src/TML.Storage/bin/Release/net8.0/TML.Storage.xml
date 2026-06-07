@@ -1,0 +1,457 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TML.Storage</name>
+    </assembly>
+    <members>
+        <member name="T:TML.Storage.Data.DesignTimeDbContextFactory">
+            <summary>
+            Design-time factory for Entity Framework Core migrations
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Data.TMLDbContext">
+            <summary>
+            Entity Framework DbContext for TML Platform data persistence
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Data.TMLDbContext.Transactions">
+            <summary>
+            Transactions table
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Data.TMLDbContext.Models">
+            <summary>
+            Models table
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:TML.Storage.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TML.Storage.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TML.Storage.Repositories.IModelRepository">
+            <summary>
+            Repository interface for Model data access
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.CreateAsync(TML.Core.Domain.Model,System.Threading.CancellationToken)">
+            <summary>
+            Create a new model
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.UpdateAsync(TML.Core.Domain.Model,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing model
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetByIdAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get model by ID
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetByTransactionIdAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get models by transaction ID
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetByParentModelIdAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get models by parent model ID (inheritance chain)
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.FindSpatialNeighborsAsync(System.Double,System.Double,System.Double,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Find spatial neighbors within radius
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetByGridIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get models in spatial grid
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetByStatusAsync(TML.Core.Domain.ModelStatus,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get models by status
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetByInheritanceDepthAsync(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get models by inheritance depth
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetInheritanceChainAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get inheritance chain for a model
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.GetStatisticsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get model statistics
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.DeleteAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete model by ID
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.CreateBatchAsync(System.Collections.Generic.IEnumerable{TML.Core.Domain.Model},System.Threading.CancellationToken)">
+            <summary>
+            Batch create models
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.IModelRepository.SearchAsync(TML.Storage.Repositories.ModelSearchCriteria,System.Threading.CancellationToken)">
+            <summary>
+            Search models by criteria
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Repositories.ModelStatistics">
+            <summary>
+            Model statistics
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Repositories.ModelSearchCriteria">
+            <summary>
+            Model search criteria
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Repositories.ITransactionRepository">
+            <summary>
+            Repository interface for Transaction data access
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.CreateAsync(TML.Core.Domain.Transaction,System.Threading.CancellationToken)">
+            <summary>
+            Create a new transaction
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.UpdateAsync(TML.Core.Domain.Transaction,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing transaction
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.GetByIdAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get transaction by ID
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.GetByStatusAsync(TML.Core.Domain.TransactionStatus,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get transactions by status
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.GetInSpatialAreaAsync(System.Double,System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>
+            Get transactions in spatial area
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.GetBySourceAsync(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get transactions by source
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.GetByTimeRangeAsync(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>
+            Get transactions created within time range
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.GetStatisticsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get transaction statistics
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.DeleteAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete transaction by ID
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Repositories.ITransactionRepository.CreateBatchAsync(System.Collections.Generic.IEnumerable{TML.Core.Domain.Transaction},System.Threading.CancellationToken)">
+            <summary>
+            Batch create transactions
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Repositories.TransactionStatistics">
+            <summary>
+            Transaction statistics
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Repositories.ModelRepository">
+            <summary>
+            PostgreSQL implementation of model repository with spatial indexing
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Repositories.TransactionRepository">
+            <summary>
+            PostgreSQL implementation of transaction repository
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.IRedisCacheService">
+            <summary>
+            Interface for Redis caching service
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetTransactionAsync(System.Guid,TML.Core.Domain.Transaction,System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Cache a transaction
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.GetTransactionAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get cached transaction
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetModelAsync(System.Guid,TML.Core.Domain.Model,System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Cache a model
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.GetModelAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get cached model
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetSpatialNeighborsAsync(System.String,System.Collections.Generic.IReadOnlyList{System.Guid},System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Cache spatial neighbors for a location
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.GetSpatialNeighborsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get cached spatial neighbors
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetMetricsAsync(System.String,System.Object,System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Cache processing metrics
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.GetMetricsAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get cached metrics
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.InvalidateAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Invalidate cache entry
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.InvalidatePatternAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Invalidate multiple cache entries by pattern
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.ExistsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Check if key exists in cache
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetWithSlidingExpirationAsync``1(System.String,``0,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Set cache entry with sliding expiration
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.GetOrSetAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}},System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Get or set cache entry (cache-aside pattern)
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.IncrementAsync(System.String,System.Int64,System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Increment counter
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetAddAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Add item to set
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetMembersAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get all items from set
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SetRemoveAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Remove item from set
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SortedSetAddAsync(System.String,System.String,System.Double,System.Threading.CancellationToken)">
+            <summary>
+            Add item to sorted set with score
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SortedSetTopAsync(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get top N items from sorted set
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.PublishAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Publish message to channel
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.SubscribeAsync(System.String,System.Action{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to channel
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IRedisCacheService.GetStatisticsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get cache statistics
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.SortedSetEntry">
+            <summary>
+            Sorted set entry
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.CacheStatistics">
+            <summary>
+            Cache statistics
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.IS3ModelArtifactService">
+            <summary>
+            Interface for S3 model artifact storage service
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.StoreModelArtifactsAsync(System.Guid,TML.Storage.Services.ModelArtifacts,System.Threading.CancellationToken)">
+            <summary>
+            Store model artifacts in S3
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.RetrieveModelArtifactsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieve model artifacts from S3
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.DeleteModelArtifactsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete model artifacts from S3
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.ExistsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Check if model artifacts exist in S3
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.GetDownloadUrlAsync(System.String,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Get pre-signed URL for model artifact download
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.StoreVersionedModelArtifactsAsync(System.Guid,System.Int32,TML.Storage.Services.ModelArtifacts,System.Threading.CancellationToken)">
+            <summary>
+            Store model artifacts with versioning
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.ListModelVersionsAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            List all versions of model artifacts
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.IS3ModelArtifactService.ArchiveOldVersionsAsync(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Archive old model versions (move to cheaper storage class)
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.ModelArtifacts">
+            <summary>
+            Model artifacts for storage
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.ModelData">
+            <summary>
+            Serialized model parameters
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.Metadata">
+            <summary>
+            Model metadata (JSON)
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.TrainingHistory">
+            <summary>
+            Training history and metrics
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.FeatureImportance">
+            <summary>
+            Feature importance data
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.Visualizations">
+            <summary>
+            Model visualization plots
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.AdditionalFiles">
+            <summary>
+            Additional files (configs, logs, etc.)
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.Compression">
+            <summary>
+            Compression type used
+            </summary>
+        </member>
+        <member name="P:TML.Storage.Services.ModelArtifacts.IsEncrypted">
+            <summary>
+            Encryption status
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.ModelArtifactVersion">
+            <summary>
+            Model artifact version information
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.CompressionType">
+            <summary>
+            Compression types for model artifacts
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.RedisCacheService">
+            <summary>
+            Redis implementation of caching service with high-performance operations
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.RedisConfiguration">
+            <summary>
+            Redis configuration settings
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.S3ClientFactory">
+            <summary>
+            Factory for creating S3 clients with MinIO support
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.S3ClientFactory.CreateClient">
+            <summary>
+            Create or get cached S3 client configured for MinIO or AWS S3
+            </summary>
+        </member>
+        <member name="M:TML.Storage.Services.S3ClientFactory.EnsureBucketExistsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Ensure bucket exists (useful for MinIO/LocalStack)
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.IS3ClientFactory">
+            <summary>
+            Interface for S3 client factory
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.S3ModelArtifactService">
+            <summary>
+            S3 implementation for model artifact storage with compression and encryption
+            </summary>
+        </member>
+        <member name="T:TML.Storage.Services.S3Configuration">
+            <summary>
+            S3 configuration settings with MinIO support
+            </summary>
+        </member>
+    </members>
+</doc>

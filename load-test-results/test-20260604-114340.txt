@@ -1,0 +1,39 @@
+Sending 20 batches...
+
+Response time: 0.003870s
+Response time: 0.003485s
+Response time: 0.003788s
+Response time: 0.002208s
+Response time: 0.002286s
+Response time: 0.003321s
+Response time: 0.001747s
+Response time: 0.001887s
+Response time: 0.001576s
+Response time: 0.001402s
+Response time: 0.002410s
+Response time: 0.001771s
+Response time: 0.001683s
+Response time: 0.001699s
+Response time: 0.001562s
+Response time: 0.001518s
+Response time: 0.002336s
+Response time: 0.001974s
+Response time: 0.002002s
+Response time: 0.001563s
+
+===========================
+Load Test Results
+===========================
+
+[0;34mSummary:[0m
+  Total transactions: 1000
+  Total duration: 2s
+  Transactions per second: 500
+
+[0;34mDatabase Statistics:[0m
+
+[0;34mCache Statistics:[0m
+  Keys in cache: Authentication
+  Memory usage: 
+
+[0;32m✅ Load test completed![0m

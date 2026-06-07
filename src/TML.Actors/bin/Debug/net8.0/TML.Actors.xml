@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TML.Actors</name>
+    </assembly>
+    <members>
+        <member name="T:TML.Actors.Actors.ModelActor">
+            <summary>
+            Model management actor responsible for creating, updating, and retrieving ML models.
+            Handles model inheritance, spatial relationships, and persistence.
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Actors.PhysicsValidatorActor">
+            <summary>
+            Physics validation actor responsible for validating physics constraints
+            and ensuring model predictions comply with physical laws.
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Actors.PhysicsRules">
+            <summary>
+            Physics rules and constraints for validation
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Actors.TransactionProcessorActor">
+            <summary>
+            High-performance transaction processor actor using Proto.Actor framework.
+            Handles individual transactions and batch processing with model inheritance.
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.ITMLMessage">
+            <summary>
+            Base interface for all TML actor messages
+            </summary>
+        </member>
+        <member name="P:TML.Actors.Messages.ITMLMessage.MessageId">
+            <summary>
+            Unique message identifier
+            </summary>
+        </member>
+        <member name="P:TML.Actors.Messages.ITMLMessage.Timestamp">
+            <summary>
+            Message timestamp
+            </summary>
+        </member>
+        <member name="P:TML.Actors.Messages.ITMLMessage.CorrelationId">
+            <summary>
+            Correlation ID for tracing
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.TMLMessage">
+            <summary>
+            Base record for TML messages with common properties
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.ProcessTransaction">
+            <summary>
+            Message to process a single transaction
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.ProcessTransaction.#ctor(TML.Core.Domain.Transaction)">
+            <summary>
+            Message to process a single transaction
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.ProcessTransactionBatch">
+            <summary>
+            Message to process multiple transactions in batch
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.ProcessTransactionBatch.#ctor(System.Collections.Generic.IReadOnlyList{TML.Core.Domain.Transaction})">
+            <summary>
+            Message to process multiple transactions in batch
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.TransactionProcessed">
+            <summary>
+            Response message for transaction processing
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.TransactionProcessed.#ctor(System.Guid,System.Boolean,TML.Core.Domain.Model,System.String,System.Double)">
+            <summary>
+            Response message for transaction processing
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.TransactionBatchProcessed">
+            <summary>
+            Response message for batch transaction processing
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.TransactionBatchProcessed.#ctor(System.Collections.Generic.IReadOnlyList{TML.Actors.Messages.TransactionProcessed},System.Int32,System.Int32,System.Double)">
+            <summary>
+            Response message for batch transaction processing
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.CreateModel">
+            <summary>
+            Message to create a new model
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.CreateModel.#ctor(System.Guid,TML.Core.Domain.TransactionData,System.Nullable{System.Guid})">
+            <summary>
+            Message to create a new model
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.UpdateModel">
+            <summary>
+            Message to update an existing model
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.UpdateModel.#ctor(System.Guid,TML.Core.Domain.TransactionData)">
+            <summary>
+            Message to update an existing model
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.GetModel">
+            <summary>
+            Message to retrieve a model
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.GetModel.#ctor(System.Guid)">
+            <summary>
+            Message to retrieve a model
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.ModelResponse">
+            <summary>
+            Response message for model operations
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.ModelResponse.#ctor(System.Guid,TML.Core.Domain.Model,System.Boolean,System.String)">
+            <summary>
+            Response message for model operations
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.FindSpatialNeighbors">
+            <summary>
+            Message to find spatial neighbors for a model
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.FindSpatialNeighbors.#ctor(System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Message to find spatial neighbors for a model
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.SpatialNeighborsFound">
+            <summary>
+            Response message for spatial neighbor search
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.SpatialNeighborsFound.#ctor(System.Collections.Generic.IReadOnlyList{TML.Core.Domain.Model})">
+            <summary>
+            Response message for spatial neighbor search
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.ValidatePhysics">
+            <summary>
+            Message to validate physics constraints
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.ValidatePhysics.#ctor(TML.Core.Domain.TransactionData,TML.Core.Domain.Model)">
+            <summary>
+            Message to validate physics constraints
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.PhysicsValidated">
+            <summary>
+            Response message for physics validation
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.PhysicsValidated.#ctor(TML.Core.Domain.PhysicsValidation,System.Boolean,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>
+            Response message for physics validation
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.GetHealthStatus">
+            <summary>
+            Message to get actor system health status
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.GetHealthStatus.#ctor">
+            <summary>
+            Message to get actor system health status
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.HealthStatusResponse">
+            <summary>
+            Response message for health status
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.HealthStatusResponse.#ctor(System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.Object},System.DateTimeOffset)">
+            <summary>
+            Response message for health status
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.GetMetrics">
+            <summary>
+            Message to get performance metrics
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.GetMetrics.#ctor">
+            <summary>
+            Message to get performance metrics
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.MetricsResponse">
+            <summary>
+            Response message for performance metrics
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.MetricsResponse.#ctor(System.String,System.Int64,System.Double,System.Double,System.Collections.Generic.Dictionary{System.String,System.Double})">
+            <summary>
+            Response message for performance metrics
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.Shutdown">
+            <summary>
+            Message to shutdown an actor gracefully
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.Shutdown.#ctor(System.String)">
+            <summary>
+            Message to shutdown an actor gracefully
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.Restart">
+            <summary>
+            Message to restart an actor
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.Restart.#ctor(System.String)">
+            <summary>
+            Message to restart an actor
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.JoinCluster">
+            <summary>
+            Message to join the cluster
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.JoinCluster.#ctor(System.String,System.String)">
+            <summary>
+            Message to join the cluster
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.LeaveCluster">
+            <summary>
+            Message to leave the cluster
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.LeaveCluster.#ctor(System.String,System.String)">
+            <summary>
+            Message to leave the cluster
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.GetClusterStatus">
+            <summary>
+            Message to get cluster status
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.GetClusterStatus.#ctor">
+            <summary>
+            Message to get cluster status
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Messages.ClusterStatusResponse">
+            <summary>
+            Response message for cluster status
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Messages.ClusterStatusResponse.#ctor(System.Collections.Generic.IReadOnlyList{System.String},System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Response message for cluster status
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Services.ActorSystemService">
+            <summary>
+            Hosted service that manages the Proto.Actor system lifecycle.
+            Handles actor creation, clustering, and graceful shutdown.
+            </summary>
+        </member>
+        <member name="P:TML.Actors.Services.ActorSystemService.Root">
+            <summary>
+            Gets the root context for the actor system
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Services.ActorSystemService.GetTransactionProcessor">
+            <summary>
+            Get a transaction processor actor using round-robin selection
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Services.ActorSystemService.GetModelActor">
+            <summary>
+            Get a model actor using round-robin selection
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Services.ActorSystemService.GetPhysicsValidator">
+            <summary>
+            Get a physics validator actor
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Services.ActorSystemService.GetAllActors">
+            <summary>
+            Get all active actors
+            </summary>
+        </member>
+        <member name="M:TML.Actors.Services.ActorSystemService.GetHealthStatusAsync">
+            <summary>
+            Get actor system health status
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Services.ActorSystemConfiguration">
+            <summary>
+            Configuration for the Actor System
+            </summary>
+        </member>
+        <member name="T:TML.Actors.Services.ActorSystemHealth">
+            <summary>
+            Actor system health information
+            </summary>
+        </member>
+    </members>
+</doc>

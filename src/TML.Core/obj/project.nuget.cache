@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "MyNKZCOYBL8=",
+  "success": true,
+  "projectFilePath": "/Users/rwattyfirstgenesis.com/TML/src/TML.Core/TML.Core.csproj",
+  "expectedPackageFiles": [
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/fluentvalidation/11.8.0/fluentvalidation.11.8.0.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/mediatr/12.2.0/mediatr.12.2.0.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/system.text.json/8.0.5/system.text.json.8.0.5.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/microsoft.netcore.app.ref/8.0.19/microsoft.netcore.app.ref.8.0.19.nupkg.sha512",
+    "/Users/rwattyfirstgenesis.com/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.19/microsoft.aspnetcore.app.ref.8.0.19.nupkg.sha512"
+  ],
+  "logs": []
+}
