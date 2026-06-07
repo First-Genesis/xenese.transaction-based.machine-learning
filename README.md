@@ -214,9 +214,10 @@ TML/
 
 ## 📚 **Documentation**
 
-- **[Platform Architecture](docs/TML_Platform_Architecture.md)**: Complete technical architecture
-- **[Technical Guide](docs/TML_Platform_Technical_Guide_For_Students.md)**: Student learning resource
-- **[Business Cases](docs/)**: 44+ comprehensive industry use cases
+- **[Platform Architecture](docs/TML_Platform_Architecture.md)**: Complete technical architecture with Mermaid diagrams
+- **[Technical Implementation Guide](docs/TML_Technical_Implementation_Guide.md)**: Comprehensive guide for AI/ML and Software Engineers
+- **[Student Learning Guide](docs/TML_Platform_Technical_Guide_For_Students.md)**: Educational resource for students
+- **[Business Cases](docs/)**: 44+ comprehensive industry use cases with $6T+ market opportunity
 
 ## 📄 **License**
 
