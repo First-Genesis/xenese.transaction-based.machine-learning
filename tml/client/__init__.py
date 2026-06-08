@@ -12,15 +12,13 @@ Production-grade client library for the TML platform supporting:
 Copyright (c) 2024 First Genesis. All rights reserved.
 """
 
-from .tml_client import (
-    AuthenticationError,
-    ClientError,
-    ProcessingError,
-    ProcessingMode,
-    ProcessingResult,
-    TMLClient,
-    TMLConfig,
-)
+from .tml_client import AuthenticationError
+from .tml_client import ClientError
+from .tml_client import ProcessingError
+from .tml_client import ProcessingMode
+from .tml_client import ProcessingResult
+from .tml_client import TMLClient
+from .tml_client import TMLConfig
 
 __all__ = [
     "TMLClient",

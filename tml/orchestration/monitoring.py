@@ -9,25 +9,29 @@ import asyncio
 import json
 import statistics
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Optional
 
 import aiohttp
 import opentelemetry
 import structlog
 from aiohttp import web
-from opentelemetry import metrics, trace
-from prometheus_client import (
-    CONTENT_TYPE_LATEST,
-    CollectorRegistry,
-    Counter,
-    Gauge,
-    Histogram,
-    Info,
-    Summary,
-    generate_latest,
-)
+from opentelemetry import metrics
+from opentelemetry import trace
+from prometheus_client import CONTENT_TYPE_LATEST
+from prometheus_client import CollectorRegistry
+from prometheus_client import Counter
+from prometheus_client import Gauge
+from prometheus_client import Histogram
+from prometheus_client import Info
+from prometheus_client import Summary
+from prometheus_client import generate_latest
 
 try:
     from opentelemetry.exporter.jaeger.thrift import JaegerExporter

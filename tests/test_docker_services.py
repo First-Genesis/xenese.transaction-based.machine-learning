@@ -12,7 +12,8 @@ import time
 def test_kafka():
     """Test Kafka connectivity."""
     try:
-        from kafka import KafkaConsumer, KafkaProducer
+        from kafka import KafkaConsumer
+        from kafka import KafkaProducer
 
         # Try to connect and send a message
         producer = KafkaProducer(bootstrap_servers="localhost:9092")

@@ -10,8 +10,13 @@ Copyright (c) 2024 First Genesis. All rights reserved.
 import json
 import logging
 import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from dataclasses import field
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
 
 import numpy as np
 from scipy.spatial.distance import euclidean

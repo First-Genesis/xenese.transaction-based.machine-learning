@@ -16,20 +16,22 @@ import os
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Tuple
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from tests.data_generators import TestDataset, create_test_datasets
+from tests.data_generators import TestDataset
+from tests.data_generators import create_test_datasets
 
 # Import TML components
-from tml.core.enhanced_platform import (
-    EnhancedTMLPlatform,
-    EnhancedTransactionData,
-    create_enhanced_tml_platform,
-)
+from tml.core.enhanced_platform import EnhancedTMLPlatform
+from tml.core.enhanced_platform import EnhancedTransactionData
+from tml.core.enhanced_platform import create_enhanced_tml_platform
 from tml.learning.enhanced_learner import LearningAlgorithm
 from tml.physics.physics_engine import create_engineering_physics_engine
 

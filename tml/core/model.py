@@ -4,13 +4,23 @@ import hashlib
 import pickle
 import time
 import uuid
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
+from abc import ABC
+from abc import abstractmethod
+from dataclasses import dataclass
+from dataclasses import field
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
 import numpy as np
 from loguru import logger
-from river import base, compose, linear_model, metrics, preprocessing
+from river import base
+from river import compose
+from river import linear_model
+from river import metrics
+from river import preprocessing
 
 
 @dataclass

@@ -11,24 +11,28 @@ import logging
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
 
 from ..core.registry import ModelRegistry
 from ..ingestion.kafka_consumer import TMLConsumer
 
 # Import existing components
 from ..ingestion.kafka_producer import TMLProducer
-from ..learning.enhanced_learner import (
-    LearningAlgorithm,
-    LearningConfiguration,
-    ModelInheritanceInfo,
-    TransactionModelLearner,
-    create_enhanced_learner,
-)
+from ..learning.enhanced_learner import LearningAlgorithm
+from ..learning.enhanced_learner import LearningConfiguration
+from ..learning.enhanced_learner import ModelInheritanceInfo
+from ..learning.enhanced_learner import TransactionModelLearner
+from ..learning.enhanced_learner import create_enhanced_learner
 
 # Import enhanced components
-from ..orchestration.proto_actor_system import ModelInheritanceMessage, TMLActorSystem
-from ..physics.physics_engine import PhysicsEngine, create_engineering_physics_engine
+from ..orchestration.proto_actor_system import ModelInheritanceMessage
+from ..orchestration.proto_actor_system import TMLActorSystem
+from ..physics.physics_engine import PhysicsEngine
+from ..physics.physics_engine import create_engineering_physics_engine
 
 logger = logging.getLogger(__name__)
 
