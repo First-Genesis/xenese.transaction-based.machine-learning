@@ -73,14 +73,14 @@ jobs:
         
         # Function to try multiple registries with service-specific alternatives
         pull_postgres() {
-          # Try specific PostgreSQL alternatives
-          if timeout 20 docker pull postgres:15-alpine 2>/dev/null; then
+          # Try specific PostgreSQL alternatives with clean output
+          if timeout 20 docker pull postgres:15-alpine >/dev/null 2>&1; then
             echo "postgres:15-alpine"
             return 0
-          elif timeout 20 docker pull postgres:15 2>/dev/null; then
+          elif timeout 20 docker pull postgres:15 >/dev/null 2>&1; then
             echo "postgres:15"
             return 0
-          elif timeout 20 docker pull postgres:14-alpine 2>/dev/null; then
+          elif timeout 20 docker pull postgres:14-alpine >/dev/null 2>&1; then
             echo "postgres:14-alpine"
             return 0
           fi
@@ -88,14 +88,14 @@ jobs:
         }
         
         pull_redis() {
-          # Try specific Redis alternatives
-          if timeout 20 docker pull redis:7-alpine 2>/dev/null; then
+          # Try specific Redis alternatives with clean output
+          if timeout 20 docker pull redis:7-alpine >/dev/null 2>&1; then
             echo "redis:7-alpine"
             return 0
-          elif timeout 20 docker pull redis:7 2>/dev/null; then
+          elif timeout 20 docker pull redis:7 >/dev/null 2>&1; then
             echo "redis:7"
             return 0
-          elif timeout 20 docker pull redis:6-alpine 2>/dev/null; then
+          elif timeout 20 docker pull redis:6-alpine >/dev/null 2>&1; then
             echo "redis:6-alpine"
             return 0
           fi
