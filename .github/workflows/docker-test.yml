@@ -20,19 +20,19 @@ jobs:
     - name: Verify Docker is available
       run: |
         docker --version
-        docker-compose --version || echo "docker-compose may need installation"
+        docker compose version || echo "docker compose plugin may need installation"
     
     - name: Start Docker services (CI configuration)
       run: |
         # Use CI-optimized configuration
-        docker-compose -f docker-compose.ci.yml up -d
+        docker compose -f docker-compose.ci.yml up -d
         
         # Wait for services to be healthy
         echo "Waiting for services to start..."
         sleep 30
         
         # Check service health
-        docker-compose -f docker-compose.ci.yml ps
+        docker compose -f docker-compose.ci.yml ps
     
     - name: Wait for Kafka to be ready
       run: |
@@ -89,4 +89,4 @@ jobs:
     - name: Stop services
       if: always()
       run: |
-        docker-compose -f docker-compose.ci.yml down -v
+        docker compose -f docker-compose.ci.yml down -v
