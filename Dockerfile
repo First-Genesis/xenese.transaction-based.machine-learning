@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for TML Platform
 
 # Build stage
-FROM python:3.9-slim as builder
+FROM python:3.9-slim AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -28,7 +28,7 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 # Production stage
-FROM python:3.9-slim as production
+FROM python:3.9-slim AS production
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -75,7 +75,7 @@ EXPOSE 8000
 CMD ["python", "-m", "uvicorn", "tml.serving.api_server:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # Development stage
-FROM production as development
+FROM production AS development
 
 # Switch back to root for development tools
 USER root
