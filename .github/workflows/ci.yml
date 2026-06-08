@@ -13,21 +13,8 @@ jobs:
       matrix:
         python-version: [3.9, "3.10", "3.11"]
 
-    services:
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      # IMPORTANT: DO NOT ADD KAFKA SERVICE CONTAINER HERE!
-      # confluentinc/cp-kafka requires Zookeeper which causes DNS resolution failures:
-      # "Unable to canonicalize address zookeeper:2181 because it's not resolvable"
-      # Redpanda (Kafka-compatible) is used instead in the steps below
+    # NOTE: Using manual Docker commands instead of service containers
+    # to avoid Docker Hub pull timeouts and have better control
 
     steps:
     - uses: actions/checkout@v4
@@ -79,8 +66,88 @@ jobs:
       run: |
         mypy tml/ --ignore-missing-imports
 
+    - name: Start services with retry logic
+      run: |
+        # Function to retry Docker pulls with exponential backoff
+        retry_docker_pull() {
+          local image=$1
+          local max_attempts=3
+          local delay=5
+          
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Attempting to pull $image (attempt $attempt/$max_attempts)"
+            if docker pull $image; then
+              echo "Successfully pulled $image"
+              return 0
+            else
+              if [ $attempt -lt $max_attempts ]; then
+                echo "Pull failed, waiting ${delay}s before retry..."
+                sleep $delay
+                delay=$((delay * 2))
+              fi
+            fi
+          done
+          
+          echo "Failed to pull $image after $max_attempts attempts"
+          return 1
+        }
+        
+        # Start PostgreSQL
+        echo "Starting PostgreSQL..."
+        retry_docker_pull postgres:15-alpine
+        docker run -d \
+          --name postgres \
+          -p 5432:5432 \
+          -e POSTGRES_DB=tml \
+          -e POSTGRES_USER=tml \
+          -e POSTGRES_PASSWORD=tml123 \
+          postgres:15-alpine
+        
+        # Start Redis
+        echo "Starting Redis..."
+        retry_docker_pull redis:7-alpine
+        docker run -d \
+          --name redis \
+          -p 6379:6379 \
+          redis:7-alpine redis-server
+        
+        # Wait for services to be ready
+        echo "Waiting for PostgreSQL and Redis..."
+        sleep 10
+        
+        # Verify services
+        docker exec postgres pg_isready -U tml || echo "PostgreSQL not ready yet"
+        docker exec redis redis-cli ping || echo "Redis not ready yet"
+
     - name: Start Redpanda (Kafka replacement)
       run: |
+        # Function to retry Docker pulls (reuse from previous step)
+        retry_docker_pull() {
+          local image=$1
+          local max_attempts=3
+          local delay=5
+          
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Attempting to pull $image (attempt $attempt/$max_attempts)"
+            if docker pull $image; then
+              echo "Successfully pulled $image"
+              return 0
+            else
+              if [ $attempt -lt $max_attempts ]; then
+                echo "Pull failed, waiting ${delay}s before retry..."
+                sleep $delay
+                delay=$((delay * 2))
+              fi
+            fi
+          done
+          
+          echo "Failed to pull $image after $max_attempts attempts"
+          return 1
+        }
+        
+        # Start Redpanda with retry
+        echo "Starting Redpanda..."
+        retry_docker_pull vectorized/redpanda:latest
         docker run -d \
           --name redpanda \
           -p 9092:9092 \
@@ -98,7 +165,7 @@ jobs:
         echo "Waiting for Redpanda to start..."
         for i in {1..30}; do
           if docker exec redpanda rpk cluster info &>/dev/null; then
-            echo "Redpanda is ready!"
+            echo "✅ Redpanda is ready!"
             break
           fi
           echo "Waiting... ($i/30)"
