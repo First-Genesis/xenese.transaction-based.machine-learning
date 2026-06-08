@@ -71,40 +71,41 @@ jobs:
         echo "🚨 Docker Hub is experiencing widespread outages"
         echo "Using alternative registries for all services..."
         
-        # Function to try multiple registries
-        pull_from_alternatives() {
-          local service=$1
-          local image_name=$2
-          local tag=$3
-          
-          # Try GitHub Container Registry first
-          if timeout 30 docker pull ghcr.io/library/${image_name}:${tag} 2>/dev/null; then
-            echo "✅ Using ${service} from GitHub Container Registry"
-            echo "ghcr.io/library/${image_name}:${tag}"
+        # Function to try multiple registries with service-specific alternatives
+        pull_postgres() {
+          # Try specific PostgreSQL alternatives
+          if timeout 20 docker pull postgres:15-alpine 2>/dev/null; then
+            echo "postgres:15-alpine"
+            return 0
+          elif timeout 20 docker pull postgres:15 2>/dev/null; then
+            echo "postgres:15"
+            return 0
+          elif timeout 20 docker pull postgres:14-alpine 2>/dev/null; then
+            echo "postgres:14-alpine"
             return 0
           fi
-          
-          # Try Quay.io
-          if timeout 30 docker pull quay.io/${image_name}:${tag} 2>/dev/null; then
-            echo "✅ Using ${service} from Quay.io"
-            echo "quay.io/${image_name}:${tag}"
-            return 0
-          fi
-          
-          # Try Docker Hub as last resort with short timeout
-          if timeout 15 docker pull ${image_name}:${tag} 2>/dev/null; then
-            echo "✅ Using ${service} from Docker Hub (lucky!)"
-            echo "${image_name}:${tag}"
-            return 0
-          fi
-          
-          echo "❌ All registries failed for ${service}"
           return 1
         }
         
-        # Start PostgreSQL with alternative registries
+        pull_redis() {
+          # Try specific Redis alternatives
+          if timeout 20 docker pull redis:7-alpine 2>/dev/null; then
+            echo "redis:7-alpine"
+            return 0
+          elif timeout 20 docker pull redis:7 2>/dev/null; then
+            echo "redis:7"
+            return 0
+          elif timeout 20 docker pull redis:6-alpine 2>/dev/null; then
+            echo "redis:6-alpine"
+            return 0
+          fi
+          return 1
+        }
+        
+        # Start PostgreSQL with fallback versions
         echo "Starting PostgreSQL..."
-        if POSTGRES_IMAGE=$(pull_from_alternatives "PostgreSQL" "postgres" "15-alpine"); then
+        if POSTGRES_IMAGE=$(pull_postgres); then
+          echo "✅ Using PostgreSQL image: $POSTGRES_IMAGE"
           docker run -d \
             --name postgres \
             -p 5432:5432 \
@@ -118,9 +119,10 @@ jobs:
           POSTGRES_STARTED=false
         fi
         
-        # Start Redis with alternative registries
+        # Start Redis with fallback versions
         echo "Starting Redis..."
-        if REDIS_IMAGE=$(pull_from_alternatives "Redis" "redis" "7-alpine"); then
+        if REDIS_IMAGE=$(pull_redis); then
+          echo "✅ Using Redis image: $REDIS_IMAGE"
           docker run -d \
             --name redis \
             -p 6379:6379 \
