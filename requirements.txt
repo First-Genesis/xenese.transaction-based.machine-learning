@@ -9,7 +9,7 @@ scikit-multiflow==0.5.3
 scikit-learn==1.3.2
 
 # Deep Learning (optional for advanced models)
-torch==2.1.1
+torch==2.2.0  # Security fix: RCE and heap buffer overflow vulnerabilities
 # transformers==4.37.0  # DISABLED: Multiple deserialization vulnerabilities
 # Alternative: Use transformers with strict input validation or consider alternatives
 
@@ -61,17 +61,26 @@ great-expectations==0.18.5
 pydantic==2.5.2
 fastapi==0.104.1
 uvicorn==0.24.0
-python-multipart==0.0.7  # Security fix: Content-Type Header ReDoS vulnerability
+python-multipart==0.0.8  # Security fix: Arbitrary file write and DoS vulnerabilities
 click==8.1.7
 python-dotenv==1.0.0
 pyyaml==6.0.1
 loguru==0.7.2
 
 # Security & Authentication
-python-jose[cryptography]==3.3.1  # Security fix: Algorithm confusion with ECDSA keys
+python-jose[cryptography]==3.3.2  # Security fix: Algorithm confusion with ECDSA keys
+cryptography==42.0.0  # Security fix: Bleichenbacher timing oracle attack
+authlib==1.3.0  # Security fix: JWS JWK header injection vulnerability
 
 # Image Processing
 pillow==10.2.0  # Security fix: Arbitrary code execution vulnerability
+
+# HTTP & Networking
+urllib3==2.2.0  # Security fix: Decompression bomb and streaming API vulnerabilities
+certifi==2024.2.2  # Security fix: Updated CA certificates
+
+# JSON Processing
+ujson==5.9.0  # Security fix: Memory leak vulnerability
 
 # Development and Testing
 pytest==7.4.3
@@ -102,11 +111,11 @@ networkx==3.2.1
 
 # Graph Neural Networks
 torch-geometric==2.4.0
-dgl==1.1.3
+# dgl==1.1.3  # DISABLED: RCE via pickle deserialization - no secure version available
 
 # Enhanced ML Algorithms
 xgboost==2.0.2
-lightgbm==4.1.0
+lightgbm==4.3.0  # Security fix: Remote code execution vulnerability
 catboost==1.2.2
 
 # Physics-Informed Neural Networks
