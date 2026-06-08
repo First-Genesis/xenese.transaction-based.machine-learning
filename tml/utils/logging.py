@@ -13,7 +13,7 @@ from tml.core.config import config
 
 class InterceptHandler(logging.Handler):
     """Intercept standard logging and redirect to loguru."""
-    
+
     def emit(self, record):
         # Get corresponding Loguru level if it exists
         try:
@@ -36,17 +36,17 @@ def setup_logging(
     log_level: str = None,
     log_file: Optional[str] = None,
     json_logs: bool = False,
-    intercept_stdlib: bool = True
+    intercept_stdlib: bool = True,
 ):
     """Setup logging configuration for TML platform."""
-    
+
     # Remove default loguru handler
     logger.remove()
-    
+
     # Determine log level
     if log_level is None:
         log_level = config.log_level
-    
+
     # Console handler
     console_format = (
         "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
@@ -54,7 +54,7 @@ def setup_logging(
         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
         "<level>{message}</level>"
     )
-    
+
     if json_logs:
         console_format = (
             '{"time": "{time:YYYY-MM-DD HH:mm:ss}", '
@@ -64,31 +64,31 @@ def setup_logging(
             '"line": {line}, '
             '"message": "{message}"}'
         )
-    
+
     logger.add(
         sys.stdout,
         format=console_format,
         level=log_level,
         colorize=not json_logs,
         backtrace=True,
-        diagnose=True
+        diagnose=True,
     )
-    
+
     # File handler
     if log_file or config.logs_dir:
         if not log_file:
             log_file = config.logs_dir / "tml.log"
-        
+
         # Ensure log directory exists
         Path(log_file).parent.mkdir(parents=True, exist_ok=True)
-        
+
         file_format = (
             "{time:YYYY-MM-DD HH:mm:ss} | "
             "{level: <8} | "
             "{name}:{function}:{line} | "
             "{message}"
         )
-        
+
         logger.add(
             log_file,
             format=file_format,
@@ -97,13 +97,13 @@ def setup_logging(
             retention="30 days",
             compression="gz",
             backtrace=True,
-            diagnose=True
+            diagnose=True,
         )
-    
+
     # Intercept standard library logging
     if intercept_stdlib:
         logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
-        
+
         # Intercept specific loggers
         for logger_name in [
             "uvicorn",
@@ -112,10 +112,10 @@ def setup_logging(
             "kafka",
             "cassandra",
             "redis",
-            "mlflow"
+            "mlflow",
         ]:
             logging.getLogger(logger_name).handlers = [InterceptHandler()]
-    
+
     logger.info(f"Logging configured with level: {log_level}")
 
 
@@ -127,15 +127,16 @@ def get_logger(name: str):
 # Performance logging decorator
 def log_performance(func_name: str = None):
     """Decorator to log function performance."""
+
     def decorator(func):
         import time
         from functools import wraps
-        
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             name = func_name or f"{func.__module__}.{func.__name__}"
             start_time = time.time()
-            
+
             try:
                 result = func(*args, **kwargs)
                 execution_time = (time.time() - start_time) * 1000
@@ -143,26 +144,30 @@ def log_performance(func_name: str = None):
                 return result
             except Exception as e:
                 execution_time = (time.time() - start_time) * 1000
-                logger.error(f"Performance: {name} failed after {execution_time:.2f}ms: {e}")
+                logger.error(
+                    f"Performance: {name} failed after {execution_time:.2f}ms: {e}"
+                )
                 raise
-        
+
         return wrapper
+
     return decorator
 
 
 # Async performance logging decorator
 def log_async_performance(func_name: str = None):
     """Decorator to log async function performance."""
+
     def decorator(func):
         import time
         import asyncio
         from functools import wraps
-        
+
         @wraps(func)
         async def wrapper(*args, **kwargs):
             name = func_name or f"{func.__module__}.{func.__name__}"
             start_time = time.time()
-            
+
             try:
                 result = await func(*args, **kwargs)
                 execution_time = (time.time() - start_time) * 1000
@@ -170,30 +175,33 @@ def log_async_performance(func_name: str = None):
                 return result
             except Exception as e:
                 execution_time = (time.time() - start_time) * 1000
-                logger.error(f"Performance: {name} failed after {execution_time:.2f}ms: {e}")
+                logger.error(
+                    f"Performance: {name} failed after {execution_time:.2f}ms: {e}"
+                )
                 raise
-        
+
         return wrapper
+
     return decorator
 
 
 # Context manager for logging blocks
 class LoggingContext:
     """Context manager for logging code blocks."""
-    
+
     def __init__(self, name: str, level: str = "INFO"):
         self.name = name
         self.level = level
         self.start_time = None
-    
+
     def __enter__(self):
         self.start_time = time.time()
         logger.log(self.level, f"Starting: {self.name}")
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         execution_time = (time.time() - self.start_time) * 1000
-        
+
         if exc_type is None:
             logger.log(self.level, f"Completed: {self.name} in {execution_time:.2f}ms")
         else:

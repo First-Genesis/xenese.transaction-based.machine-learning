@@ -3,7 +3,7 @@ TML Client Library
 
 Production-grade client library for the TML platform supporting:
 - Local processing mode
-- Remote API mode  
+- Remote API mode
 - Hybrid mode
 - Distributed processing
 - Authentication and security
@@ -19,18 +19,18 @@ from .tml_client import (
     ProcessingResult,
     ClientError,
     AuthenticationError,
-    ProcessingError
+    ProcessingError,
 )
 
 __all__ = [
-    'TMLClient',
-    'TMLConfig', 
-    'ProcessingMode',
-    'ProcessingResult',
-    'ClientError',
-    'AuthenticationError',
-    'ProcessingError'
+    "TMLClient",
+    "TMLConfig",
+    "ProcessingMode",
+    "ProcessingResult",
+    "ClientError",
+    "AuthenticationError",
+    "ProcessingError",
 ]
 
 # Version
-__version__ = '3.0.0'
+__version__ = "3.0.0"

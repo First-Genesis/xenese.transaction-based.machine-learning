@@ -23,12 +23,17 @@ from tml.monitoring.metrics import MetricsCollector
 # Pydantic models for API
 class PredictionRequest(BaseModel):
     """Request model for predictions."""
+
     features: Dict[str, Any] = Field(..., description="Feature dictionary")
     model_id: Optional[str] = Field(None, description="Specific model ID to use")
     user_id: Optional[str] = Field(None, description="User ID for model selection")
-    session_id: Optional[str] = Field(None, description="Session ID for model selection")
-    return_probabilities: bool = Field(False, description="Return prediction probabilities")
-    
+    session_id: Optional[str] = Field(
+        None, description="Session ID for model selection"
+    )
+    return_probabilities: bool = Field(
+        False, description="Return prediction probabilities"
+    )
+
     class Config:
         schema_extra = {
             "example": {
@@ -36,32 +41,42 @@ class PredictionRequest(BaseModel):
                     "amount": 150.0,
                     "category": "electronics",
                     "hour_of_day": 14,
-                    "device_type": "mobile"
+                    "device_type": "mobile",
                 },
                 "user_id": "user_12345",
-                "return_probabilities": True
+                "return_probabilities": True,
             }
         }
 
 
 class PredictionResponse(BaseModel):
     """Response model for predictions."""
+
     prediction: Any = Field(..., description="Model prediction")
     model_id: str = Field(..., description="ID of model used")
     confidence: Optional[float] = Field(None, description="Prediction confidence")
-    probabilities: Optional[Dict[str, float]] = Field(None, description="Class probabilities")
-    processing_time_ms: float = Field(..., description="Processing time in milliseconds")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    probabilities: Optional[Dict[str, float]] = Field(
+        None, description="Class probabilities"
+    )
+    processing_time_ms: float = Field(
+        ..., description="Processing time in milliseconds"
+    )
+    metadata: Dict[str, Any] = Field(
+        default_factory=dict, description="Additional metadata"
+    )
 
 
 class LearningRequest(BaseModel):
     """Request model for online learning."""
+
     features: Dict[str, Any] = Field(..., description="Feature dictionary")
     target: Any = Field(..., description="Target value for learning")
     model_id: Optional[str] = Field(None, description="Specific model ID to update")
     user_id: Optional[str] = Field(None, description="User ID for model selection")
-    session_id: Optional[str] = Field(None, description="Session ID for model selection")
-    
+    session_id: Optional[str] = Field(
+        None, description="Session ID for model selection"
+    )
+
     class Config:
         schema_extra = {
             "example": {
@@ -69,38 +84,46 @@ class LearningRequest(BaseModel):
                     "amount": 150.0,
                     "category": "electronics",
                     "hour_of_day": 14,
-                    "device_type": "mobile"
+                    "device_type": "mobile",
                 },
                 "target": True,
-                "user_id": "user_12345"
+                "user_id": "user_12345",
             }
         }
 
 
 class LearningResponse(BaseModel):
     """Response model for learning operations."""
+
     success: bool = Field(..., description="Whether learning was successful")
     model_id: str = Field(..., description="ID of model updated")
-    processing_time_ms: float = Field(..., description="Processing time in milliseconds")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    processing_time_ms: float = Field(
+        ..., description="Processing time in milliseconds"
+    )
+    metadata: Dict[str, Any] = Field(
+        default_factory=dict, description="Additional metadata"
+    )
 
 
 class BatchPredictionRequest(BaseModel):
     """Request model for batch predictions."""
-    requests: List[PredictionRequest] = Field(..., description="List of prediction requests")
-    
+
+    requests: List[PredictionRequest] = Field(
+        ..., description="List of prediction requests"
+    )
+
     class Config:
         schema_extra = {
             "example": {
                 "requests": [
                     {
                         "features": {"amount": 100.0, "category": "books"},
-                        "user_id": "user_1"
+                        "user_id": "user_1",
                     },
                     {
                         "features": {"amount": 200.0, "category": "electronics"},
-                        "user_id": "user_2"
-                    }
+                        "user_id": "user_2",
+                    },
                 ]
             }
         }
@@ -108,12 +131,16 @@ class BatchPredictionRequest(BaseModel):
 
 class BatchPredictionResponse(BaseModel):
     """Response model for batch predictions."""
-    predictions: List[PredictionResponse] = Field(..., description="List of predictions")
+
+    predictions: List[PredictionResponse] = Field(
+        ..., description="List of predictions"
+    )
     total_processing_time_ms: float = Field(..., description="Total processing time")
 
 
 class ModelStatsResponse(BaseModel):
     """Response model for model statistics."""
+
     model_id: str
     total_predictions: int
     total_updates: int
@@ -145,7 +172,7 @@ app = FastAPI(
     title="TML Platform API",
     description="Transaction-based Machine Learning Platform API",
     version="0.1.0",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # Add CORS middleware
@@ -170,11 +197,7 @@ async def collect_metrics():
 @app.get("/")
 async def root():
     """Root endpoint."""
-    return {
-        "message": "TML Platform API",
-        "version": "0.1.0",
-        "status": "running"
-    }
+    return {"message": "TML Platform API", "version": "0.1.0", "status": "running"}
 
 
 @app.get("/health")
@@ -186,8 +209,8 @@ async def health_check():
         "services": {
             "learning_engine": "running",
             "model_registry": "running",
-            "kafka_producer": "running"
-        }
+            "kafka_producer": "running",
+        },
     }
 
 
@@ -195,11 +218,11 @@ async def health_check():
 async def predict(
     request: PredictionRequest,
     background_tasks: BackgroundTasks,
-    _: None = Depends(collect_metrics)
+    _: None = Depends(collect_metrics),
 ):
     """Make a prediction using the appropriate model."""
     start_time = time.time()
-    
+
     try:
         # Determine model ID
         model_id = request.model_id
@@ -210,15 +233,15 @@ async def predict(
                 model_id = f"session_{request.session_id}"
             else:
                 model_id = "default_model"
-        
+
         # Get or create learner
         learner = learning_engine.get_learner(model_id)
         if not learner:
             learner = learning_engine.create_learner(model_id)
-        
+
         # Make prediction
         prediction = learner.predict(request.features)
-        
+
         # Get probabilities if requested
         probabilities = None
         confidence = None
@@ -226,16 +249,16 @@ async def predict(
             probabilities = learner.predict_proba(request.features)
             if probabilities:
                 confidence = max(probabilities.values())
-        
+
         processing_time = (time.time() - start_time) * 1000
-        
+
         # Record metrics in background
         background_tasks.add_task(
             metrics_collector.record_prediction,
             model_id=model_id,
-            processing_time_ms=processing_time
+            processing_time_ms=processing_time,
         )
-        
+
         return PredictionResponse(
             prediction=prediction,
             model_id=model_id,
@@ -244,10 +267,10 @@ async def predict(
             processing_time_ms=processing_time,
             metadata={
                 "algorithm": type(learner).__name__,
-                "features_count": len(request.features)
-            }
+                "features_count": len(request.features),
+            },
         )
-        
+
     except Exception as e:
         logger.error(f"Prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -257,11 +280,11 @@ async def predict(
 async def learn(
     request: LearningRequest,
     background_tasks: BackgroundTasks,
-    _: None = Depends(collect_metrics)
+    _: None = Depends(collect_metrics),
 ):
     """Update a model with new training data."""
     start_time = time.time()
-    
+
     try:
         # Determine model ID
         model_id = request.model_id
@@ -272,12 +295,12 @@ async def learn(
                 model_id = f"session_{request.session_id}"
             else:
                 model_id = "default_model"
-        
+
         # Update model
         success = learning_engine.learn(model_id, request.features, request.target)
-        
+
         processing_time = (time.time() - start_time) * 1000
-        
+
         # Send to Kafka for further processing
         if success:
             transaction_event = TransactionEvent(
@@ -287,28 +310,30 @@ async def learn(
                 timestamp=time.time(),
                 event_type="learning_update",
                 features=request.features,
-                target=request.target
+                target=request.target,
             )
-            background_tasks.add_task(kafka_producer.send_transaction, transaction_event)
-        
+            background_tasks.add_task(
+                kafka_producer.send_transaction, transaction_event
+            )
+
         # Record metrics in background
         background_tasks.add_task(
             metrics_collector.record_learning_update,
             model_id=model_id,
             success=success,
-            processing_time_ms=processing_time
+            processing_time_ms=processing_time,
         )
-        
+
         return LearningResponse(
             success=success,
             model_id=model_id,
             processing_time_ms=processing_time,
             metadata={
                 "features_count": len(request.features),
-                "target_type": type(request.target).__name__
-            }
+                "target_type": type(request.target).__name__,
+            },
         )
-        
+
     except Exception as e:
         logger.error(f"Learning error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -318,49 +343,50 @@ async def learn(
 async def batch_predict(
     request: BatchPredictionRequest,
     background_tasks: BackgroundTasks,
-    _: None = Depends(collect_metrics)
+    _: None = Depends(collect_metrics),
 ):
     """Make batch predictions."""
     start_time = time.time()
-    
+
     try:
         predictions = []
-        
+
         # Process requests concurrently
         tasks = []
         for pred_request in request.requests:
             task = asyncio.create_task(_process_single_prediction(pred_request))
             tasks.append(task)
-        
+
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         for i, result in enumerate(results):
             if isinstance(result, Exception):
                 logger.error(f"Batch prediction error for request {i}: {result}")
                 # Add error response
-                predictions.append(PredictionResponse(
-                    prediction=None,
-                    model_id="error",
-                    processing_time_ms=0,
-                    metadata={"error": str(result)}
-                ))
+                predictions.append(
+                    PredictionResponse(
+                        prediction=None,
+                        model_id="error",
+                        processing_time_ms=0,
+                        metadata={"error": str(result)},
+                    )
+                )
             else:
                 predictions.append(result)
-        
+
         total_processing_time = (time.time() - start_time) * 1000
-        
+
         # Record batch metrics
         background_tasks.add_task(
             metrics_collector.record_batch_prediction,
             batch_size=len(request.requests),
-            processing_time_ms=total_processing_time
+            processing_time_ms=total_processing_time,
         )
-        
+
         return BatchPredictionResponse(
-            predictions=predictions,
-            total_processing_time_ms=total_processing_time
+            predictions=predictions, total_processing_time_ms=total_processing_time
         )
-        
+
     except Exception as e:
         logger.error(f"Batch prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -369,7 +395,7 @@ async def batch_predict(
 async def _process_single_prediction(request: PredictionRequest) -> PredictionResponse:
     """Process a single prediction request."""
     start_time = time.time()
-    
+
     # Determine model ID
     model_id = request.model_id
     if not model_id:
@@ -379,15 +405,15 @@ async def _process_single_prediction(request: PredictionRequest) -> PredictionRe
             model_id = f"session_{request.session_id}"
         else:
             model_id = "default_model"
-    
+
     # Get or create learner
     learner = learning_engine.get_learner(model_id)
     if not learner:
         learner = learning_engine.create_learner(model_id)
-    
+
     # Make prediction
     prediction = learner.predict(request.features)
-    
+
     # Get probabilities if requested
     probabilities = None
     confidence = None
@@ -395,9 +421,9 @@ async def _process_single_prediction(request: PredictionRequest) -> PredictionRe
         probabilities = learner.predict_proba(request.features)
         if probabilities:
             confidence = max(probabilities.values())
-    
+
     processing_time = (time.time() - start_time) * 1000
-    
+
     return PredictionResponse(
         prediction=prediction,
         model_id=model_id,
@@ -406,8 +432,8 @@ async def _process_single_prediction(request: PredictionRequest) -> PredictionRe
         processing_time_ms=processing_time,
         metadata={
             "algorithm": type(learner).__name__,
-            "features_count": len(request.features)
-        }
+            "features_count": len(request.features),
+        },
     )
 
 
@@ -429,7 +455,7 @@ async def get_model_stats(model_id: str):
         metadata = await model_registry.get_model_metadata(model_id)
         if not metadata:
             raise HTTPException(status_code=404, detail="Model not found")
-        
+
         return ModelStatsResponse(
             model_id=metadata.model_id,
             total_predictions=metadata.total_predictions,
@@ -437,9 +463,9 @@ async def get_model_stats(model_id: str):
             accuracy=metadata.accuracy,
             drift_score=metadata.drift_score,
             last_updated=metadata.last_updated,
-            creation_time=metadata.creation_time
+            creation_time=metadata.creation_time,
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -454,9 +480,9 @@ async def delete_model(model_id: str):
         success = await model_registry.delete_model(model_id)
         if not success:
             raise HTTPException(status_code=404, detail="Model not found")
-        
+
         return {"message": f"Model {model_id} deleted successfully"}
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -470,13 +496,13 @@ async def get_system_stats():
     try:
         engine_stats = learning_engine.get_engine_stats()
         cache_stats = model_registry.get_cache_stats()
-        
+
         return {
             "learning_engine": engine_stats,
             "model_registry": cache_stats,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
-        
+
     except Exception as e:
         logger.error(f"Error getting system stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -497,10 +523,7 @@ async def get_metrics():
 async def global_exception_handler(request, exc):
     """Global exception handler."""
     logger.error(f"Unhandled exception: {exc}")
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "Internal server error"}
-    )
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
 
 def create_app() -> FastAPI:
@@ -516,7 +539,7 @@ def run_server(host: str = "0.0.0.0", port: int = 8000, **kwargs):
         port=port,
         reload=config.debug,
         log_level=config.log_level.lower(),
-        **kwargs
+        **kwargs,
     )
 
 
