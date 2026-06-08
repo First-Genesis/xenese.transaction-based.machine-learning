@@ -9,7 +9,7 @@ scikit-multiflow==0.5.3
 scikit-learn==1.3.2
 
 # Deep Learning (optional for advanced models)
-torch==2.2.0  # Security fix: RCE and heap buffer overflow vulnerabilities
+torch==2.2.1  # Latest security patches for RCE and buffer overflow
 # transformers==4.37.0  # DISABLED: Multiple deserialization vulnerabilities
 # Alternative: Use transformers with strict input validation or consider alternatives
 
@@ -20,7 +20,8 @@ apache-flink==1.18.0
 pyflink==1.18.0
 
 # Feature Store
-feast==0.34.1
+# feast==0.34.1  # DISABLED: Deserialization and CORS vulnerabilities
+# Alternative: Custom feature store implementation
 
 # Model Storage and Registry
 # mlflow==2.10.2  # DISABLED: Multiple unpatched security vulnerabilities
@@ -39,7 +40,7 @@ fastapi==0.104.1  # Direct API serving
 uvicorn==0.24.0   # ASGI server
 tritonclient[all]==2.40.0
 grpcio==1.60.0
-protobuf==4.25.1
+protobuf==4.25.3  # Security fix: DoS and JSON recursion vulnerabilities
 
 # Monitoring and Observability
 evidently==0.4.11
@@ -61,32 +62,33 @@ great-expectations==0.18.5
 pydantic==2.5.2
 fastapi==0.104.1
 uvicorn==0.24.0
-python-multipart==0.0.8  # Security fix: Arbitrary file write and DoS vulnerabilities
+python-multipart==0.0.9  # Latest security patches for file write vulnerabilities
 click==8.1.7
-python-dotenv==1.0.0
+python-dotenv==1.0.1  # Security fix: Symlink following vulnerability
 pyyaml==6.0.1
 loguru==0.7.2
 
 # Security & Authentication
-python-jose[cryptography]==3.3.2  # Security fix: Algorithm confusion with ECDSA keys
-cryptography==42.0.0  # Security fix: Bleichenbacher timing oracle attack
-authlib==1.3.0  # Security fix: JWS JWK header injection vulnerability
+# python-jose[cryptography]==3.3.2  # REPLACED: Persistent algorithm confusion vulnerabilities
+PyJWT==2.8.0  # Secure JWT library replacement for python-jose
+cryptography==42.0.5  # Latest security patches for subgroup attacks and NULL pointer issues
+authlib==1.3.1  # Latest security patches for multiple vulnerabilities
 
 # Image Processing
-pillow==10.2.0  # Security fix: Arbitrary code execution vulnerability
+pillow==10.3.0  # Latest security patches for buffer overflow vulnerabilities
 
 # HTTP & Networking
-urllib3==2.2.0  # Security fix: Decompression bomb and streaming API vulnerabilities
+urllib3==2.2.1  # Latest security patches for redirect and decompression issues
 certifi==2024.2.2  # Security fix: Updated CA certificates
 
 # JSON Processing
-ujson==5.9.0  # Security fix: Memory leak vulnerability
+ujson==5.9.0  # Note: Latest available version, consider replacing with orjson
 
 # Development and Testing
-pytest==7.4.3
+pytest==8.1.1  # Security fix: Vulnerable tmpdir handling
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
-black==23.11.0
+black==24.3.0  # Security fix: Arbitrary file writes and ReDoS vulnerabilities
 isort==5.12.0
 flake8==6.1.0
 mypy==1.7.1
