@@ -265,7 +265,6 @@ class TransactionModel:
         parent_model: Optional["TransactionModel"] = None,
         model_type: str = "logistic_regression",
     ):
-
         self.context = transaction_context
         self.model_id = self._generate_model_id(transaction_context)
         self.parent_model_id = parent_model.model_id if parent_model else None

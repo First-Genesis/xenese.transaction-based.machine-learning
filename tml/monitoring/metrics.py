@@ -377,7 +377,6 @@ class AlertManager:
 
         # Check per-model metrics
         for model_id, metrics in self.metrics_collector.get_all_model_metrics().items():
-
             # High drift score
             if metrics.drift_score > self.alert_thresholds["high_drift_score"]:
                 alert = {

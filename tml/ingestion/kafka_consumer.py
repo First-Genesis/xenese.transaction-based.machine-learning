@@ -23,7 +23,6 @@ class TransactionConsumer:
         bootstrap_servers: Optional[str] = None,
         auto_offset_reset: str = "latest",
     ):
-
         self.bootstrap_servers = bootstrap_servers or config.kafka.bootstrap_servers
         self.consumer_group = consumer_group or config.kafka.consumer_group
         self.transaction_topic = config.kafka.transaction_topic
