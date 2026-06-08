@@ -2,28 +2,14 @@
 
 import time
 from dataclasses import dataclass
-from datetime import datetime
-from datetime import timedelta
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import pyarrow as pa
-from feast import Entity
-from feast import FeatureStore
-from feast import FeatureView
-from feast import Field
-from feast import FileSource
-from feast import ValueType
-from feast.types import Bool
-from feast.types import Float32
-from feast.types import Float64
-from feast.types import Int32
-from feast.types import Int64
-from feast.types import String
+from feast import (Entity, FeatureStore, FeatureView, Field, FileSource,
+                   ValueType)
+from feast.types import Bool, Float32, Float64, Int32, Int64, String
 from loguru import logger
 
 from tml.core.config import config

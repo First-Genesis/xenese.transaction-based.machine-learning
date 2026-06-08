@@ -3,16 +3,10 @@
 import asyncio
 import json
 import time
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict
-from dataclasses import dataclass
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Set
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional, Set
 
 import mlflow
 import redis
@@ -21,8 +15,7 @@ from cassandra.cluster import Cluster
 from loguru import logger
 
 from tml.core.config import config
-from tml.core.model import TransactionContext
-from tml.core.model import TransactionModel
+from tml.core.model import TransactionContext, TransactionModel
 
 
 @dataclass

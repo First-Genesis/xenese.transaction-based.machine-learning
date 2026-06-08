@@ -4,11 +4,7 @@ import asyncio
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from kafka import KafkaConsumer
 from kafka.errors import KafkaError

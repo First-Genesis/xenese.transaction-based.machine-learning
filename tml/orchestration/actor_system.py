@@ -13,30 +13,18 @@ import threading
 import time
 import uuid
 import weakref
-from abc import ABC
-from abc import abstractmethod
-from collections import defaultdict
-from collections import deque
+from abc import ABC, abstractmethod
+from collections import defaultdict, deque
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Set
-from typing import Union
+from typing import Any, Callable, Dict, List, Optional, Set, Union
 
 import aioredis
 import psutil
 import redis
 import structlog
-from prometheus_client import Counter
-from prometheus_client import Gauge
-from prometheus_client import Histogram
-from prometheus_client import start_http_server
+from prometheus_client import Counter, Gauge, Histogram, start_http_server
 
 # Configure structured logging
 structlog.configure(

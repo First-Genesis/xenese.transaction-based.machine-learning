@@ -12,12 +12,8 @@ Generates realistic datasets for different engineering domains:
 import math
 import random
 from dataclasses import dataclass
-from datetime import datetime
-from datetime import timedelta
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Tuple
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 import pandas as pd

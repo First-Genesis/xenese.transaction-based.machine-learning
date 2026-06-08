@@ -6,25 +6,17 @@ advanced inheritance mechanisms for transaction-based models.
 """
 
 import logging
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
 from .continual_learning import EWCLearner
-
 # Import existing learning components
-from .online_learner import RiverLearner
-from .online_learner import VowpalWabbitLearner
+from .online_learner import RiverLearner, VowpalWabbitLearner
 
 logger = logging.getLogger(__name__)
 

@@ -9,21 +9,16 @@ import asyncio
 import queue
 import threading
 import time
-from concurrent.futures import Future
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
+from typing import Any, Dict, List, Optional
 
 import aioredis
 import structlog
 
 from .actor_system import ActorSystem
-from .tml_actors import ModelActor
-from .tml_actors import PhysicsValidatorActor
-from .tml_actors import TransactionProcessorActor
+from .tml_actors import (ModelActor, PhysicsValidatorActor,
+                         TransactionProcessorActor)
 
 logger = structlog.get_logger(__name__)
 

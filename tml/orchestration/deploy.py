@@ -7,16 +7,13 @@ Production deployment script for the complete TML Proto.Actor system.
 import asyncio
 import os
 import sys
-from typing import Any
-from typing import Dict
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import click
 import structlog
 import yaml
 
-from .integration import TMLPlatform
-from .integration import TMLPlatformBuilder
+from .integration import TMLPlatform, TMLPlatformBuilder
 
 # Configure logging
 structlog.configure(

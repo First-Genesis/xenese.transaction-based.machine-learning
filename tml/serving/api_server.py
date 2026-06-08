@@ -3,31 +3,20 @@
 import asyncio
 import time
 from contextlib import asynccontextmanager
-from dataclasses import asdict
-from dataclasses import dataclass
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional, Union
 
 import uvicorn
-from fastapi import BackgroundTasks
-from fastapi import Depends
-from fastapi import FastAPI
-from fastapi import HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from tml.core.config import config
 from tml.core.registry import ModelRegistry
-from tml.ingestion.kafka_producer import TransactionEvent
-from tml.ingestion.kafka_producer import TransactionProducer
-from tml.learning.online_learner import LearningResult
-from tml.learning.online_learner import learning_engine
+from tml.ingestion.kafka_producer import TransactionEvent, TransactionProducer
+from tml.learning.online_learner import LearningResult, learning_engine
 from tml.monitoring.metrics import MetricsCollector
 
 

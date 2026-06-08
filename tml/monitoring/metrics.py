@@ -2,21 +2,13 @@
 
 import threading
 import time
-from collections import defaultdict
-from collections import deque
-from dataclasses import dataclass
-from dataclasses import field
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 from loguru import logger
-from prometheus_client import CollectorRegistry
-from prometheus_client import Counter
-from prometheus_client import Gauge
-from prometheus_client import Histogram
-from prometheus_client import generate_latest
+from prometheus_client import (CollectorRegistry, Counter, Gauge, Histogram,
+                               generate_latest)
 
 from tml.core.config import config
 

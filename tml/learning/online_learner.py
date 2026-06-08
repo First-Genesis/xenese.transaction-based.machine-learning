@@ -2,30 +2,17 @@
 
 import asyncio
 import time
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
 from loguru import logger
-
 # River imports
-from river import base
-from river import compose
-from river import ensemble
-from river import linear_model
-from river import metrics
-from river import preprocessing
-from river import tree
-from river.drift import ADWIN
-from river.drift import PageHinkley
+from river import (base, compose, ensemble, linear_model, metrics,
+                   preprocessing, tree)
+from river.drift import ADWIN, PageHinkley
 
 # Vowpal Wabbit import (optional)
 try:
@@ -39,8 +26,7 @@ except ImportError:
     )
 
 from tml.core.config import config
-from tml.core.model import TransactionContext
-from tml.core.model import TransactionModel
+from tml.core.model import TransactionContext, TransactionModel
 from tml.ingestion.kafka_producer import TransactionEvent
 
 

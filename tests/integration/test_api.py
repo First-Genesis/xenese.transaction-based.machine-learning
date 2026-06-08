@@ -3,12 +3,10 @@ Integration tests for TML API endpoints
 """
 
 import asyncio
-
 # Import the API app
 import sys
 from pathlib import Path
-from unittest.mock import Mock
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import httpx
 import pytest

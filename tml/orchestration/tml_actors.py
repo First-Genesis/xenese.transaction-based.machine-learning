@@ -11,22 +11,13 @@ import pickle
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Set
+from typing import Any, Dict, List, Optional, Set
 
 import numpy as np
 
-from .actor_system import Actor
-from .actor_system import ActorMessage
-from .actor_system import ActorRef
-from .actor_system import ActorSystem
-from .actor_system import MessagePriority
-from .actor_system import SupervisionDirective
-from .actor_system import SupervisionStrategy
-from .actor_system import logger
+from .actor_system import (Actor, ActorMessage, ActorRef, ActorSystem,
+                           MessagePriority, SupervisionDirective,
+                           SupervisionStrategy, logger)
 
 
 class TMLMessageType(Enum):

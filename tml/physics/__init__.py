@@ -7,8 +7,7 @@ for engineering applications with transaction-based model inheritance.
 
 from .constraint_validator import ConstraintValidator
 from .engineering_equations import EngineeringEquations
-from .physics_engine import PhysicsConstraint
-from .physics_engine import PhysicsEngine
+from .physics_engine import PhysicsConstraint, PhysicsEngine
 from .physics_informed_ml import PhysicsInformedModel
 
 __all__ = [
