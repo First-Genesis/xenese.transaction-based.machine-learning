@@ -49,7 +49,7 @@ jobs:
           -p 8081:8081 \
           -p 8082:8082 \
           -p 9644:9644 \
-          vectorized/redpanda:latest \
+          redpandadata/redpanda:latest \
           redpanda start \
           --smp 1 \
           --reserve-memory 0M \

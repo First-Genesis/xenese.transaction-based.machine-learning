@@ -145,14 +145,14 @@ jobs:
           return 1
         }
         
-        # Start Redpanda with retry
+        # Start Redpanda with retry (using new repository name)
         echo "Starting Redpanda..."
-        retry_docker_pull vectorized/redpanda:latest
+        retry_docker_pull redpandadata/redpanda:latest
         docker run -d \
           --name redpanda \
           -p 9092:9092 \
           -p 8081:8081 \
-          vectorized/redpanda:latest \
+          redpandadata/redpanda:latest \
           redpanda start \
           --smp 1 \
           --reserve-memory 0M \

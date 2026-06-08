@@ -120,7 +120,7 @@ jobs:
         docker run -d \
           --name redpanda \
           -p 9092:9092 \
-          vectorized/redpanda:latest \
+          redpandadata/redpanda:latest \
           redpanda start \
           --smp 1 \
           --reserve-memory 0M \

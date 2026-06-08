@@ -69,8 +69,8 @@ jobs:
     
     - name: Start Redpanda (Kafka replacement)
       run: |
-        # Pull and run Redpanda
-        docker pull vectorized/redpanda:latest
+        # Pull and run Redpanda (using new repository name)
+        docker pull redpandadata/redpanda:latest
         
         docker run -d \
           --name redpanda \
@@ -80,7 +80,7 @@ jobs:
           -p 8082:8082 \
           -p 9644:9644 \
           -e REDPANDA_ADVERTISE_KAFKA_ADDR=localhost:9092 \
-          vectorized/redpanda:latest \
+          redpandadata/redpanda:latest \
           redpanda start \
           --smp 1 \
           --reserve-memory 0M \
