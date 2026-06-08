@@ -2,9 +2,10 @@
 
 import json
 import uuid
-import psycopg2
 from datetime import datetime, timezone
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+import psycopg2
 from loguru import logger
 
 

@@ -12,30 +12,30 @@ Copyright (c) 2024 First Genesis. All rights reserved.
 """
 
 import asyncio
-import time
-import logging
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 import json
+import logging
+import time
+import traceback
 import uuid
 from contextlib import asynccontextmanager
-import traceback
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
 
 # Third-party imports
 import numpy as np
+import opentelemetry.trace as trace
+import pybreaker
 import redis.asyncio as redis
+from opentelemetry import trace as otel_trace
+from prometheus_client import Counter, Gauge, Histogram
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from prometheus_client import Counter, Histogram, Gauge
-import opentelemetry.trace as trace
-from opentelemetry import trace as otel_trace
 from tenacity import retry, stop_after_attempt, wait_exponential
-import pybreaker
 
 # TML imports
-from .inheritance import SpatialInheritanceCoordinator, SpatialContext
-from .model import TransactionModel, TransactionContext
+from .inheritance import SpatialContext, SpatialInheritanceCoordinator
+from .model import TransactionContext, TransactionModel
 
 logger = logging.getLogger(__name__)
 

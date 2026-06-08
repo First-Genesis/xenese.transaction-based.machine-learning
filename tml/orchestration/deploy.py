@@ -5,12 +5,13 @@ Production deployment script for the complete TML Proto.Actor system.
 """
 
 import asyncio
-import click
-import yaml
 import os
 import sys
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+import click
 import structlog
+import yaml
 
 from .integration import TMLPlatform, TMLPlatformBuilder
 
@@ -335,8 +336,8 @@ alerts:
 def benchmark(transactions, batch_size):
     """Run performance benchmark"""
 
-    import time
     import random
+    import time
 
     async def run_benchmark():
         # Deploy platform with optimized settings

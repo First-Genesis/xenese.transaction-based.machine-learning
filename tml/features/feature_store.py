@@ -1,14 +1,15 @@
 """Feature store implementation using Feast."""
 
 import time
-import pandas as pd
-from typing import Dict, Any, List, Optional, Union
-from datetime import datetime, timedelta
 from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Union
 
-from feast import FeatureStore, Entity, FeatureView, Field, FileSource, ValueType
-from feast.types import Float32, Float64, Int32, Int64, String, Bool
+import pandas as pd
 import pyarrow as pa
+from feast import (Entity, FeatureStore, FeatureView, Field, FileSource,
+                   ValueType)
+from feast.types import Bool, Float32, Float64, Int32, Int64, String
 from loguru import logger
 
 from tml.core.config import config

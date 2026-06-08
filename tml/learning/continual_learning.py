@@ -1,14 +1,14 @@
 """Continual learning techniques to prevent catastrophic forgetting."""
 
+import copy
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from typing import Dict, Any, List, Optional, Tuple
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-import copy
-
 from loguru import logger
 
 

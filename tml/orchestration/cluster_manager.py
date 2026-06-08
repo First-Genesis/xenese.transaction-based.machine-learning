@@ -9,9 +9,10 @@ import asyncio
 import json
 import time
 import uuid
-from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional, Set
+
 import aiohttp
 import aioredis
 import consul
@@ -23,18 +24,15 @@ try:
 except ImportError:
     ETCD_AVAILABLE = False
     etcd3 = None
-from kubernetes import client, config
-import docker
 import structlog
+from kubernetes import client, config
+
+import docker
 
 from .actor_system import ActorSystem, ClusterNode
-from .tml_actors import (
-    TransactionProcessorActor,
-    ModelActor,
-    InheritanceCoordinatorActor,
-    PhysicsValidatorActor,
-    ClusterManagerActor,
-)
+from .tml_actors import (ClusterManagerActor, InheritanceCoordinatorActor,
+                         ModelActor, PhysicsValidatorActor,
+                         TransactionProcessorActor)
 
 logger = structlog.get_logger(__name__)
 

@@ -3,9 +3,9 @@
 import json
 import time
 import uuid
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from kafka import KafkaProducer
 from kafka.errors import KafkaError

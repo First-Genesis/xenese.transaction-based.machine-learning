@@ -1,19 +1,14 @@
 """Metrics collection and monitoring for TML platform."""
 
-import time
 import threading
-from typing import Dict, Any, List, Optional
+import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
-from prometheus_client import (
-    Counter,
-    Histogram,
-    Gauge,
-    CollectorRegistry,
-    generate_latest,
-)
 from loguru import logger
+from prometheus_client import (CollectorRegistry, Counter, Gauge, Histogram,
+                               generate_latest)
 
 from tml.core.config import config
 

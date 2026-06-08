@@ -2,12 +2,14 @@
 Unit tests for TML core models
 """
 
-import pytest
 import pickle
-from unittest.mock import Mock, patch
 from datetime import datetime
+from unittest.mock import Mock, patch
 
-from tml.core.model import TransactionContext, RiverTransactionModel, ModelMetrics
+import pytest
+
+from tml.core.model import (ModelMetrics, RiverTransactionModel,
+                            TransactionContext)
 
 
 class TestTransactionContext:

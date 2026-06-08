@@ -6,17 +6,19 @@ properly with Streamlit's event loop management.
 """
 
 import asyncio
+import queue
 import threading
 import time
-from typing import Dict, List, Any, Optional
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
 import aioredis
 import structlog
-from concurrent.futures import ThreadPoolExecutor, Future
-import queue
 
 from .actor_system import ActorSystem
-from .tml_actors import TransactionProcessorActor, ModelActor, PhysicsValidatorActor
+from .tml_actors import (ModelActor, PhysicsValidatorActor,
+                         TransactionProcessorActor)
 
 logger = structlog.get_logger(__name__)
 

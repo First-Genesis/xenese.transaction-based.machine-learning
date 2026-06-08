@@ -1,22 +1,22 @@
 """FastAPI server for TML model serving."""
 
-import time
 import asyncio
-from typing import Dict, Any, List, Optional, Union
-from dataclasses import dataclass, asdict
+import time
 from contextlib import asynccontextmanager
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional, Union
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
+import uvicorn
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-import uvicorn
 from loguru import logger
+from pydantic import BaseModel, Field
 
 from tml.core.config import config
 from tml.core.registry import ModelRegistry
-from tml.learning.online_learner import learning_engine, LearningResult
 from tml.ingestion.kafka_producer import TransactionEvent, TransactionProducer
+from tml.learning.online_learner import LearningResult, learning_engine
 from tml.monitoring.metrics import MetricsCollector
 
 

@@ -1,8 +1,8 @@
 """Logging configuration and utilities for TML platform."""
 
+import logging
 import sys
 import time
-import logging
 from pathlib import Path
 from typing import Optional
 
@@ -159,8 +159,8 @@ def log_async_performance(func_name: str = None):
     """Decorator to log async function performance."""
 
     def decorator(func):
-        import time
         import asyncio
+        import time
         from functools import wraps
 
         @wraps(func)

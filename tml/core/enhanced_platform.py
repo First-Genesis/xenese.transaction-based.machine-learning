@@ -6,28 +6,27 @@ for transaction-based machine learning with physics-informed inheritance.
 """
 
 import asyncio
-from typing import Dict, List, Any, Optional, Tuple
+import json
+import logging
+import uuid
 from dataclasses import dataclass
 from datetime import datetime
-import logging
-import json
-import uuid
+from typing import Any, Dict, List, Optional, Tuple
 
-# Import enhanced components
-from ..orchestration.proto_actor_system import TMLActorSystem, ModelInheritanceMessage
-from ..physics.physics_engine import PhysicsEngine, create_engineering_physics_engine
-from ..learning.enhanced_learner import (
-    TransactionModelLearner,
-    LearningAlgorithm,
-    LearningConfiguration,
-    ModelInheritanceInfo,
-    create_enhanced_learner,
-)
-
+from ..core.registry import ModelRegistry
+from ..ingestion.kafka_consumer import TMLConsumer
 # Import existing components
 from ..ingestion.kafka_producer import TMLProducer
-from ..ingestion.kafka_consumer import TMLConsumer
-from ..core.registry import ModelRegistry
+from ..learning.enhanced_learner import (LearningAlgorithm,
+                                         LearningConfiguration,
+                                         ModelInheritanceInfo,
+                                         TransactionModelLearner,
+                                         create_enhanced_learner)
+# Import enhanced components
+from ..orchestration.proto_actor_system import (ModelInheritanceMessage,
+                                                TMLActorSystem)
+from ..physics.physics_engine import (PhysicsEngine,
+                                      create_engineering_physics_engine)
 
 logger = logging.getLogger(__name__)
 

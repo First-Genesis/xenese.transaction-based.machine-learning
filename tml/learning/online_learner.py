@@ -1,17 +1,17 @@
 """Online learning engine with multiple algorithm support."""
 
-import time
 import asyncio
-from typing import Dict, Any, Optional, List, Union, Callable
+import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
 from loguru import logger
-
 # River imports
-from river import base, compose, preprocessing, linear_model, tree, ensemble, metrics
+from river import (base, compose, ensemble, linear_model, metrics,
+                   preprocessing, tree)
 from river.drift import ADWIN, PageHinkley
 
 # Vowpal Wabbit import (optional)

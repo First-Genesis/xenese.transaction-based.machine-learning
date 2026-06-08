@@ -1,16 +1,16 @@
 """Core transaction model implementation with incremental learning."""
 
-import uuid
-import time
-import pickle
 import hashlib
-from typing import Dict, Any, Optional, List, Union
-from dataclasses import dataclass, field
+import pickle
+import time
+import uuid
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
-from river import base, compose, preprocessing, linear_model, metrics
 from loguru import logger
+from river import base, compose, linear_model, metrics, preprocessing
 
 
 @dataclass

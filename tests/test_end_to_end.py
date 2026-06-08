@@ -11,25 +11,24 @@ Tests the complete pipeline:
 """
 
 import asyncio
-import pytest
-import time
 import json
 import os
-from typing import Dict, List, Any, Tuple
+import time
+from dataclasses import dataclass
 from datetime import datetime
+from typing import Any, Dict, List, Tuple
+
 import numpy as np
 import pandas as pd
-from dataclasses import dataclass
+import pytest
 
+from tests.data_generators import TestDataset, create_test_datasets
 # Import TML components
-from tml.core.enhanced_platform import (
-    EnhancedTMLPlatform,
-    EnhancedTransactionData,
-    create_enhanced_tml_platform,
-)
-from tml.physics.physics_engine import create_engineering_physics_engine
+from tml.core.enhanced_platform import (EnhancedTMLPlatform,
+                                        EnhancedTransactionData,
+                                        create_enhanced_tml_platform)
 from tml.learning.enhanced_learner import LearningAlgorithm
-from tests.data_generators import create_test_datasets, TestDataset
+from tml.physics.physics_engine import create_engineering_physics_engine
 
 
 @dataclass

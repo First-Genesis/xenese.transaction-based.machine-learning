@@ -6,24 +6,25 @@ advanced fault tolerance, and comprehensive monitoring.
 """
 
 import asyncio
+import hashlib
+import json
 import logging
+import threading
 import time
 import uuid
+import weakref
 from abc import ABC, abstractmethod
+from collections import defaultdict, deque
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable, Union
-from concurrent.futures import ThreadPoolExecutor
-import threading
-import json
-import hashlib
-from collections import defaultdict, deque
-import weakref
+from typing import Any, Callable, Dict, List, Optional, Set, Union
+
+import aioredis
 import psutil
 import redis
-import aioredis
-from prometheus_client import Counter, Histogram, Gauge, start_http_server
 import structlog
+from prometheus_client import Counter, Gauge, Histogram, start_http_server
 
 # Configure structured logging
 structlog.configure(

@@ -9,13 +9,14 @@ Generates realistic datasets for different engineering domains:
 - IoT Sensor Networks
 """
 
+import math
+import random
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Tuple
+
 import numpy as np
 import pandas as pd
-from typing import Dict, List, Any, Tuple
-from datetime import datetime, timedelta
-import random
-import math
-from dataclasses import dataclass
 
 
 @dataclass

@@ -4,15 +4,15 @@ Test script for Docker services in CI/CD environment.
 This is used by GitHub Actions to verify all services are running correctly.
 """
 
+import os
 import sys
 import time
-import os
 
 
 def test_kafka():
     """Test Kafka connectivity."""
     try:
-        from kafka import KafkaProducer, KafkaConsumer
+        from kafka import KafkaConsumer, KafkaProducer
 
         # Try to connect and send a message
         producer = KafkaProducer(bootstrap_servers="localhost:9092")

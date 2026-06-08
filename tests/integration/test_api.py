@@ -2,15 +2,15 @@
 Integration tests for TML API endpoints
 """
 
-import pytest
 import asyncio
-import httpx
-from fastapi.testclient import TestClient
-from unittest.mock import patch, Mock
-
 # Import the API app
 import sys
 from pathlib import Path
+from unittest.mock import Mock, patch
+
+import httpx
+import pytest
+from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
@@ -275,6 +275,7 @@ class TestConcurrency:
     async def test_concurrent_model_creation(self, client):
         """Test creating multiple models concurrently"""
         import asyncio
+
         import httpx
 
         async def create_model(model_id: str):

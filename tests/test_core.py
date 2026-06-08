@@ -1,13 +1,15 @@
 """Tests for core TML components."""
 
-import pytest
 import time
 from unittest.mock import Mock, patch
 
-from tml.core.model import TransactionContext, TransactionModel, ModelFactory
+import pytest
+
 from tml.core.config import Config
-from tml.learning.online_learner import RiverLearner, OnlineLearningEngine
-from tml.ingestion.kafka_producer import TransactionEvent, TransactionEventGenerator
+from tml.core.model import ModelFactory, TransactionContext, TransactionModel
+from tml.ingestion.kafka_producer import (TransactionEvent,
+                                          TransactionEventGenerator)
+from tml.learning.online_learner import OnlineLearningEngine, RiverLearner
 
 
 class TestTransactionContext:

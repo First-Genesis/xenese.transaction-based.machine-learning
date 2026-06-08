@@ -7,21 +7,17 @@ for production-ready transaction-based machine learning.
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any
-import structlog
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
-from .actor_system import ActorSystem, ActorMessage, MessagePriority
-from .tml_actors import (
-    TransactionProcessorActor,
-    ModelActor,
-    InheritanceCoordinatorActor,
-    PhysicsValidatorActor,
-    TMLMessageType,
-    TransactionData,
-)
-from .cluster_manager import TMLClusterManager, ScalingRule, ScalingPolicy
-from .monitoring import TMLMonitoringSystem, Alert, AlertSeverity
+import structlog
+
+from .actor_system import ActorMessage, ActorSystem, MessagePriority
+from .cluster_manager import ScalingPolicy, ScalingRule, TMLClusterManager
+from .monitoring import Alert, AlertSeverity, TMLMonitoringSystem
+from .tml_actors import (InheritanceCoordinatorActor, ModelActor,
+                         PhysicsValidatorActor, TMLMessageType,
+                         TransactionData, TransactionProcessorActor)
 
 logger = structlog.get_logger(__name__)
 

@@ -6,27 +6,21 @@ distributed tracing, and performance analytics for TML actors.
 """
 
 import asyncio
-import time
 import json
 import statistics
-from typing import Dict, List, Optional, Any, Callable
+import time
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
+
 import aiohttp
-from aiohttp import web
-import structlog
-from prometheus_client import (
-    Counter,
-    Histogram,
-    Gauge,
-    Summary,
-    Info,
-    CollectorRegistry,
-    generate_latest,
-    CONTENT_TYPE_LATEST,
-)
 import opentelemetry
-from opentelemetry import trace, metrics
+import structlog
+from aiohttp import web
+from opentelemetry import metrics, trace
+from prometheus_client import (CONTENT_TYPE_LATEST, CollectorRegistry, Counter,
+                               Gauge, Histogram, Info, Summary,
+                               generate_latest)
 
 try:
     from opentelemetry.exporter.jaeger.thrift import JaegerExporter
@@ -39,9 +33,9 @@ try:
     from opentelemetry.exporter.prometheus import PrometheusMetricReader
 except ImportError:
     PrometheusMetricReader = None
+from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.metrics import MeterProvider
 
 try:
     from opentelemetry.instrumentation.asyncio import AsyncioInstrumentor

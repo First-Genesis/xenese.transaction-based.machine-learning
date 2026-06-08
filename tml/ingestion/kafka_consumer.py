@@ -1,10 +1,10 @@
 """Kafka consumer for processing transaction events."""
 
+import asyncio
 import json
 import time
-import asyncio
-from typing import Dict, Any, Optional, Callable, List
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Callable, Dict, List, Optional
 
 from kafka import KafkaConsumer
 from kafka.errors import KafkaError

@@ -2,21 +2,20 @@
 
 import json
 import time
-from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
 
-from pyflink.datastream import StreamExecutionEnvironment
-from pyflink.datastream.connectors import FlinkKafkaConsumer, FlinkKafkaProducer
-from pyflink.datastream.formats.json import (
-    JsonRowDeserializationSchema,
-    JsonRowSerializationSchema,
-)
-from pyflink.common.serialization import SimpleStringSchema
-from pyflink.common.typeinfo import Types
-from pyflink.datastream.functions import KeyedProcessFunction, RuntimeContext
-from pyflink.datastream.state import ValueStateDescriptor, ListStateDescriptor
-from pyflink.common.time import Time
 from loguru import logger
+from pyflink.common.serialization import SimpleStringSchema
+from pyflink.common.time import Time
+from pyflink.common.typeinfo import Types
+from pyflink.datastream import StreamExecutionEnvironment
+from pyflink.datastream.connectors import (FlinkKafkaConsumer,
+                                           FlinkKafkaProducer)
+from pyflink.datastream.formats.json import (JsonRowDeserializationSchema,
+                                             JsonRowSerializationSchema)
+from pyflink.datastream.functions import KeyedProcessFunction, RuntimeContext
+from pyflink.datastream.state import ListStateDescriptor, ValueStateDescriptor
 
 from tml.core.config import config
 from tml.ingestion.kafka_producer import TransactionEvent

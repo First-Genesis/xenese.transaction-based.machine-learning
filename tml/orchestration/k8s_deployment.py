@@ -1,8 +1,9 @@
 """Kubernetes deployment utilities for TML platform."""
 
-import yaml
-from typing import Dict, Any, List
 from pathlib import Path
+from typing import Any, Dict, List
+
+import yaml
 
 from tml.core.config import config
 

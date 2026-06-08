@@ -5,17 +5,18 @@ Multi-algorithm support with physics-informed learning and
 advanced inheritance mechanisms for transaction-based models.
 """
 
-import numpy as np
-from typing import Dict, List, Any, Optional, Union, Tuple
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
-from enum import Enum
 import logging
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
+import numpy as np
+
+from .continual_learning import EWCLearner
 # Import existing learning components
 from .online_learner import RiverLearner, VowpalWabbitLearner
-from .continual_learning import EWCLearner
 
 logger = logging.getLogger(__name__)
 

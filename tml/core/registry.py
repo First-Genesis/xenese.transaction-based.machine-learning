@@ -1,21 +1,21 @@
 """Model registry for managing millions of transaction models."""
 
-import time
-import json
 import asyncio
-from typing import Dict, Any, Optional, List, Set
-from dataclasses import dataclass, asdict
-from concurrent.futures import ThreadPoolExecutor
+import json
+import time
 from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional, Set
 
-import redis
 import mlflow
-from cassandra.cluster import Cluster
+import redis
 from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
 from loguru import logger
 
 from tml.core.config import config
-from tml.core.model import TransactionModel, TransactionContext
+from tml.core.model import TransactionContext, TransactionModel
 
 
 @dataclass
