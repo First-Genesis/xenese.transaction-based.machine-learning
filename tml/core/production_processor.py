@@ -445,7 +445,6 @@ class ProductionTransactionProcessor:
             
             return prediction.tolist() if hasattr(prediction, 'tolist') else prediction
     
-    @db_breaker
     async def _store_result_async(self, transaction_id: str, model_id: str, prediction: Any):
         """Store processing result in database with circuit breaker."""
         try:

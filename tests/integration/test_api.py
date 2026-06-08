@@ -4,6 +4,7 @@ Integration tests for TML API endpoints
 
 import pytest
 import asyncio
+import httpx
 from fastapi.testclient import TestClient
 from unittest.mock import patch, Mock
 
