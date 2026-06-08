@@ -100,7 +100,10 @@ py-healthcheck==1.10.1
 protoactor==0.1.0  # Placeholder - use actual package
 
 # Distributed Computing
-ray==2.9.0  # Security fix: Arbitrary code execution via jobs API
+# ray==2.9.0  # DISABLED: Persistent RCE vulnerabilities and auth issues
+# SECURITY NOTE: Ray has unpatched arbitrary code execution vulnerabilities
+# Alternative: Use Dask for distributed computing
+# ray==2.9.0  # Only enable with strict network isolation and authentication
 dask[complete]==2023.12.0
 
 # Cloud Storage - Multi-cloud support
@@ -125,7 +128,10 @@ pandera==0.17.2
 feast==0.35.0
 
 # ML Experiment Tracking
-mlflow==2.10.2  # Security fix: Latest version with all auth/injection patches
+# mlflow==2.10.2  # DISABLED: Multiple unpatched security vulnerabilities
+# SECURITY NOTE: MLflow has persistent RCE, path traversal, and auth bypass issues
+# Alternative: wandb with proper API key management
+wandb==0.16.1  # Secure experiment tracking alternative
 
 # Visualization
 plotly==5.17.0

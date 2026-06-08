@@ -10,7 +10,8 @@ scikit-learn==1.3.2
 
 # Deep Learning (optional for advanced models)
 torch==2.1.1
-transformers==4.37.0  # Security fix: CVE-2024-XXXX deserialization vulnerability
+# transformers==4.37.0  # DISABLED: Multiple deserialization vulnerabilities
+# Alternative: Use transformers with strict input validation or consider alternatives
 
 # Data Processing and Streaming
 kafka-python==2.0.2
@@ -22,15 +23,20 @@ pyflink==1.18.0
 feast==0.34.1
 
 # Model Storage and Registry
-mlflow==2.10.2  # Security fix: Latest version with all auth/injection patches
+# mlflow==2.10.2  # DISABLED: Multiple unpatched security vulnerabilities
+# Alternative: Use MLflow with strict network isolation and authentication
+wandb==0.16.1  # Secure alternative for experiment tracking
 redis==5.0.1
 redis-py-cluster==2.1.3
 cassandra-driver==3.28.0
 delta-spark==2.4.0
 
 # Model Serving
-ray[serve]==2.9.0  # Security fix: Arbitrary code execution via jobs API
-bentoml==1.2.5  # Security fix: Insecure deserialization vulnerability
+# ray[serve]==2.9.0  # DISABLED: Persistent RCE vulnerabilities
+# bentoml==1.2.5  # DISABLED: Persistent deserialization vulnerabilities
+# Secure alternatives:
+fastapi==0.104.1  # Direct API serving
+uvicorn==0.24.0   # ASGI server
 tritonclient[all]==2.40.0
 grpcio==1.60.0
 protobuf==4.25.1
