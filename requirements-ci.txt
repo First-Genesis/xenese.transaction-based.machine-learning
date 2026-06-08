@@ -14,7 +14,7 @@ kafka-python==2.0.2
 redis==5.0.1
 
 # Model Storage
-mlflow==2.9.2  # Security fix: Multiple RCE and path traversal vulnerabilities
+mlflow==2.10.2  # Security fix: Latest version with all auth/injection patches
 
 # Monitoring
 prometheus-client==0.19.0

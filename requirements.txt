@@ -22,7 +22,7 @@ pyflink==1.18.0
 feast==0.34.1
 
 # Model Storage and Registry
-mlflow==2.9.2  # Security fix: Multiple RCE and path traversal vulnerabilities
+mlflow==2.10.2  # Security fix: Latest version with all auth/injection patches
 redis==5.0.1
 redis-py-cluster==2.1.3
 cassandra-driver==3.28.0
@@ -30,7 +30,7 @@ delta-spark==2.4.0
 
 # Model Serving
 ray[serve]==2.9.0  # Security fix: Arbitrary code execution via jobs API
-bentoml==1.1.10
+bentoml==1.2.5  # Security fix: Insecure deserialization vulnerability
 tritonclient[all]==2.40.0
 grpcio==1.60.0
 protobuf==4.25.1
@@ -55,10 +55,17 @@ great-expectations==0.18.5
 pydantic==2.5.2
 fastapi==0.104.1
 uvicorn==0.24.0
+python-multipart==0.0.7  # Security fix: Content-Type Header ReDoS vulnerability
 click==8.1.7
 python-dotenv==1.0.0
 pyyaml==6.0.1
 loguru==0.7.2
+
+# Security & Authentication
+python-jose[cryptography]==3.3.1  # Security fix: Algorithm confusion with ECDSA keys
+
+# Image Processing
+pillow==10.2.0  # Security fix: Arbitrary code execution vulnerability
 
 # Development and Testing
 pytest==7.4.3
