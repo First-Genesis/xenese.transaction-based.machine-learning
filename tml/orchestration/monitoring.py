@@ -18,9 +18,16 @@ import opentelemetry
 import structlog
 from aiohttp import web
 from opentelemetry import metrics, trace
-from prometheus_client import (CONTENT_TYPE_LATEST, CollectorRegistry, Counter,
-                               Gauge, Histogram, Info, Summary,
-                               generate_latest)
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Gauge,
+    Histogram,
+    Info,
+    Summary,
+    generate_latest,
+)
 
 try:
     from opentelemetry.exporter.jaeger.thrift import JaegerExporter

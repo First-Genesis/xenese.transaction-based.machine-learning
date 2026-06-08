@@ -7,8 +7,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import pyarrow as pa
-from feast import (Entity, FeatureStore, FeatureView, Field, FileSource,
-                   ValueType)
+from feast import Entity, FeatureStore, FeatureView, Field, FileSource, ValueType
 from feast.types import Bool, Float32, Float64, Int32, Int64, String
 from loguru import logger
 

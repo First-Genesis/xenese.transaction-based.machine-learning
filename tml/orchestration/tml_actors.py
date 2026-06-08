@@ -15,9 +15,16 @@ from typing import Any, Dict, List, Optional, Set
 
 import numpy as np
 
-from .actor_system import (Actor, ActorMessage, ActorRef, ActorSystem,
-                           MessagePriority, SupervisionDirective,
-                           SupervisionStrategy, logger)
+from .actor_system import (
+    Actor,
+    ActorMessage,
+    ActorRef,
+    ActorSystem,
+    MessagePriority,
+    SupervisionDirective,
+    SupervisionStrategy,
+    logger,
+)
 
 
 class TMLMessageType(Enum):

@@ -15,9 +15,14 @@ import structlog
 from .actor_system import ActorMessage, ActorSystem, MessagePriority
 from .cluster_manager import ScalingPolicy, ScalingRule, TMLClusterManager
 from .monitoring import Alert, AlertSeverity, TMLMonitoringSystem
-from .tml_actors import (InheritanceCoordinatorActor, ModelActor,
-                         PhysicsValidatorActor, TMLMessageType,
-                         TransactionData, TransactionProcessorActor)
+from .tml_actors import (
+    InheritanceCoordinatorActor,
+    ModelActor,
+    PhysicsValidatorActor,
+    TMLMessageType,
+    TransactionData,
+    TransactionProcessorActor,
+)
 
 logger = structlog.get_logger(__name__)
 

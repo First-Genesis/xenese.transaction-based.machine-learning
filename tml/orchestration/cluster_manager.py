@@ -30,9 +30,13 @@ from kubernetes import client, config
 import docker
 
 from .actor_system import ActorSystem, ClusterNode
-from .tml_actors import (ClusterManagerActor, InheritanceCoordinatorActor,
-                         ModelActor, PhysicsValidatorActor,
-                         TransactionProcessorActor)
+from .tml_actors import (
+    ClusterManagerActor,
+    InheritanceCoordinatorActor,
+    ModelActor,
+    PhysicsValidatorActor,
+    TransactionProcessorActor,
+)
 
 logger = structlog.get_logger(__name__)
 

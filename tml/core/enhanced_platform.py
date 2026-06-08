@@ -15,18 +15,20 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..core.registry import ModelRegistry
 from ..ingestion.kafka_consumer import TMLConsumer
+
 # Import existing components
 from ..ingestion.kafka_producer import TMLProducer
-from ..learning.enhanced_learner import (LearningAlgorithm,
-                                         LearningConfiguration,
-                                         ModelInheritanceInfo,
-                                         TransactionModelLearner,
-                                         create_enhanced_learner)
+from ..learning.enhanced_learner import (
+    LearningAlgorithm,
+    LearningConfiguration,
+    ModelInheritanceInfo,
+    TransactionModelLearner,
+    create_enhanced_learner,
+)
+
 # Import enhanced components
-from ..orchestration.proto_actor_system import (ModelInheritanceMessage,
-                                                TMLActorSystem)
-from ..physics.physics_engine import (PhysicsEngine,
-                                      create_engineering_physics_engine)
+from ..orchestration.proto_actor_system import ModelInheritanceMessage, TMLActorSystem
+from ..physics.physics_engine import PhysicsEngine, create_engineering_physics_engine
 
 logger = logging.getLogger(__name__)
 
