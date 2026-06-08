@@ -64,7 +64,7 @@ jobs:
 
     - name: Type check with mypy
       run: |
-        mypy tml/ --ignore-missing-imports
+        mypy tml/ --config-file mypy.ini
 
     - name: Start services with retry logic
       run: |
