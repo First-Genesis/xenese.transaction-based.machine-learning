@@ -3,14 +3,16 @@
 import os
 from typing import Any, Dict, Optional
 
+from pathlib import Path
+
 from pydantic import Field
+
 try:
     from pydantic_settings import BaseSettings, SettingsConfigDict
 except ImportError:
     from pydantic import BaseSettings
-    SettingsConfigDict = dict  # Fallback for older versions
 
-from pathlib import Path
+    SettingsConfigDict = dict  # Fallback for older versions
 
 
 class RedisConfig(BaseSettings):
@@ -112,9 +114,7 @@ class Config(BaseSettings):
     logs_dir: Path = Field(default=Path("./logs"))
 
     model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        env_prefix="TML_"
+        env_file=".env", env_file_encoding="utf-8", env_prefix="TML_"
     )
 
     def __init__(self, **kwargs):
