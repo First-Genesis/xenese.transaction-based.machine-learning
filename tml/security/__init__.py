@@ -13,8 +13,7 @@ Copyright (c) 2024 First Genesis. All rights reserved.
 """
 
 from .config import SecurityConfig, get_secure_config
-from .validation import (InputValidator, SecurityChecker, security_checker,
-                         validator)
+from .validation import InputValidator, SecurityChecker, security_checker, validator
 
 __all__ = [
     "SecurityConfig",

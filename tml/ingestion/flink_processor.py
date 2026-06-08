@@ -10,10 +10,11 @@ from pyflink.common.serialization import SimpleStringSchema
 from pyflink.common.time import Time
 from pyflink.common.typeinfo import Types
 from pyflink.datastream import StreamExecutionEnvironment
-from pyflink.datastream.connectors import (FlinkKafkaConsumer,
-                                           FlinkKafkaProducer)
-from pyflink.datastream.formats.json import (JsonRowDeserializationSchema,
-                                             JsonRowSerializationSchema)
+from pyflink.datastream.connectors import FlinkKafkaConsumer, FlinkKafkaProducer
+from pyflink.datastream.formats.json import (
+    JsonRowDeserializationSchema,
+    JsonRowSerializationSchema,
+)
 from pyflink.datastream.functions import KeyedProcessFunction, RuntimeContext
 from pyflink.datastream.state import ListStateDescriptor, ValueStateDescriptor
 

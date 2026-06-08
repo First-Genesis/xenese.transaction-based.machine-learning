@@ -7,8 +7,7 @@ import pytest
 
 from tml.core.config import Config
 from tml.core.model import ModelFactory, TransactionContext, TransactionModel
-from tml.ingestion.kafka_producer import (TransactionEvent,
-                                          TransactionEventGenerator)
+from tml.ingestion.kafka_producer import TransactionEvent, TransactionEventGenerator
 from tml.learning.online_learner import OnlineLearningEngine, RiverLearner
 
 

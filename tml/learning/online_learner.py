@@ -9,9 +9,9 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
 from loguru import logger
+
 # River imports
-from river import (base, compose, ensemble, linear_model, metrics,
-                   preprocessing, tree)
+from river import base, compose, ensemble, linear_model, metrics, preprocessing, tree
 from river.drift import ADWIN, PageHinkley
 
 # Vowpal Wabbit import (optional)

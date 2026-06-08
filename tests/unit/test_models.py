@@ -8,8 +8,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tml.core.model import (ModelMetrics, RiverTransactionModel,
-                            TransactionContext)
+from tml.core.model import ModelMetrics, RiverTransactionModel, TransactionContext
 
 
 class TestTransactionContext:

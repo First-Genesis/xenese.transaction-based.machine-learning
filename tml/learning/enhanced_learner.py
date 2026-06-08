@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
 from .continual_learning import EWCLearner
+
 # Import existing learning components
 from .online_learner import RiverLearner, VowpalWabbitLearner
 

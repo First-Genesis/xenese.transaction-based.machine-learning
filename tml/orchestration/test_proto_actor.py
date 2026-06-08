@@ -14,13 +14,24 @@ import numpy as np
 import pytest
 import structlog
 
-from .actor_system import (Actor, ActorMessage, ActorState, ActorSystem,
-                           MessagePriority, SupervisionDirective,
-                           SupervisionStrategy)
+from .actor_system import (
+    Actor,
+    ActorMessage,
+    ActorState,
+    ActorSystem,
+    MessagePriority,
+    SupervisionDirective,
+    SupervisionStrategy,
+)
 from .integration import TMLPlatform, TMLPlatformBuilder, TMLPlatformConfig
-from .tml_actors import (InheritanceCoordinatorActor, ModelActor,
-                         PhysicsValidatorActor, TMLMessageType,
-                         TransactionData, TransactionProcessorActor)
+from .tml_actors import (
+    InheritanceCoordinatorActor,
+    ModelActor,
+    PhysicsValidatorActor,
+    TMLMessageType,
+    TransactionData,
+    TransactionProcessorActor,
+)
 
 logger = structlog.get_logger(__name__)
 

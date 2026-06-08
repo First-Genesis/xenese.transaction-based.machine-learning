@@ -17,8 +17,7 @@ import aioredis
 import structlog
 
 from .actor_system import ActorSystem
-from .tml_actors import (ModelActor, PhysicsValidatorActor,
-                         TransactionProcessorActor)
+from .tml_actors import ModelActor, PhysicsValidatorActor, TransactionProcessorActor
 
 logger = structlog.get_logger(__name__)
 
