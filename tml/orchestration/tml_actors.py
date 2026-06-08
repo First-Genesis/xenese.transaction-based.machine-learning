@@ -98,9 +98,9 @@ class TransactionProcessorActor(Actor):
     def __init__(self, actor_id: str, actor_system: ActorSystem):
         super().__init__(actor_id, actor_system)
         self.processed_transactions = 0
-        self.processing_times = []
+        self.processing_times: List[float] = []
         self.batch_size = 100
-        self.batch_buffer = []
+        self.batch_buffer: List[Any] = []
         self.batch_timeout = 1.0  # seconds
         self.last_batch_time = time.time()
 
@@ -114,7 +114,7 @@ class TransactionProcessorActor(Actor):
         if message.message_type == TMLMessageType.PROCESS_TRANSACTION.value:
             await self._process_transaction(message)
         elif message.message_type == TMLMessageType.BATCH_PROCESS.value:
-            await self._process_batch(message)
+            await self._process_current_batch(message)
         elif message.message_type == TMLMessageType.GET_METRICS.value:
             await self._send_metrics(message)
         else:
@@ -256,12 +256,14 @@ class TransactionProcessorActor(Actor):
             / (time.time() - self.metrics["start_time"]),
         }
 
-        response = ActorMessage(
-            message_type=TMLMessageType.METRICS_RESPONSE.value,
-            recipient=message.reply_to or message.sender,
-            payload={"metrics": metrics},
-        )
-        await self.actor_system.deliver_message(response)
+        recipient = message.reply_to or message.sender
+        if recipient:
+            response = ActorMessage(
+                message_type=TMLMessageType.METRICS_RESPONSE.value,
+                recipient=recipient,
+                payload={"metrics": metrics},
+            )
+            await self.actor_system.deliver_message(response)
 
 
 class ModelActor(Actor):
@@ -273,7 +275,7 @@ class ModelActor(Actor):
         self.parent_models: List[str] = []
         self.inheritance_depth = 0
         self.learning_rate = 0.01
-        self.physics_constraints = {}
+        self.physics_constraints: Dict[str, Any] = {}
 
         # High-performance settings
         self.supervision_directive = SupervisionDirective(
@@ -541,6 +543,55 @@ class ModelActor(Actor):
                 payload=response_data,
             )
             await self.actor_system.deliver_message(response)
+
+    async def _inherit_from_model(self, message: ActorMessage) -> None:
+        """Inherit from parent model"""
+        try:
+            parent_model_id = message.payload.get("parent_model_id")
+            if parent_model_id and self.model_data:
+                # Simple inheritance - copy parent weights with some noise
+                parent_weights = message.payload.get("parent_weights", np.random.randn(100))
+                noise = np.random.randn(*parent_weights.shape) * 0.1
+                self.model_data.weights = parent_weights + noise
+                self.parent_models.append(parent_model_id)
+                
+                self.logger.info(f"Inherited from model {parent_model_id}")
+        except Exception as e:
+            self.logger.error("Model inheritance failed", error=str(e))
+
+    async def _validate_physics(self, message: ActorMessage) -> None:
+        """Validate physics constraints"""
+        try:
+            transaction_data = message.payload.get("transaction_data", {})
+            
+            # Simple physics validation
+            valid = True
+            violations = []
+            
+            # Check basic constraints
+            for constraint_name, constraint_value in self.physics_constraints.items():
+                if constraint_name in transaction_data:
+                    actual_value = transaction_data[constraint_name]
+                    if isinstance(constraint_value, dict):
+                        min_val = constraint_value.get("min", float("-inf"))
+                        max_val = constraint_value.get("max", float("inf"))
+                        if not (min_val <= actual_value <= max_val):
+                            valid = False
+                            violations.append(f"{constraint_name}: {actual_value} not in range [{min_val}, {max_val}]")
+            
+            if message.reply_to:
+                response = ActorMessage(
+                    message_type=TMLMessageType.PHYSICS_VALIDATED.value,
+                    recipient=message.reply_to,
+                    payload={
+                        "valid": valid,
+                        "violations": violations,
+                    },
+                )
+                await self.actor_system.deliver_message(response)
+                
+        except Exception as e:
+            self.logger.error("Physics validation failed", error=str(e))
 
 
 class InheritanceCoordinatorActor(Actor):

@@ -121,7 +121,9 @@ class PhysicsEngine:
 
             if not is_valid:
                 results["valid"] = False
-                results["violations"].append(
+                violations_list = results["violations"]
+                if isinstance(violations_list, list):
+                    violations_list.append(
                     {
                         "constraint": constraint_name,
                         "value": value,
@@ -195,7 +197,9 @@ class PhysicsEngine:
                     # Flag large changes that might indicate physics violations
                     if change_ratio > 10.0:  # 1000% change threshold
                         checks["valid"] = False
-                        checks["consistency_violations"].append(
+                        violations_list = checks["consistency_violations"]
+                        if isinstance(violations_list, list):
+                            violations_list.append(
                             {
                                 "parameter": key,
                                 "reason": "Large parameter change",

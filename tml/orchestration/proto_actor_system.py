@@ -56,7 +56,7 @@ class BaseActor(ABC):
 
     def __init__(self, actor_id: str):
         self.actor_id = actor_id
-        self.mailbox = asyncio.Queue()
+        self.mailbox: asyncio.Queue[Any] = asyncio.Queue()
         self.running = False
 
     async def start(self):
@@ -245,7 +245,7 @@ class ModelSupervisorActor(BaseActor):
             parent_actor = self.model_actors[parent_id]
 
             # Get parent state for inheritance
-            response_queue = asyncio.Queue()
+            response_queue: asyncio.Queue[Any] = asyncio.Queue()
             await parent_actor.send_message(
                 {"type": "get_state", "response_queue": response_queue}
             )
@@ -299,7 +299,7 @@ class ModelSupervisorActor(BaseActor):
             model_actor = self.model_actors[model_id]
 
             # Create snapshot before deactivation
-            response_queue = asyncio.Queue()
+            response_queue: asyncio.Queue[Any] = asyncio.Queue()
             await model_actor.send_message(
                 {"type": "snapshot", "response_queue": response_queue}
             )
@@ -368,7 +368,7 @@ class TMLActorSystem:
         """Spawn a new model for a transaction"""
         model_id = f"model_{transaction_id}"
 
-        response_queue = asyncio.Queue()
+        response_queue: asyncio.Queue[Any] = asyncio.Queue()
         await self.supervisor.send_message(
             {
                 "type": "spawn_model",
@@ -389,7 +389,7 @@ class TMLActorSystem:
         self, model_id: str, transaction_data: Dict[str, Any]
     ):
         """Process a transaction with an existing model"""
-        response_queue = asyncio.Queue()
+        response_queue: asyncio.Queue[Any] = asyncio.Queue()
         await self.supervisor.send_message(
             {
                 "type": "get_model",
@@ -417,7 +417,7 @@ class TMLActorSystem:
 
     async def get_model_lineage(self, model_id: str) -> List[str]:
         """Get the inheritance lineage for a model"""
-        response_queue = asyncio.Queue()
+        response_queue: asyncio.Queue[Any] = asyncio.Queue()
         await self.supervisor.send_message(
             {
                 "type": "get_lineage",

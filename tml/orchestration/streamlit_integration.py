@@ -40,20 +40,20 @@ class StreamlitTMLPlatform:
     Streamlit-compatible TML Platform that handles event loop conflicts gracefully
     """
 
-    def __init__(self, config: StreamlitTMLConfig = None):
+    def __init__(self, config: Optional[StreamlitTMLConfig] = None):
         self.config = config or StreamlitTMLConfig()
         self.actor_system = None
         self.redis_client = None
         self.is_running = False
-        self.transaction_processors = []
-        self.model_actors = []
+        self.transaction_processors: List[Any] = []
+        self.model_actors: List[Any] = []
         self.physics_validator = None
 
         # Thread pool for async operations
         self.executor = ThreadPoolExecutor(max_workers=self.config.max_workers)
-        self._async_thread = None
-        self._loop = None
-        self._startup_future = None
+        self._async_thread: Optional[threading.Thread] = None
+        self._loop: Optional[asyncio.AbstractEventLoop] = None
+        self._startup_future: Optional[Future[bool]] = None
 
         logger.info("StreamlitTMLPlatform initialized", node_id=self.config.node_id)
 

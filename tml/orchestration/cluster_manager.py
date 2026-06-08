@@ -372,7 +372,7 @@ class ContainerOrchestrator:
         service_name: str,
         actor_type: str,
         replicas: int = 1,
-        resources: Dict[str, Any] = None,
+        resources: Optional[Dict[str, Any]] = None,
     ) -> List[str]:
         """Deploy actor service with specified replicas"""
         deployed_instances = []

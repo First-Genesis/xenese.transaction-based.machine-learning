@@ -62,7 +62,7 @@ class ModelStorage(ABC):
         pass
 
     @abstractmethod
-    async def list_models(self, filters: Dict[str, Any] = None) -> List[str]:
+    async def list_models(self, filters: Optional[Dict[str, Any]] = None) -> List[str]:
         """List model IDs with optional filters."""
         pass
 
@@ -176,7 +176,7 @@ class RedisModelStorage(ModelStorage):
             logger.error(f"Failed to delete model {model_id} from Redis: {e}")
             return False
 
-    async def list_models(self, filters: Dict[str, Any] = None) -> List[str]:
+    async def list_models(self, filters: Optional[Dict[str, Any]] = None) -> List[str]:
         """List active model IDs."""
         try:
             return list(self.metadata_client.smembers("active_models"))
@@ -349,7 +349,7 @@ class CassandraModelStorage(ModelStorage):
             logger.error(f"Failed to delete model {model_id} from Cassandra: {e}")
             return False
 
-    async def list_models(self, filters: Dict[str, Any] = None) -> List[str]:
+    async def list_models(self, filters: Optional[Dict[str, Any]] = None) -> List[str]:
         """List model IDs with optional filters."""
         try:
             if filters and "user_id" in filters:
@@ -501,7 +501,7 @@ class ModelRegistry:
             logger.error(f"Failed to delete model {model_id}: {e}")
             return False
 
-    async def list_models(self, filters: Dict[str, Any] = None) -> List[str]:
+    async def list_models(self, filters: Optional[Dict[str, Any]] = None) -> List[str]:
         """List all model IDs."""
         hot_models = await self.hot_storage.list_models(filters)
         cold_models = await self.cold_storage.list_models(filters)

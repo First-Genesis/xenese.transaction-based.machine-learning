@@ -140,14 +140,14 @@ class SimilarityCalculator:
             vec2.append(val2)
 
         # Normalize vectors
-        vec1 = np.array(vec1)
-        vec2 = np.array(vec2)
+        vec1_array = np.array(vec1)
+        vec2_array = np.array(vec2)
 
-        if np.linalg.norm(vec1) == 0 or np.linalg.norm(vec2) == 0:
+        if np.linalg.norm(vec1_array) == 0 or np.linalg.norm(vec2_array) == 0:
             return 0.0
 
-        vec1_norm = vec1 / np.linalg.norm(vec1)
-        vec2_norm = vec2 / np.linalg.norm(vec2)
+        vec1_norm = vec1_array / np.linalg.norm(vec1_array)
+        vec2_norm = vec2_array / np.linalg.norm(vec2_array)
 
         # Cosine similarity
         return max(0.0, np.dot(vec1_norm, vec2_norm))

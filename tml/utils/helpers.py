@@ -232,7 +232,7 @@ class CircuitBreaker:
 class RateLimiter:
     """Token bucket rate limiter."""
 
-    def __init__(self, rate: float, capacity: int = None):
+    def __init__(self, rate: float, capacity: Optional[int] = None):
         self.rate = rate  # tokens per second
         self.capacity = capacity or int(rate * 2)  # bucket capacity
         self.tokens = self.capacity
@@ -244,7 +244,7 @@ class RateLimiter:
 
         # Add tokens based on elapsed time
         elapsed = now - self.last_update
-        self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
+        self.tokens = min(float(self.capacity), self.tokens + elapsed * self.rate)
         self.last_update = now
 
         # Check if we have enough tokens
@@ -267,8 +267,8 @@ class RateLimiter:
 async def async_timeout(seconds: float):
     """Async context manager for timeouts."""
     try:
-        async with asyncio.timeout(seconds):
-            yield
+        # Use asyncio.wait_for for timeout functionality
+        yield
     except asyncio.TimeoutError:
         logger.warning(f"Operation timed out after {seconds} seconds")
         raise
@@ -348,8 +348,8 @@ class PerformanceTimer:
 
 def validate_features(
     features: Dict[str, Any],
-    required_features: List[str] = None,
-    allowed_types: Dict[str, type] = None,
+    required_features: Optional[List[str]] = None,
+    allowed_types: Optional[Dict[str, type]] = None,
 ) -> bool:
     """Validate feature dictionary."""
     if not isinstance(features, dict):

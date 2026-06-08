@@ -33,7 +33,7 @@ class InterceptHandler(logging.Handler):
 
 
 def setup_logging(
-    log_level: str = None,
+    log_level: Optional[str] = None,
     log_file: Optional[str] = None,
     json_logs: bool = False,
     intercept_stdlib: bool = True,
@@ -125,7 +125,7 @@ def get_logger(name: str):
 
 
 # Performance logging decorator
-def log_performance(func_name: str = None):
+def log_performance(func_name: Optional[str] = None):
     """Decorator to log function performance."""
 
     def decorator(func):
@@ -155,7 +155,7 @@ def log_performance(func_name: str = None):
 
 
 # Async performance logging decorator
-def log_async_performance(func_name: str = None):
+def log_async_performance(func_name: Optional[str] = None):
     """Decorator to log async function performance."""
 
     def decorator(func):

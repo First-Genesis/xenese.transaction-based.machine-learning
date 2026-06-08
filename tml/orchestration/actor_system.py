@@ -192,7 +192,7 @@ class Actor(ABC):
         self.actor_id = actor_id
         self.actor_system = actor_system
         self.state = ActorState.CREATED
-        self.mailbox = asyncio.Queue(maxsize=10000)  # High-capacity mailbox
+        self.mailbox: asyncio.Queue[Any] = asyncio.Queue(maxsize=10000)  # High-capacity mailbox
         self.children: Set[str] = set()
         self.parent: Optional[str] = None
         self.supervision_directive = SupervisionDirective(SupervisionStrategy.RESTART)
@@ -507,7 +507,7 @@ class ActorSystem:
 
         # Message routing
         self.message_router = MessageRouter(self)
-        self.dead_letter_queue = deque(maxlen=10000)
+        self.dead_letter_queue: deque[Any] = deque(maxlen=10000)
         self.pending_asks: Dict[str, asyncio.Future] = {}
 
         # Fault tolerance
@@ -515,8 +515,8 @@ class ActorSystem:
 
         # Performance optimization
         self.thread_pool = ThreadPoolExecutor(max_workers=50)
-        self.high_priority_queue = asyncio.Queue(maxsize=1000)
-        self.normal_priority_queue = asyncio.Queue(maxsize=10000)
+        self.high_priority_queue: asyncio.Queue[Any] = asyncio.Queue(maxsize=1000)
+        self.normal_priority_queue: asyncio.Queue[Any] = asyncio.Queue(maxsize=10000)
 
         # Monitoring
         self.metrics_collector = MetricsCollector(self)

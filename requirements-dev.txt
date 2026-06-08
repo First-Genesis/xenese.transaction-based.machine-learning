@@ -1,5 +1,6 @@
 # Development dependencies
 pytest==7.4.3
+types-PyYAML==6.0.12.12  # Type stubs for yaml
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 pytest-mock==3.12.0

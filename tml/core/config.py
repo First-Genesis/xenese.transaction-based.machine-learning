@@ -9,9 +9,8 @@ from pydantic import Field
 try:
     from pydantic_settings import BaseSettings, SettingsConfigDict
 except ImportError:
-    from pydantic import BaseSettings
-
-    SettingsConfigDict = dict  # Fallback for older versions
+    from pydantic import BaseSettings  # type: ignore[assignment]
+    SettingsConfigDict = dict  # type: ignore[misc,assignment]  # Fallback for older versions
 
 
 class RedisConfig(BaseSettings):

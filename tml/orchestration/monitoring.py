@@ -247,7 +247,7 @@ class TMLMetrics:
 class DistributedTracing:
     """Distributed tracing for TML operations"""
 
-    def __init__(self, service_name: str = "tml-platform", jaeger_endpoint: str = None):
+    def __init__(self, service_name: str = "tml-platform", jaeger_endpoint: Optional[str] = None):
         self.service_name = service_name
 
         # Configure tracing
@@ -569,16 +569,17 @@ class MonitoringDashboard:
         self.app = web.Application()
 
         # Metrics endpoint
-        self.app.router.add_get("/metrics", self._metrics_handler)
+        if self.app and self.app.router:
+            self.app.router.add_get("/metrics", self._metrics_handler)
 
-        # Health endpoint
-        self.app.router.add_get("/health", self._health_handler)
+            # Health endpoint
+            self.app.router.add_get("/health", self._health_handler)
 
-        # Alerts endpoint
-        self.app.router.add_get("/alerts", self._alerts_handler)
+            # Alerts endpoint
+            self.app.router.add_get("/alerts", self._alerts_handler)
 
-        # Dashboard endpoint
-        self.app.router.add_get("/", self._dashboard_handler)
+            # Dashboard endpoint
+            self.app.router.add_get("/", self._dashboard_handler)
 
         # Start web server
         runner = web.AppRunner(self.app)
@@ -659,7 +660,7 @@ class TMLMonitoringSystem:
         self,
         service_name: str = "tml-platform",
         metrics_port: int = 9090,
-        jaeger_endpoint: str = None,
+        jaeger_endpoint: Optional[str] = None,
     ):
         self.service_name = service_name
         self.metrics_port = metrics_port

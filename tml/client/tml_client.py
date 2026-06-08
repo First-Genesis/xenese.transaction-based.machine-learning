@@ -469,7 +469,7 @@ class TMLClient:
 
     async def health_check(self) -> Dict[str, Any]:
         """Perform health check of client and connected services."""
-        health = {
+        health: Dict[str, Any] = {
             "status": "healthy",
             "timestamp": datetime.utcnow().isoformat(),
             "components": {},

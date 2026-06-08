@@ -96,11 +96,22 @@ class RiverLearner(OnlineLearner):
         elif model_type == "hoeffding_tree":
             return tree.HoeffdingTreeClassifier(**kwargs)
         elif model_type == "adaptive_random_forest":
-            return ensemble.AdaptiveRandomForestClassifier(**kwargs)
+            # AdaptiveRandomForestClassifier may not be available in all river versions
+            if hasattr(ensemble, 'AdaptiveRandomForestClassifier'):
+                return ensemble.AdaptiveRandomForestClassifier(**kwargs)
+            else:
+                # Fallback to another ensemble method
+                return tree.HoeffdingTreeClassifier(**kwargs)
         elif model_type == "sgd_regressor":
-            return compose.Pipeline(
-                preprocessing.StandardScaler(), linear_model.SGDRegressor(**kwargs)
-            )
+            # SGDRegressor may not be available, use PARegressor as fallback
+            if hasattr(linear_model, 'SGDRegressor'):
+                return compose.Pipeline(
+                    preprocessing.StandardScaler(), linear_model.SGDRegressor(**kwargs)
+                )
+            else:
+                return compose.Pipeline(
+                    preprocessing.StandardScaler(), linear_model.PARegressor(**kwargs)
+                )
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
 
@@ -284,7 +295,7 @@ class OnlineLearningEngine:
     def create_learner(
         self,
         model_id: str,
-        algorithm: str = None,
+        algorithm: Optional[str] = None,
         model_type: str = "logistic_regression",
         **kwargs,
     ) -> OnlineLearner:
@@ -292,6 +303,7 @@ class OnlineLearningEngine:
         algorithm = algorithm or self.default_algorithm
 
         try:
+            learner: OnlineLearner
             if algorithm == "river":
                 learner = RiverLearner(model_type=model_type, **kwargs)
             elif algorithm == "vowpal_wabbit":
