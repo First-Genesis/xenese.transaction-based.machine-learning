@@ -97,14 +97,14 @@ class RiverLearner(OnlineLearner):
             return tree.HoeffdingTreeClassifier(**kwargs)
         elif model_type == "adaptive_random_forest":
             # AdaptiveRandomForestClassifier may not be available in all river versions
-            if hasattr(ensemble, 'AdaptiveRandomForestClassifier'):
+            if hasattr(ensemble, "AdaptiveRandomForestClassifier"):
                 return ensemble.AdaptiveRandomForestClassifier(**kwargs)
             else:
                 # Fallback to another ensemble method
                 return tree.HoeffdingTreeClassifier(**kwargs)
         elif model_type == "sgd_regressor":
             # SGDRegressor may not be available, use PARegressor as fallback
-            if hasattr(linear_model, 'SGDRegressor'):
+            if hasattr(linear_model, "SGDRegressor"):
                 return compose.Pipeline(
                     preprocessing.StandardScaler(), linear_model.SGDRegressor(**kwargs)
                 )

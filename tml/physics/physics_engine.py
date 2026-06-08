@@ -124,13 +124,13 @@ class PhysicsEngine:
                 violations_list = results["violations"]
                 if isinstance(violations_list, list):
                     violations_list.append(
-                    {
-                        "constraint": constraint_name,
-                        "value": value,
-                        "tolerance": constraint.tolerance,
-                        "law": constraint.law.value,
-                    }
-                )
+                        {
+                            "constraint": constraint_name,
+                            "value": value,
+                            "tolerance": constraint.tolerance,
+                            "law": constraint.law.value,
+                        }
+                    )
 
         results["summary"] = {
             "total_constraints": len(constraint_names),
@@ -200,12 +200,12 @@ class PhysicsEngine:
                         violations_list = checks["consistency_violations"]
                         if isinstance(violations_list, list):
                             violations_list.append(
-                            {
-                                "parameter": key,
-                                "reason": "Large parameter change",
-                                "change_ratio": change_ratio,
-                            }
-                        )
+                                {
+                                    "parameter": key,
+                                    "reason": "Large parameter change",
+                                    "change_ratio": change_ratio,
+                                }
+                            )
 
         return checks
 

@@ -192,7 +192,9 @@ class Actor(ABC):
         self.actor_id = actor_id
         self.actor_system = actor_system
         self.state = ActorState.CREATED
-        self.mailbox: asyncio.Queue[Any] = asyncio.Queue(maxsize=10000)  # High-capacity mailbox
+        self.mailbox: asyncio.Queue[Any] = asyncio.Queue(
+            maxsize=10000
+        )  # High-capacity mailbox
         self.children: Set[str] = set()
         self.parent: Optional[str] = None
         self.supervision_directive = SupervisionDirective(SupervisionStrategy.RESTART)

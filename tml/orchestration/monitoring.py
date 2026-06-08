@@ -247,7 +247,9 @@ class TMLMetrics:
 class DistributedTracing:
     """Distributed tracing for TML operations"""
 
-    def __init__(self, service_name: str = "tml-platform", jaeger_endpoint: Optional[str] = None):
+    def __init__(
+        self, service_name: str = "tml-platform", jaeger_endpoint: Optional[str] = None
+    ):
         self.service_name = service_name
 
         # Configure tracing

@@ -550,11 +550,13 @@ class ModelActor(Actor):
             parent_model_id = message.payload.get("parent_model_id")
             if parent_model_id and self.model_data:
                 # Simple inheritance - copy parent weights with some noise
-                parent_weights = message.payload.get("parent_weights", np.random.randn(100))
+                parent_weights = message.payload.get(
+                    "parent_weights", np.random.randn(100)
+                )
                 noise = np.random.randn(*parent_weights.shape) * 0.1
                 self.model_data.weights = parent_weights + noise
                 self.parent_models.append(parent_model_id)
-                
+
                 self.logger.info(f"Inherited from model {parent_model_id}")
         except Exception as e:
             self.logger.error("Model inheritance failed", error=str(e))
@@ -563,11 +565,11 @@ class ModelActor(Actor):
         """Validate physics constraints"""
         try:
             transaction_data = message.payload.get("transaction_data", {})
-            
+
             # Simple physics validation
             valid = True
             violations = []
-            
+
             # Check basic constraints
             for constraint_name, constraint_value in self.physics_constraints.items():
                 if constraint_name in transaction_data:
@@ -577,8 +579,10 @@ class ModelActor(Actor):
                         max_val = constraint_value.get("max", float("inf"))
                         if not (min_val <= actual_value <= max_val):
                             valid = False
-                            violations.append(f"{constraint_name}: {actual_value} not in range [{min_val}, {max_val}]")
-            
+                            violations.append(
+                                f"{constraint_name}: {actual_value} not in range [{min_val}, {max_val}]"
+                            )
+
             if message.reply_to:
                 response = ActorMessage(
                     message_type=TMLMessageType.PHYSICS_VALIDATED.value,
@@ -589,7 +593,7 @@ class ModelActor(Actor):
                     },
                 )
                 await self.actor_system.deliver_message(response)
-                
+
         except Exception as e:
             self.logger.error("Physics validation failed", error=str(e))
 

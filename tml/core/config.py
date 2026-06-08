@@ -10,6 +10,7 @@ try:
     from pydantic_settings import BaseSettings, SettingsConfigDict
 except ImportError:
     from pydantic import BaseSettings  # type: ignore[assignment]
+
     SettingsConfigDict = dict  # type: ignore[misc,assignment]  # Fallback for older versions
 
 
