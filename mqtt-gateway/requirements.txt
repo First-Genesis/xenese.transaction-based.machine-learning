@@ -1,45 +1,55 @@
-# TML MQTT Gateway - Python Dependencies
+# TML MQTT Gateway - Python Dependencies - Security Updated
 
 # MQTT Client
-paho-mqtt==1.6.1
+paho-mqtt>=2.1.0  # Security patches
 
 # Kafka Integration
-kafka-python==2.0.2
-confluent-kafka==2.3.0
+kafka-python>=2.2.0  # Security fixes
+confluent-kafka>=2.6.1  # Latest stable
 
 # Database
-psycopg2-binary==2.9.9
-asyncpg==0.29.0
-redis==5.0.1
+psycopg2-binary>=2.9.10  # Security patches
+asyncpg>=0.30.0  # Latest stable
+redis>=5.2.1  # Security fixes
 
 # Web Framework
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
+fastapi>=0.115.5  # Security patches
+uvicorn[standard]>=0.32.1  # Security fixes
 
 # Data Processing
-pandas==2.1.3
-numpy==1.25.2
-pydantic==2.5.0
+pandas>=2.2.3  # Security fixes
+numpy>=1.26.4,<2.0.0  # Security patches
+pydantic>=2.10.3  # Security fixes
 
 # Monitoring and Metrics
-prometheus-client==0.19.0
-structlog==23.2.0
+prometheus-client>=0.21.1  # Security patches
+structlog>=24.5.0  # Latest stable
 
 # Configuration
-python-dotenv==1.0.0
-pyyaml==6.0.1
-pydantic-settings==2.1.0
+python-dotenv>=1.0.1  # Security fixes
+pyyaml>=6.0.2  # Security patches for CVE
+pydantic-settings>=2.6.1  # Latest stable
 
 # Utilities
-aiofiles==23.2.1
-asyncio-mqtt==0.16.1
-tenacity==8.2.3
+aiofiles>=24.1.0  # Latest stable
+asyncio-mqtt>=0.16.2  # Security patches
+tenacity>=9.0.0  # Latest stable
 
 # Security
-cryptography==41.0.7
-bcrypt==4.1.2
+cryptography>=43.0.3  # All security vulnerabilities patched
+bcrypt>=4.2.1  # Latest stable
+PyJWT>=2.10.1  # JWT support with security patches
+passlib[bcrypt]>=1.7.4  # Password hashing
+python-multipart>=0.0.18  # Secure file uploads
 
 # Testing (for development)
-pytest==7.4.3
-pytest-asyncio==0.21.1
-httpx==0.25.2
+pytest>=8.3.4  # Security fixes
+pytest-asyncio>=0.24.0  # Latest stable
+httpx>=0.28.1  # Security patches
+
+# Additional for ML and provisioning
+joblib>=1.4.2  # Model serialization
+scikit-learn>=1.5.2  # For edge ML
+qrcode>=8.0  # QR code provisioning
+Pillow>=11.0.0  # Image processing
+psutil>=6.1.1  # System monitoring

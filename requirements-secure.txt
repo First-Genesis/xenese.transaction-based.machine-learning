@@ -1,0 +1,137 @@
+# TML Platform - Secure Requirements (Updated December 2024)
+# All dependencies updated to fix security vulnerabilities
+
+# Core Dependencies
+numpy>=1.26.4,<2.0.0  # Latest stable for compatibility
+pandas>=2.2.3  # Security fixes
+scipy>=1.13.0  # Latest stable
+scikit-learn>=1.5.2  # Latest stable with security fixes
+
+# River ML for online learning
+river>=0.21.2
+
+# Deep Learning (Optional)
+torch>=2.5.0  # Latest stable
+tensorflow>=2.17.0  # Latest with security fixes
+
+# MQTT and Messaging
+paho-mqtt>=2.1.0  # Latest stable
+kafka-python>=2.2.0  # Latest stable
+confluent-kafka>=2.6.1  # Latest stable
+asyncio-mqtt>=0.16.2
+
+# Database
+psycopg2-binary>=2.9.10  # Latest stable
+asyncpg>=0.30.0
+redis>=5.2.1  # Latest with security fixes
+pymongo>=4.10.1  # Latest stable
+
+# Web Framework and API
+fastapi>=0.115.5  # Latest with security fixes
+uvicorn[standard]>=0.32.1  # Latest stable
+pydantic>=2.10.3  # Latest v2
+pydantic-settings>=2.6.1
+starlette>=0.41.3  # Latest with security fixes
+httpx>=0.28.1  # Latest stable
+
+# Authentication and Security
+cryptography>=43.0.3  # Latest with all security fixes
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.18
+PyJWT>=2.10.1  # Latest stable
+
+# Monitoring and Metrics
+prometheus-client>=0.21.1  # Latest stable
+grafana-api>=1.0.3
+opentelemetry-api>=1.29.0
+opentelemetry-sdk>=1.29.0
+opentelemetry-instrumentation-fastapi>=0.50b0
+
+# Stream Processing
+apache-flink>=1.20.0  # Latest stable
+pyflink>=1.20.0  # Latest stable
+
+# Actor System
+protoactor>=0.1.0
+pyactor>=1.4.0
+
+# Utilities
+python-dotenv>=1.0.1
+pyyaml>=6.0.2  # Security fix for CVE
+structlog>=24.5.0  # Latest stable
+tenacity>=9.0.0
+httptools>=0.6.4  # Latest stable
+websockets>=14.1  # Latest stable
+aiofiles>=24.1.0  # Latest stable
+click>=8.1.8  # Latest stable
+rich>=13.9.4  # Latest stable
+typer>=0.13.1  # Latest stable
+
+# Data Processing
+pyarrow>=18.1.0  # Latest stable
+polars>=1.14.0  # Alternative to pandas, very fast
+dask[complete]>=2024.12.1  # Latest stable
+ray>=2.40.0  # Latest stable
+
+# Model Management
+mlflow>=2.19.0  # Latest stable
+dvc>=3.58.0  # Latest stable
+wandb>=0.19.1  # Latest stable
+
+# Testing
+pytest>=8.3.4  # Latest stable
+pytest-asyncio>=0.24.0  # Latest stable
+pytest-cov>=6.0.0  # Latest stable
+pytest-mock>=3.14.0  # Latest stable
+hypothesis>=6.122.3  # Latest stable
+
+# Code Quality
+black>=24.10.0  # Latest stable
+flake8>=7.1.1  # Latest stable
+mypy>=1.13.0  # Latest stable
+pylint>=3.3.2  # Latest stable
+isort>=5.13.2  # Latest stable
+bandit>=1.8.0  # Security linting
+
+# Documentation
+sphinx>=8.1.3  # Latest stable
+sphinx-rtd-theme>=3.0.2  # Latest stable
+
+# Development
+ipython>=8.31.0  # Latest stable
+jupyter>=1.1.1  # Latest stable
+notebook>=7.3.2  # Latest stable
+
+# Visualization
+matplotlib>=3.10.0  # Latest stable
+seaborn>=0.13.2  # Latest stable
+plotly>=5.25.0  # Latest stable
+
+# Additional Security
+certifi>=2024.12.14  # Latest CA certificates
+urllib3>=2.3.0,<3.0.0  # Security fixes
+requests>=2.32.3  # Latest stable
+idna>=3.10  # Latest stable
+charset-normalizer>=3.4.3  # Latest stable
+
+# Async Support
+aiohttp>=3.11.10  # Latest with security fixes
+aiodns>=3.2.0
+asyncio>=3.4.3
+anyio>=4.7.0  # Latest stable
+
+# MQTT Gateway specific
+qrcode>=8.0  # For QR code provisioning
+Pillow>=11.0.0  # Image processing with security fixes
+joblib>=1.4.2  # Model serialization
+psutil>=6.1.1  # System monitoring
+
+# SDK specific
+marshmallow>=4.0.0  # Serialization
+
+# Pinned for compatibility
+wrapt>=1.17.0  # Latest stable
+six>=1.17.0  # Latest stable
+setuptools>=75.7.0  # Latest stable
+wheel>=0.45.1  # Latest stable
