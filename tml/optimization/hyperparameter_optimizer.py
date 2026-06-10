@@ -302,7 +302,7 @@ class RiverMLHyperparameterOptimizer:
 
             similarities.append(similarity)
 
-        return np.mean(similarities)
+        return float(np.mean(similarities))
 
     def optimize_hyperparameters(
         self,

@@ -594,7 +594,7 @@ class FederatedLearningCoordinator:
         score_variance = np.var(validation_scores)
         convergence_score = 1.0 / (1.0 + score_variance)
 
-        return convergence_score
+        return float(convergence_score)
 
     def _update_federation_stats(self, federated_round: FederatedRound):
         """Update federation statistics"""
@@ -668,7 +668,7 @@ class FederatedLearningCoordinator:
         recent_scores = [round_obj.convergence_score for round_obj in model_rounds[-3:]]
         avg_convergence = np.mean(recent_scores)
 
-        return avg_convergence > (1.0 - self.config.convergence_threshold)
+        return bool(avg_convergence > (1.0 - self.config.convergence_threshold))
 
     def get_federation_status(self) -> Dict[str, Any]:
         """Get comprehensive federation status"""

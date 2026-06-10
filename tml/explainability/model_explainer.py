@@ -340,7 +340,7 @@ class RealTimeModelExplainer:
         }
 
         # Explanation cache for performance
-        self.explanation_cache = {}
+        self.explanation_cache: Dict[str, ExplanationResult] = {}
         self.cache_ttl = 300  # 5 minutes
 
         # Performance tracking
@@ -378,7 +378,8 @@ class RealTimeModelExplainer:
         # Check cache
         if cache_key and self._check_cache(cache_key):
             self.explanation_stats["cache_hits"] += 1
-            return self.explanation_cache[cache_key]
+            cached_result: ExplanationResult = self.explanation_cache[cache_key]
+            return cached_result
 
         # Run explanations in parallel
         explanation_tasks = []
@@ -426,7 +427,7 @@ class RealTimeModelExplainer:
         # Create explanation result
         computation_time = time.time() - start_time
 
-        result = ExplanationResult(
+        result: ExplanationResult = ExplanationResult(
             model_id=model_id,
             explanation_type="comprehensive",
             feature_importance=aggregated_importance,
@@ -459,7 +460,7 @@ class RealTimeModelExplainer:
             f"Model explanation completed for {model_id} in {computation_time:.3f}s"
         )
 
-        return result
+        return result  # type: ignore[return-value]
 
     async def _run_explanation_async(
         self, method: str, model, X: np.ndarray, feature_names: List[str]
@@ -501,7 +502,7 @@ class RealTimeModelExplainer:
                 if feature in method_importance:
                     scores.append(method_importance[feature])
 
-            aggregated[feature] = np.mean(scores) if scores else 0.0
+            aggregated[feature] = float(np.mean(scores)) if scores else 0.0
 
         return aggregated
 

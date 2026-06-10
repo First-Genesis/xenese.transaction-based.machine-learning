@@ -490,8 +490,8 @@ class EnhancedSpatialInheritance:
             candidate_perf = np.mean(
                 list(candidate_embedding.performance_metrics.values())
             )
-            performance_score = candidate_perf / max(
-                target_perf, 0.001
+            performance_score = float(candidate_perf) / max(
+                float(target_perf), 0.001
             )  # Avoid division by zero
 
             # Compute inheritance confidence
@@ -566,8 +566,8 @@ class EnhancedSpatialInheritance:
             "source_model_id": source_model_id,
             "inheritance_weight": inheritance_weight,
             "similarity_score": similarity,
-            "performance_improvement_estimate": (source_perf - target_perf)
-            / max(target_perf, 0.001),
+            "performance_improvement_estimate": float(source_perf - target_perf)
+            / max(float(target_perf), 0.001),
             "inheritance_confidence": inheritance_weight * similarity,
             "timestamp": time.time(),
             "method": "enhanced_deep_learning",
