@@ -6,35 +6,35 @@ Integrates supervision and fault tolerance with transaction processing
 import asyncio
 import json
 import time
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional
 
 from kafka import KafkaConsumer, KafkaProducer
 from loguru import logger
 
-from .actor_system import ActorSystem, ActorMessage, MessagePriority, ActorState
-from .supervision_manager import (
-    SupervisionManager,
-    SupervisionPolicy,
-    FaultType,
-    RecoveryAction,
-    SupervisionStrategy,
-)
+from ..core.inheritance import SpatialInheritanceCoordinator
+from ..learning.online_learner import OnlineLearningEngine
+from .actor_system import ActorMessage, ActorState, ActorSystem, MessagePriority
 from .enhanced_cluster_manager import (
-    EnhancedClusterManager,
     ClusterConfig,
     ClusterStrategy,
+    EnhancedClusterManager,
+)
+from .supervision_manager import (
+    FaultType,
+    RecoveryAction,
+    SupervisionManager,
+    SupervisionPolicy,
+    SupervisionStrategy,
 )
 from .tml_actors import (
-    TransactionProcessorActor,
-    ModelActor,
     InheritanceCoordinatorActor,
+    ModelActor,
     PhysicsValidatorActor,
     TMLMessageType,
     TransactionData,
+    TransactionProcessorActor,
 )
-from ..learning.online_learner import OnlineLearningEngine
-from ..core.inheritance import SpatialInheritanceCoordinator
 
 
 @dataclass

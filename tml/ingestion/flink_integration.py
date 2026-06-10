@@ -6,26 +6,26 @@ Stateful stream processing with spatial model inheritance
 import json
 import os
 import time
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional
 
 from loguru import logger
+from pyflink.common import Configuration, WatermarkStrategy
+from pyflink.common.serialization import SimpleStringSchema
+from pyflink.common.typeinfo import Types
 from pyflink.datastream import StreamExecutionEnvironment
 from pyflink.datastream.connectors.kafka import (
-    KafkaSource,
     KafkaOffsetsInitializer,
-    KafkaSink,
     KafkaRecordSerializationSchema,
+    KafkaSink,
+    KafkaSource,
 )
-from pyflink.common.serialization import SimpleStringSchema
-from pyflink.common import Configuration, WatermarkStrategy
-from pyflink.datastream.functions import ProcessFunction, KeyedProcessFunction
-from pyflink.datastream.state import ValueStateDescriptor, ListStateDescriptor
-from pyflink.common.typeinfo import Types
+from pyflink.datastream.functions import KeyedProcessFunction, ProcessFunction
+from pyflink.datastream.state import ListStateDescriptor, ValueStateDescriptor
 
 from tml.core.config import config
+from tml.core.inheritance import SpatialContext, SpatialInheritanceCoordinator
 from tml.learning.online_learner import OnlineLearningEngine
-from tml.core.inheritance import SpatialInheritanceCoordinator, SpatialContext
 
 
 @dataclass

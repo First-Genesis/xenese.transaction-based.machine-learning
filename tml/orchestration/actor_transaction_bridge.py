@@ -6,23 +6,23 @@ Integrates actors with Kafka streams and TML learning engine
 import asyncio
 import json
 import time
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional
 
 from kafka import KafkaConsumer, KafkaProducer
 from loguru import logger
 
-from .actor_system import ActorSystem, ActorMessage, MessagePriority
+from ..core.inheritance import SpatialInheritanceCoordinator
+from ..learning.online_learner import OnlineLearningEngine
+from .actor_system import ActorMessage, ActorSystem, MessagePriority
 from .tml_actors import (
-    TransactionProcessorActor,
-    ModelActor,
     InheritanceCoordinatorActor,
+    ModelActor,
     PhysicsValidatorActor,
     TMLMessageType,
     TransactionData,
+    TransactionProcessorActor,
 )
-from ..learning.online_learner import OnlineLearningEngine
-from ..core.inheritance import SpatialInheritanceCoordinator
 
 
 @dataclass

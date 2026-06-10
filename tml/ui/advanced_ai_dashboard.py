@@ -4,18 +4,19 @@ Advanced AI/ML Features Dashboard for TML Platform
 Interactive Streamlit dashboard showcasing all advanced AI capabilities
 """
 
-import streamlit as st
-import pandas as pd
+import asyncio
+import json
+import os
+import sys
+import time
+from typing import Any, Dict, List
+
 import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit as st
 from plotly.subplots import make_subplots
-import asyncio
-import time
-import json
-from typing import Dict, Any, List
-import sys
-import os
 
 # Add TML to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

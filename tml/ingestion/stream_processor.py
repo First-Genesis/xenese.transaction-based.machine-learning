@@ -4,21 +4,21 @@ Implements stateful stream processing without PyFlink dependencies
 Mimics Apache Flink's keyed state and windowing capabilities
 """
 
-import json
-import time
 import asyncio
+import json
 import threading
-from typing import Dict, Any, Optional, List, Callable
-from dataclasses import dataclass, asdict
+import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from typing import Any, Callable, Dict, List, Optional
 
+import redis
 from kafka import KafkaConsumer, KafkaProducer
 from loguru import logger
-import redis
 
+from tml.core.inheritance import SpatialContext, SpatialInheritanceCoordinator
 from tml.learning.online_learner import OnlineLearningEngine
-from tml.core.inheritance import SpatialInheritanceCoordinator, SpatialContext
 
 
 @dataclass

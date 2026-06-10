@@ -26,7 +26,7 @@ except ImportError:
     )
 
 from tml.core.config import config
-from tml.core.inheritance import SpatialInheritanceCoordinator, SpatialContext
+from tml.core.inheritance import SpatialContext, SpatialInheritanceCoordinator
 from tml.core.model import TransactionContext, TransactionModel
 from tml.ingestion.kafka_producer import TransactionEvent
 

@@ -11,26 +11,27 @@ Real-time dashboard connecting to complete TML infrastructure:
 - Advanced AI/ML features
 """
 
-import streamlit as st
-import pandas as pd
+import asyncio
+import json
+import os
+import queue
+import sys
+import threading
+import time
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
+
+import mlflow
 import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import asyncio
-import time
-import json
 import psycopg2
 import redis
-import mlflow
 import requests
+import streamlit as st
 from kafka import KafkaConsumer, KafkaProducer
-from typing import Dict, Any, List, Optional
-import sys
-import os
-from datetime import datetime, timedelta
-import threading
-import queue
+from plotly.subplots import make_subplots
 
 # Add TML to path
 sys.path.insert(
@@ -39,13 +40,13 @@ sys.path.insert(
 
 # TML Infrastructure imports
 try:
-    from tml.learning.enhanced_spatial_inheritance import EnhancedSpatialInheritance
-    from tml.optimization.hyperparameter_optimizer import RiverMLHyperparameterOptimizer
     from tml.explainability.model_explainer import RealTimeModelExplainer
-    from tml.monitoring.advanced_drift_detection import AdvancedDriftDetector
     from tml.federated.federated_learning_coordinator import (
         FederatedLearningCoordinator,
     )
+    from tml.learning.enhanced_spatial_inheritance import EnhancedSpatialInheritance
+    from tml.monitoring.advanced_drift_detection import AdvancedDriftDetector
+    from tml.optimization.hyperparameter_optimizer import RiverMLHyperparameterOptimizer
 
     TML_FEATURES_AVAILABLE = True
 except ImportError as e:
@@ -337,8 +338,9 @@ class FullStackTMLDashboard:
                 except Exception as e:
                     # Create a new consumer if the old one failed
                     try:
-                        from kafka import KafkaConsumer
                         import json
+
+                        from kafka import KafkaConsumer
 
                         self.infrastructure.connections[
                             "kafka_consumer"
@@ -545,8 +547,9 @@ class FullStackTMLDashboard:
         recent_transactions = []
 
         try:
-            from kafka import KafkaConsumer
             import json
+
+            from kafka import KafkaConsumer
 
             # Create a consumer to get the latest messages
             consumer = KafkaConsumer(

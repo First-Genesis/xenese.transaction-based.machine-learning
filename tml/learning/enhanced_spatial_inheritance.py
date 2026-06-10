@@ -3,21 +3,22 @@ Enhanced Spatial Inheritance with Deep Learning Models
 Advanced neural network-based spatial similarity and inheritance for TML Platform
 """
 
+import json
 import os
+import pickle
+import time
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Tuple
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import DataLoader, TensorDataset
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.manifold import TSNE
-import pickle
-import json
-import time
-from typing import Dict, List, Tuple, Any
-from dataclasses import dataclass, asdict
 from loguru import logger
+from sklearn.manifold import TSNE
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import StandardScaler
+from torch.utils.data import DataLoader, TensorDataset
 
 from ..core.inheritance import SpatialInheritanceCoordinator
 
