@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Flink JobManager
+  flink-jobmanager:
+    image: flink:1.18-scala_2.12
+    container_name: flink-jobmanager
+    ports:
+      - "8081:8081"  # Flink UI
+      - "6123:6123"  # RPC port
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        jobmanager.memory.process.size: 2048m
+        parallelism.default: 4
+        state.backend: rocksdb
+        state.checkpoints.dir: file:///tmp/flink-checkpoints
+    volumes:
+      - flink-checkpoints:/tmp/flink-checkpoints
+      - ./tml:/opt/flink/tml
+    networks:
+      - tml-network
+
+  # Flink TaskManagers (Workers)
+  flink-taskmanager-1:
+    image: flink:1.18-scala_2.12
+    container_name: flink-taskmanager-1
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process.size: 2048m
+        parallelism.default: 4
+    volumes:
+      - flink-checkpoints:/tmp/flink-checkpoints
+      - ./tml:/opt/flink/tml
+    networks:
+      - tml-network
+
+  flink-taskmanager-2:
+    image: flink:1.18-scala_2.12
+    container_name: flink-taskmanager-2
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process.size: 2048m
+        parallelism.default: 4
+    volumes:
+      - flink-checkpoints:/tmp/flink-checkpoints
+      - ./tml:/opt/flink/tml
+    networks:
+      - tml-network
+
+  # Python Flink Job Submitter
+  flink-python-job:
+    build:
+      context: .
+      dockerfile: Dockerfile.flink
+    container_name: flink-python-job
+    depends_on:
+      - flink-jobmanager
+      - kafka
+    environment:
+      - FLINK_JOBMANAGER_HOST=flink-jobmanager
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - PYTHONPATH=/app
+    volumes:
+      - ./tml:/app/tml
+      - flink-checkpoints:/tmp/flink-checkpoints
+    networks:
+      - tml-network
+    command: python -m tml.ingestion.flink_integration
+
+volumes:
+  flink-checkpoints:
+    driver: local
+
+networks:
+  tml-network:
+    external: true
+    name: tml_default

@@ -69,7 +69,7 @@ class TransactionProducer:
             "linger_ms": 10,  # Small delay to batch messages
             "buffer_memory": 33554432,  # 32MB buffer
             "compression_type": "snappy",
-            "max_in_flight_requests_per_connection": 5,
+            "max_in_flight_requests_per_connection": 1,  # Required for idempotence
             "enable_idempotence": True,  # Exactly-once semantics
         }
 

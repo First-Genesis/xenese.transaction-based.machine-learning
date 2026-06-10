@@ -1,0 +1,87 @@
+# TML MQTT Gateway Configuration
+# Production-ready configuration for Phase 1 deployment
+
+# MQTT Broker Configuration
+mqtt:
+  host: "mosquitto"
+  port: 1883
+  username: "tml_gateway"
+  password: "tml_secure_2026"
+  client_id: "tml-gateway-001"
+  keepalive: 60
+  qos: 1
+  
+  # TLS Configuration (for production)
+  use_tls: false
+  ca_cert_path: null
+  cert_path: null
+  key_path: null
+  
+  # Topic Configuration
+  base_topic: "tml"
+  subscribe_topics:
+    - "tml/devices/+/+/telemetry"
+    - "tml/devices/+/+/status"
+    - "tml/gateways/+/status"
+    - "tml/system/alerts/+"
+
+# Kafka Configuration
+kafka:
+  bootstrap_servers: "localhost:29092"
+  topic_prefix: "tml.iot"
+  
+  # Producer Settings
+  acks: "all"
+  retries: 3
+  batch_size: 16384
+  linger_ms: 10
+  compression_type: "gzip"
+  
+  # Topic Mapping
+  telemetry_topic: "tml.iot.telemetry"
+  status_topic: "tml.iot.device_status"
+  alerts_topic: "tml.iot.alerts"
+  dead_letter_topic: "tml.iot.dead_letter"
+
+# Database Configuration
+database:
+  host: "localhost"
+  port: 5432
+  database: "tml"
+  username: "tml"
+  password: "tml123"
+  min_connections: 5
+  max_connections: 20
+
+# Redis Configuration
+redis:
+  host: "localhost"
+  port: 6379
+  password: null
+  db: 0
+  max_connections: 100
+
+# Gateway Configuration
+gateway:
+  gateway_id: "tml-gateway-001"
+  log_level: "INFO"
+  
+  # API Configuration
+  api_host: "0.0.0.0"
+  api_port: 8080
+  
+  # Metrics Configuration
+  metrics_host: "0.0.0.0"
+  metrics_port: 9090
+  
+  # Processing Configuration
+  max_workers: 10
+  batch_size: 100
+  flush_interval: 1.0
+  
+  # Health Check
+  health_check_interval: 30
+  
+  # Security
+  api_key: null
+  enable_auth: false

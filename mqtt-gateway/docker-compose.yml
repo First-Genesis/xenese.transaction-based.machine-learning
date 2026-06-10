@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Eclipse Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0.18
+    container_name: tml-mosquitto
+    ports:
+      - "1883:1883"      # MQTT
+      - "9001:9001"      # WebSocket
+      - "8883:8883"      # MQTT over TLS
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./mosquitto/certs:/mosquitto/certs
+    environment:
+      - MOSQUITTO_USERNAME=tml_admin
+      - MOSQUITTO_PASSWORD=tml_secure_2026
+    restart: unless-stopped
+    networks:
+      - tml-network
+
+  # TML MQTT Gateway Service
+  mqtt-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tml-mqtt-gateway
+    ports:
+      - "8080:8080"      # Management API
+      - "9090:9090"      # Metrics endpoint
+    environment:
+      - MQTT_BROKER_HOST=mosquitto
+      - MQTT_BROKER_PORT=1883
+      - KAFKA_BOOTSTRAP_SERVERS=localhost:29092
+      - POSTGRES_HOST=localhost
+      - POSTGRES_USER=tml
+      - POSTGRES_PASSWORD=tml123
+      - POSTGRES_DB=tml
+      - LOG_LEVEL=INFO
+      - GATEWAY_ID=tml-gateway-001
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+    networks:
+      - tml-network
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: tml-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - tml-network
+
+networks:
+  tml-network:
+    driver: bridge
+
+volumes:
+  redis_data:
