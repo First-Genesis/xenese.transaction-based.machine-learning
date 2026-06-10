@@ -3,6 +3,7 @@ Enhanced Spatial Inheritance with Deep Learning Models
 Advanced neural network-based spatial similarity and inheritance for TML Platform
 """
 
+import os
 import numpy as np
 import torch
 import torch.nn as nn
