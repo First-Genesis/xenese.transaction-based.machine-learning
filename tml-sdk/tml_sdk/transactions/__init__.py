@@ -9,6 +9,6 @@ from .transaction_manager import TransactionManager
 
 __all__ = [
     "Transaction",
-    "TransactionStream", 
+    "TransactionStream",
     "TransactionManager",
 ]

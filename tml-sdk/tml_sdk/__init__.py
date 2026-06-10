@@ -26,7 +26,7 @@ from .client.exceptions import (
     TMLAuthenticationError,
     TMLValidationError,
     TMLModelError,
-    TMLTransactionError
+    TMLTransactionError,
 )
 
 # Model types
@@ -71,37 +71,30 @@ __all__ = [
     # Core
     "TMLClient",
     "TMLConfig",
-    
     # Exceptions
     "TMLException",
-    "TMLConnectionError", 
+    "TMLConnectionError",
     "TMLAuthenticationError",
     "TMLValidationError",
     "TMLModelError",
     "TMLTransactionError",
-    
     # Models
     "BaseModel",
     "RiverModel",
     "SklearnModel",
-    
     # Transactions
     "Transaction",
     "create_transaction",
     "TransactionStream",
-    
     # Spatial
     "SpatialInheritance",
     "SimilarityCalculator",
-    
     # Federated
     "FederatedCoordinator",
     "FederatedNode",
-    
     # Monitoring
     "DriftDetector",
     "MetricsCollector",
-    
     # Utilities
     "get_logger",
     "load_config",

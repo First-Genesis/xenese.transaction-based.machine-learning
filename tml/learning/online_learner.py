@@ -292,14 +292,12 @@ class OnlineLearningEngine:
         self.total_predictions = 0
         self.total_updates = 0
         self.start_time = time.time()
-        
+
         # Initialize spatial inheritance coordinator for River ML
-        self.inheritance_coordinator = SpatialInheritanceCoordinator({
-            "max_parents": 3,
-            "similarity_threshold": 0.4,
-            "inheritance_decay": 0.85
-        })
-        
+        self.inheritance_coordinator = SpatialInheritanceCoordinator(
+            {"max_parents": 3, "similarity_threshold": 0.4, "inheritance_decay": 0.85}
+        )
+
         logger.info("✅ Spatial Inheritance Coordinator initialized for River ML models")
 
     def create_learner(
@@ -323,9 +321,9 @@ class OnlineLearningEngine:
                     timestamp=context.get("timestamp", time.time()),
                     domain=context.get("domain", "default"),
                     features=context.get("features", {}),
-                    metadata=context.get("metadata", {})
+                    metadata=context.get("metadata", {}),
                 )
-            
+
             # Check for spatial inheritance opportunities
             parent_models = []
             if spatial_context and len(self.learners) > 0:
@@ -333,78 +331,107 @@ class OnlineLearningEngine:
                     model_id, spatial_context
                 )
                 parent_models = inheritance_info.get("parent_models", [])
-                
+
                 if parent_models:
-                    logger.info(f"🧬 Spatial inheritance: Model {model_id} will inherit from {len(parent_models)} parent models")
+                    logger.info(
+                        f"🧬 Spatial inheritance: Model {model_id} will inherit from {len(parent_models)} parent models"
+                    )
 
             # Create the base learner
             learner: OnlineLearner
             if algorithm == "river":
                 learner = RiverLearner(model_type=model_type, **kwargs)
-                
+
                 # Apply spatial inheritance for River models
-                if parent_models and hasattr(learner, 'model'):
+                if parent_models and hasattr(learner, "model"):
                     self._apply_river_inheritance(learner, parent_models, model_id)
-                    
+
             elif algorithm == "vowpal_wabbit":
                 learner = VowpalWabbitLearner(**kwargs)
             else:
                 raise ValueError(f"Unsupported algorithm: {algorithm}")
 
             self.learners[model_id] = learner
-            
+
             if parent_models:
-                logger.info(f"✅ Created {algorithm} learner for {model_id} with spatial inheritance from {parent_models}")
+                logger.info(
+                    f"✅ Created {algorithm} learner for {model_id} with spatial inheritance from {parent_models}"
+                )
             else:
-                logger.info(f"✅ Created {algorithm} learner for {model_id} (no inheritance - first model)")
-                
+                logger.info(
+                    f"✅ Created {algorithm} learner for {model_id} (no inheritance - first model)"
+                )
+
             return learner
 
         except Exception as e:
             logger.error(f"Failed to create learner for {model_id}: {e}")
             raise
 
-    def _apply_river_inheritance(self, learner: OnlineLearner, parent_models: List[str], model_id: str):
+    def _apply_river_inheritance(
+        self, learner: OnlineLearner, parent_models: List[str], model_id: str
+    ):
         """Apply spatial inheritance to River ML models."""
         try:
             # Get the River model from the learner
             river_model = learner.model
-            
+
             # For River models, we can inherit by pre-training on parent model data
             # or by initializing with weighted parameters from parent models
-            
+
             inheritance_samples = 0
             for parent_id in parent_models:
                 parent_learner = self.learners.get(parent_id)
-                if parent_learner and hasattr(parent_learner, 'model'):
-                    
+                if parent_learner and hasattr(parent_learner, "model"):
                     # For linear models, we can inherit coefficients
-                    if hasattr(river_model, '_pipeline') and hasattr(parent_learner.model, '_pipeline'):
+                    if hasattr(river_model, "_pipeline") and hasattr(
+                        parent_learner.model, "_pipeline"
+                    ):
                         try:
                             # Get the linear model from the pipeline
                             if len(river_model._pipeline) > 1:
-                                child_linear = river_model._pipeline[-1]  # Last step is usually the model
+                                child_linear = river_model._pipeline[
+                                    -1
+                                ]  # Last step is usually the model
                                 parent_linear = parent_learner.model._pipeline[-1]
-                                
+
                                 # Inherit weights if both are linear models
-                                if hasattr(child_linear, '_weights') and hasattr(parent_linear, '_weights'):
+                                if hasattr(child_linear, "_weights") and hasattr(
+                                    parent_linear, "_weights"
+                                ):
                                     # Initialize with parent weights (scaled down for inheritance)
                                     inheritance_factor = 0.3  # 30% inheritance strength
-                                    for feature, weight in parent_linear._weights.items():
-                                        child_linear._weights[feature] = weight * inheritance_factor
-                                    
+                                    for (
+                                        feature,
+                                        weight,
+                                    ) in parent_linear._weights.items():
+                                        child_linear._weights[feature] = (
+                                            weight * inheritance_factor
+                                        )
+
                                     inheritance_samples += len(parent_linear._weights)
-                                    logger.info(f"🧬 Inherited {len(parent_linear._weights)} features from {parent_id}")
+                                    logger.info(
+                                        f"🧬 Inherited {len(parent_linear._weights)} features from {parent_id}"
+                                    )
                         except Exception as e:
-                            logger.debug(f"Could not inherit linear weights from {parent_id}: {e}")
-                    
+                            logger.debug(
+                                f"Could not inherit linear weights from {parent_id}: {e}"
+                            )
+
                     # Alternative: Inherit through synthetic training data
                     # This works for any River model type
-                    if hasattr(parent_learner, 'feature_names') and parent_learner.feature_names:
+                    if (
+                        hasattr(parent_learner, "feature_names")
+                        and parent_learner.feature_names
+                    ):
                         try:
                             # Generate synthetic samples based on parent model's learned patterns
-                            synthetic_features = self._generate_synthetic_features(parent_learner)
-                            for features in synthetic_features[:5]:  # Limit to 5 synthetic samples
+                            synthetic_features = self._generate_synthetic_features(
+                                parent_learner
+                            )
+                            for features in synthetic_features[
+                                :5
+                            ]:  # Limit to 5 synthetic samples
                                 # Make a prediction with parent model to get target
                                 target = parent_learner.predict(features)
                                 if target is not None:
@@ -412,24 +439,34 @@ class OnlineLearningEngine:
                                     river_model.learn_one(features, target)
                                     inheritance_samples += 1
                         except Exception as e:
-                            logger.debug(f"Could not generate synthetic inheritance data from {parent_id}: {e}")
-            
+                            logger.debug(
+                                f"Could not generate synthetic inheritance data from {parent_id}: {e}"
+                            )
+
             if inheritance_samples > 0:
-                logger.info(f"✅ Applied spatial inheritance to {model_id}: {inheritance_samples} inherited patterns from {len(parent_models)} parents")
+                logger.info(
+                    f"✅ Applied spatial inheritance to {model_id}: {inheritance_samples} inherited patterns from {len(parent_models)} parents"
+                )
             else:
-                logger.info(f"⚠️ No inheritance patterns applied to {model_id} (incompatible parent models)")
-                
+                logger.info(
+                    f"⚠️ No inheritance patterns applied to {model_id} (incompatible parent models)"
+                )
+
         except Exception as e:
             logger.error(f"Error applying River inheritance to {model_id}: {e}")
 
-    def _generate_synthetic_features(self, parent_learner: OnlineLearner) -> List[Dict[str, Any]]:
+    def _generate_synthetic_features(
+        self, parent_learner: OnlineLearner
+    ) -> List[Dict[str, Any]]:
         """Generate synthetic feature sets based on parent model's learned patterns."""
         synthetic_samples = []
-        
-        if hasattr(parent_learner, 'feature_names') and parent_learner.feature_names:
+
+        if hasattr(parent_learner, "feature_names") and parent_learner.feature_names:
             # Create variations of known feature patterns
-            base_features = {name: 0.5 for name in parent_learner.feature_names[:10]}  # Limit features
-            
+            base_features = {
+                name: 0.5 for name in parent_learner.feature_names[:10]
+            }  # Limit features
+
             # Generate 5 synthetic samples with variations
             for i in range(5):
                 features = base_features.copy()
@@ -437,7 +474,7 @@ class OnlineLearningEngine:
                 for key in features:
                     features[key] += (i - 2) * 0.1  # Vary by ±0.2
                 synthetic_samples.append(features)
-        
+
         return synthetic_samples
 
     def get_learner(self, model_id: str) -> Optional[OnlineLearner]:
@@ -464,12 +501,12 @@ class OnlineLearningEngine:
     def learn(self, model_id: str, features: Dict[str, Any], target: Any) -> bool:
         """Update a model with new data, creating learner if needed."""
         learner = self.get_learner(model_id)
-        
+
         # Create learner if it doesn't exist (enables spatial inheritance)
         if not learner:
             try:
                 logger.info(f"Creating new learner for model {model_id}")
-                
+
                 # Create context for spatial inheritance
                 context = {
                     "features": features,
@@ -477,20 +514,24 @@ class OnlineLearningEngine:
                     "timestamp": time.time(),
                     "x_coord": hash(model_id) % 100,  # Synthetic spatial coordinates
                     "y_coord": hash(str(features)) % 100,
-                    "metadata": {"target": target}
+                    "metadata": {"target": target},
                 }
-                
+
                 learner = self.create_learner(model_id, context=context)
-                logger.info(f"✅ Created learner for {model_id} - spatial inheritance enabled")
+                logger.info(
+                    f"✅ Created learner for {model_id} - spatial inheritance enabled"
+                )
             except Exception as e:
                 logger.error(f"Failed to create learner for {model_id}: {e}")
                 return False
-        
+
         if learner:
             try:
                 learner.learn(features, target)
                 self.total_updates += 1
-                logger.debug(f"Model {model_id} learned from transaction (total updates: {self.total_updates})")
+                logger.debug(
+                    f"Model {model_id} learned from transaction (total updates: {self.total_updates})"
+                )
                 return True
             except Exception as e:
                 logger.error(f"Learning failed for model {model_id}: {e}")

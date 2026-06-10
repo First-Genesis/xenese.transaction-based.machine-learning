@@ -9,6 +9,6 @@ from .encryption_manager import EncryptionManager
 
 __all__ = [
     "CertificateManager",
-    "DeviceAuthenticator", 
+    "DeviceAuthenticator",
     "EncryptionManager",
 ]

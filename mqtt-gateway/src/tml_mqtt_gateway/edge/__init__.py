@@ -10,7 +10,7 @@ from .edge_sync_manager import EdgeSyncManager
 
 __all__ = [
     "EdgeMLManager",
-    "ModelDeployer", 
+    "ModelDeployer",
     "InferenceEngine",
     "EdgeSyncManager",
 ]
