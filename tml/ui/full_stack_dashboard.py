@@ -28,7 +28,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import psycopg2
 import redis
-import requests
+import requests  # type: ignore[import-untyped]
 import streamlit as st
 from kafka import KafkaConsumer, KafkaProducer
 from plotly.subplots import make_subplots
